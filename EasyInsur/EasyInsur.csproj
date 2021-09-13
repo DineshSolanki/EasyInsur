@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>WinExe</OutputType>
+		<UseWPF>true</UseWPF>
+		<Copyright>Copyright © DRONA 2021</Copyright>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+		<Nullable>enable</Nullable>
+		<UserSecretsId>15fae26a-b280-410f-a3a2-ccf9337fb385</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Remove="EasyInsur.db" />
+		<None Remove="Resources\add_people.png" />
+		<None Remove="Resources\broker.ico" />
+		<None Remove="Resources\broker_16.png" />
+		<None Remove="Resources\broker_32.png" />
+		<None Remove="Resources\clear.png" />
+		<None Remove="Resources\dashboard.png" />
+		<None Remove="Resources\isd_country_code.json" />
+		<None Remove="Resources\money.png" />
+		<None Remove="Resources\no_image.jpg" />
+		<None Remove="Resources\payment_history.png" />
+		<None Remove="Resources\people.png" />
+		<None Remove="Resources\rupee.png" />
+		<None Remove="Resources\save.png" />
+		<None Remove="Resources\view_people.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="EasyInsur.db">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\isd_country_code.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="HandyControls" Version="3.3.7" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Prism.DryIoc" Version="8.1.97" />
+		<PackageReference Include="Prism.Wpf" Version="8.1.97" />
+		<PackageReference Include="RepoDb.SqLite" Version="1.1.3" />
+		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.115" />
+		<PackageReference Include="Syncfusion.Shared.WPF" Version="19.2.0.60" />
+		<PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="19.2.0.60" />
+		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.60" />
+		<PackageReference Include="Syncfusion.Themes.Metro.Wpf" Version="19.2.0.60" />
+		<PackageReference Include="Syncfusion.SfSkinManager.Wpf" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60"/>
+</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Resources\add_people.png" />
+		<Resource Include="Resources\broker.ico" />
+		<Resource Include="Resources\broker_16.png" />
+		<Resource Include="Resources\broker_32.png" />
+		<Resource Include="Resources\clear.png" />
+		<Resource Include="Resources\dashboard.png" />
+		<Resource Include="Resources\money.png" />
+		<Resource Include="Resources\no_image.jpg" />
+		<Resource Include="Resources\payment_history.png" />
+		<Resource Include="Resources\people.png" />
+		<Resource Include="Resources\rupee.png" />
+		<Resource Include="Resources\save.png" />
+		<Resource Include="Resources\view_people.png" />
+	</ItemGroup>
+
+</Project>

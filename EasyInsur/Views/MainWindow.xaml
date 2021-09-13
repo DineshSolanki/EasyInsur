@@ -1,0 +1,64 @@
+﻿<hc:Window x:Class="HandyControlWpfCoreApp1.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:regions="http://prismlibrary.com/"
+        mc:Ignorable="d"
+        Title="MainWindow" 
+        WindowStartupLocation="CenterScreen"
+        Style="{StaticResource WindowWin10}"
+        ShowTitle="True"
+        Height="450" 
+        Width="800">
+    <DockPanel>
+        <hc:SideMenu>
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="SelectionChanged">
+                    <hc:EventToCommand Command="{Binding NavigateCommand}" PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+            <hc:SideMenuItem Header="Dashboard">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="../Resources/dashboard.png" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+            <hc:SideMenuItem Header="Payment">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="../Resources/money.png" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+                <hc:SideMenuItem Header="Add Payment" Tag="PaymentWindow" Padding="10"
+                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
+                    <hc:SideMenuItem.Icon>
+                        <Image Source="../Resources/rupee.png" Width="24" Height="24"/>
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+                <hc:SideMenuItem Header="view Payments" Tag="PaymentWindow" Padding="10"
+                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
+                    <hc:SideMenuItem.Icon>
+                        <Image Source="../Resources/payment_history.png" Width="24" Height="24"/>
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+            </hc:SideMenuItem>
+            <hc:SideMenuItem Header="People">
+                <hc:SideMenuItem.Icon>
+                    <Image Source="../Resources/people.png" Width="24" Height="24"/>
+                </hc:SideMenuItem.Icon>
+                <hc:SideMenuItem Header="Add Person" Tag="PersonDetails" Padding="10"
+                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
+                    <hc:SideMenuItem.Icon>
+                        <Image Source="../Resources/add_people.png" Width="24" Height="24"/>
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+                <hc:SideMenuItem Header="view" Tag="PersonDetails" Padding="10"
+                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
+                    <hc:SideMenuItem.Icon>
+                        <Image Source="../Resources/view_people.png" Width="24" Height="24"/>
+                    </hc:SideMenuItem.Icon>
+                </hc:SideMenuItem>
+            </hc:SideMenuItem>
+        </hc:SideMenu>
+        <ContentControl regions:RegionManager.RegionName="ContentRegion" Margin="5"/>
+    </DockPanel>
+</hc:Window>
