@@ -1,9 +1,32 @@
 ﻿<UserControl x:Class="EasyInsur.Views.ViewPeopleWindow"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:mc ="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d ="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance viewModels:ViewPeopleWindowViewModel}"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:viewModels="clr-namespace:EasyInsur.ViewModels"
+             xmlns:local="clr-namespace:EasyInsur.Models"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
-            
-    </Grid>
+    <DockPanel>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}" SelectedIndex="0" SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5"/>
+            <hc:SearchBar Grid.Column="1" VerticalAlignment="Top" Command="{Binding SearchCommand}" CommandParameter="{Binding Text,RelativeSource={RelativeSource Self}}"  ShowClearButton="True" Width="380" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="Search here..." hc:InfoElement.TitlePlacement="Top" hc:InfoElement.Title="Search" Margin="5" Style="{StaticResource SearchBarPlusBaseStyle}"/>
+            <StackPanel Grid.Column="2">
+                <Button hc:IconElement.Geometry="{StaticResource SaveGeometry}" Content="Save" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,30,5,5"/>
+                <Button hc:IconElement.Geometry="{StaticResource ReloadGeometry}" Content="Reload" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"/>
+            </StackPanel>
+        </Grid>
+        <DataGrid DockPanel.Dock="Bottom">
+
+        </DataGrid>
+    </DockPanel>
 </UserControl>

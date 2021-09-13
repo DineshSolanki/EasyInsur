@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
+using EasyInsur.Views;
 using Prism.Ioc;
 using Prism.Regions;
 using HandyControlWpfCoreApp1.Views;
@@ -26,6 +27,9 @@ namespace HandyControlWpfCoreApp1
         {
             containerRegistry.RegisterForNavigation<PaymentWindow>();
             containerRegistry.RegisterForNavigation<PersonDetails>();
+            containerRegistry.RegisterForNavigation<ViewPaymentWindow>();
+            containerRegistry.RegisterForNavigation<ViewPeopleWindow>();
+            containerRegistry.RegisterForNavigation<Dashboard>();
             //containerRegistry.RegisterDialog<DialogControl, DialogControlViewModel>("MessageBox");
         }
 

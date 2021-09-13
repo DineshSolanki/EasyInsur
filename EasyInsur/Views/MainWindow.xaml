@@ -34,7 +34,7 @@
                         <Image Source="../Resources/rupee.png" Width="24" Height="24"/>
                     </hc:SideMenuItem.Icon>
                 </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view Payments" Tag="PaymentWindow" Padding="10"
+                <hc:SideMenuItem Header="view Payments" Tag="ViewPaymentWindow" Padding="10"
                                  Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
                     <hc:SideMenuItem.Icon>
                         <Image Source="../Resources/payment_history.png" Width="24" Height="24"/>
@@ -51,7 +51,7 @@
                         <Image Source="../Resources/add_people.png" Width="24" Height="24"/>
                     </hc:SideMenuItem.Icon>
                 </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view" Tag="PersonDetails" Padding="10"
+                <hc:SideMenuItem Header="view" Tag="ViewPeopleWindow" Padding="10"
                                  Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
                     <hc:SideMenuItem.Icon>
                         <Image Source="../Resources/view_people.png" Width="24" Height="24"/>

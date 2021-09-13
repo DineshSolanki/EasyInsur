@@ -55,6 +55,7 @@
 		<PackageReference Include="Syncfusion.Themes.Metro.Wpf" Version="19.2.0.60" />
 		<PackageReference Include="Syncfusion.SfSkinManager.Wpf" Version="19.2.0.60" />
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60" />
+    <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.60" />
 </ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\add_people.png" />
