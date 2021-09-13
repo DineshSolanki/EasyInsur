@@ -5,6 +5,7 @@ namespace HandyControlWpfCoreApp1.Models
     public class Insurance
     {
         [Identity] // Identity decoration
+        [Primary]
         public long? Id { get; set; } = null;
 
         public string RegDate { get; set; }

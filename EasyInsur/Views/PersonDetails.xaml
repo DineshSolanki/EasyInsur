@@ -93,7 +93,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -110,18 +110,12 @@
         <hc:TextBox Grid.Row="0" Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
         <hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding RegistrationDate}"/>
         <syncfusion:CurrencyTextBox Grid.Row="0" Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Balance" Value="{Binding Balance}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-        <Grid Grid.Row="0" Grid.RowSpan="2" Grid.Column="6">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
-            </Grid.RowDefinitions>
-            <hc:ImageSelector Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePath, Mode=TwoWay}"/>
-        </Grid>
-        <hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+        <hc:ImageSelector Grid.Row="0" Grid.RowSpan="2" Grid.Column="6" Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePath, Mode=TwoWay}"/>
+            <hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
             <hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True"  MinWidth="120" MaxWidth="120"  AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}"   hc:TitleElement.Title="Country Code" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0"/>
-            <hc:TextBox hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True" MaxWidth="60"/>
+            <hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True" MaxWidth="60"/>
         </hc:SimpleStackPanel>
-        <hc:TextBox Grid.Row="1" Grid.Column="1" hc:TitleElement.Title="Mobile No." hc:InfoElement.Necessary="True" Text="{Binding Mobile}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top"/>
+        <hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True"  Grid.Row="1" Grid.Column="1" hc:TitleElement.Title="Mobile No." hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top"/>
         <hc:SplitButton Grid.Row="1" Grid.Column="2" Style="{StaticResource SplitButtonPrimary}" Content="Save person" Command="{Binding SaveCommand}" Margin="10,26,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <hc:SplitButton.DropDownContent>
                 <StackPanel>

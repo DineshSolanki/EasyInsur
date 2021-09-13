@@ -1,11 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
-using HandyControlWpfCoreApp1.Models;
-using Newtonsoft.Json;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using HandyControlWpfCoreApp1;
+using HandyControlWpfCoreApp1.Models;
+using HandyControlWpfCoreApp1.Modules;
+using Newtonsoft.Json;
+using PhoneNumbers;
 
-namespace HandyControlWpfCoreApp1.Modules
+namespace EasyInsur.Modules
 {
     public static class Util
     {
@@ -29,7 +34,22 @@ namespace HandyControlWpfCoreApp1.Modules
 
             return ser.Deserialize<ObservableCollection<Country>>(jsonReader);
         }
-        
+
+        public static Tuple<string, string> GetMobileDetails(string regionCode)
+        {
+            try
+            {
+                var exampleNumber = Services.PhoneNumberUtil.GetExampleNumberForType(regionCode, PhoneNumberType.MOBILE);
+                var formattedNumber = Services.PhoneNumberUtil.FormatNumberForMobileDialing(exampleNumber, regionCode, true)[1..];
+                var mask = Regex.Replace(formattedNumber, @"\d", "0");
+                return new Tuple<string, string>(mask,formattedNumber);
+            }
+            catch (Exception)
+            {
+                return new Tuple<string, string>("", "");
+            }
+        }
+
 
     }
 }

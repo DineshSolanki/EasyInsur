@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using EasyInsur.Modules;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Prism.Commands;
@@ -317,18 +318,28 @@ namespace HandyControlWpfCoreApp1.ViewModels
             }
             try
             {
-                var iid = Insurance.Any() && Insurance.Any(i => i.VehicleNo == VehicleNo)
-                    ? Insurance.First(i => i.VehicleNo == VehicleNo).Id!
-                    : DBMethods.SaveInsurance(new Insurance()
+                long? iid;
+                if (Insurance.Any() && Insurance.Any(i => i.VehicleNo == VehicleNo))
+                    iid = Insurance.First(i => i.VehicleNo == VehicleNo).Id!;
+                else
+                {
+                    DBMethods.SaveInsurance(new Insurance()
                     {
                         RegDate = FirstDate,
                         VehicleNo = VehicleNo
                     });
-                Insurance = DBMethods.GetInsurances();
+                    iid = DBMethods.GetInsuranceId(VehicleNo);
+                }
+
+                if (iid is null)
+                {
+                    MessageBox.Error("An Error Occurred", "Transaction aborted");
+                    return;
+                }
                 var transaction = new Transactions()
                 {
                     FixedAmount = FixedAmount,
-                    InsuranceID = (long?)iid,
+                    InsuranceID = iid,
                     OD = ODAmount,
                     TP = TPAmount,
                     Tax = TaxAmount,
@@ -346,12 +357,12 @@ namespace HandyControlWpfCoreApp1.ViewModels
                     Payment = Payment
                 };
                 var id = DBMethods.SaveTransaction(transaction);
-                DBMethods.UpdatePerson(new Person()
-                {
-                    Id = SelectedPayee.Id,
-                    Balance = FinalBalance
-                });
+                SelectedPayee.Balance = FinalBalance;
+                DBMethods.UpdatePerson(SelectedPayee);
+                Insurance = DBMethods.GetInsurances();
                 Transactions = DBMethods.GetTransactions(SelectedPayee.Id);
+                PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);
+                
             }
             catch (Exception e)
             {

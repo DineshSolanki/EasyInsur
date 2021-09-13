@@ -4,10 +4,12 @@ using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.Linq;
+using EasyInsur.Modules;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using HandyControlWpfCoreApp1.Models;
 using HandyControlWpfCoreApp1.Modules;
+using PhoneNumbers;
 using Prism.Commands;
 using RepoDb;
 
@@ -17,7 +19,7 @@ namespace HandyControlWpfCoreApp1.ViewModels
     {
         public PersonDetailsViewModel()
         {
-            CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.code));
+            CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.name));
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
             LoadPeople();
@@ -31,8 +33,14 @@ namespace HandyControlWpfCoreApp1.ViewModels
             PersonData = people;
         }
 
+        private string _mobileMask;
+        public string MobileMask
+        {
+            get => _mobileMask;
+            set => SetProperty(ref _mobileMask, value);
+        }
         public IEnumerable<Person> _people;
-        public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people,value); }
+        public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people, value); }
         private ObservableCollection<Country> _countryDetails;
 
         public ObservableCollection<Country> CountryDetails
@@ -137,7 +145,7 @@ namespace HandyControlWpfCoreApp1.ViewModels
             try
             {
                 using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-                connection.Insert<Person,int>(person);
+                connection.Insert<Person, int>(person);
                 ResetFields();
                 LoadPeople();
             }

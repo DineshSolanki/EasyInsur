@@ -97,20 +97,24 @@ namespace HandyControlWpfCoreApp1.Modules
         public static object SaveInsurance(Insurance insurance)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.Insert(insurance);
+            var r = connection.Insert(insurance);
+            return r;
         }
 
-        public static bool DoesInsuranceExist(string vehicleNo)
+        public static long? GetInsuranceId(string vehicleNo)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             var existing = connection.Exists<Insurance>(i =>
                 i.VehicleNo == vehicleNo);
-            return existing;
+            if (!existing) return null;
+            var id = connection.Query<Insurance>
+                (i => i.VehicleNo == vehicleNo);
+            return id.FirstOrDefault().Id;
         }
         public static int UpdatePerson(Person person)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.UpdateAsync(person).Result;
+            return connection.UpdateAsync(person, person.Id,Field.Parse<Person>(person1 => person1.Balance)).Result;
         }
     }
 }

@@ -39,7 +39,11 @@
 		<EmbeddedResource Include="Resources\isd_country_code.json" />
 	</ItemGroup>
 	<ItemGroup>
+	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	</ItemGroup>
+	<ItemGroup>
 		<PackageReference Include="HandyControls" Version="3.3.7" />
+		<PackageReference Include="libphonenumber-csharp" Version="8.12.32" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Prism.DryIoc" Version="8.1.97" />
 		<PackageReference Include="Prism.Wpf" Version="8.1.97" />
@@ -50,7 +54,7 @@
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="19.2.0.60" />
 		<PackageReference Include="Syncfusion.Themes.Metro.Wpf" Version="19.2.0.60" />
 		<PackageReference Include="Syncfusion.SfSkinManager.Wpf" Version="19.2.0.60" />
-    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60"/>
+    <PackageReference Include="Syncfusion.SfInput.WPF" Version="19.2.0.60" />
 </ItemGroup>
 	<ItemGroup>
 		<Resource Include="Resources\add_people.png" />

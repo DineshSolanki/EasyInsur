@@ -36,7 +36,7 @@
             <ComboBoxItem Content="Agents"/>
         </hc:ComboBox>
         <hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" hc:TitleElement.Title="Payee Name" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-        <syncfusion:SfTextBoxExt Grid.Row="0" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
+        <syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" Grid.Row="0" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
         <GroupBox Header="Insurance Amount" Grid.Row="0" Grid.Column="5" Style="{StaticResource GroupBoxTab}" BorderThickness="0" Margin="5">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -326,9 +326,10 @@
                 <syncfusion:GridCurrencyColumn MappingName="FinalBalance" HeaderText="Final Balance"/>
             </syncfusion:SfDataGrid.Columns>
         </syncfusion:SfDataGrid>
-        <syncfusion:SfDataPager Grid.Column="0" Grid.ColumnSpan="7" x:Name="SfDataPager" 
+        <syncfusion:SfDataPager Grid.Column="0" Grid.ColumnSpan="8" x:Name="SfDataPager" 
                                 Grid.Row="3"
                                 NumericButtonCount="10"
+                                HorizontalAlignment="Right"
                                 PageSize="10" 
                                 Source="{Binding Transactions}" />
        
