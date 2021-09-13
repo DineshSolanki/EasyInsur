@@ -12,88 +12,8 @@
 			 xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
 			 xmlns:local="clr-namespace:HandyControlWpfCoreApp1.Modules"
 			 xmlns:barcode="clr-namespace:Syncfusion.UI.Xaml.Controls.Barcode;assembly=Syncfusion.SfBarcode.WPF"
-			 syncfusionskin:SfSkinManager.VisualStyle="Metro"
+			 syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
 			 prism:ViewModelLocator.AutoWireViewModel="True">
-	<UserControl.Resources>
-		<DataTemplate x:Key="DetailsViewTemplate">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="125"/>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="250"/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
-			<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="5" Height="150" HorizontalAlignment="Left" 
-				   Source="{Binding Path=Data.ImagePath}" />
-			<Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
-				   Margin="25,0,0,0" Content="Personal Details" FontWeight="Bold" />
-			<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" 
-						HorizontalAlignment="Left" VerticalAlignment="Center">
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold"
-						   Content="Name :"/>
-					<TextBlock x:Name="NameText" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5">
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} {1}">
-								<Binding Path="Data.FirstName" />
-								<Binding Path="Data.LastName" />
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="Mobile No :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.Mobile}"/>
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="Email :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.Email}"/>
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="Registration Date :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.RegDate}"/>
-				</StackPanel>
-			</StackPanel>
-			<Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="25,0,0,0"
-				   Content="Transactions Details" FontWeight="Bold" />
-			<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1" 
-						HorizontalAlignment="Left" VerticalAlignment="Center">
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Right" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="initial Balance :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.Balance, StringFormat='{}{0:C}'}"/>
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Right" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="Balance :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.Balance, StringFormat='{}{0:C}'}"/>
-				</StackPanel>
-				<!--<barcode:SfBarcode x:Name="barcode" DisplayText="True">
-					<barcode:SfBarcode.Text>
-						<MultiBinding StringFormat="{}{0} {1}">
-							<Binding Path="Data.FirstName" />
-							<Binding Path="Data.Mobile" />
-						</MultiBinding>
-					</barcode:SfBarcode.Text>
-				</barcode:SfBarcode>-->
-			</StackPanel>
-		</Grid>
-	</DataTemplate>
-	</UserControl.Resources>
 	<Grid>
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>

@@ -6,7 +6,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-             syncfusionskin:SfSkinManager.VisualStyle="Metro" 
+             syncfusionskin:SfSkinManager.VisualStyle="FluentLight" 
              xmlns:viewModels="clr-namespace:HandyControlWpfCoreApp1.ViewModels"
              xmlns:local="clr-namespace:HandyControlWpfCoreApp1.Modules"
              mc:Ignorable="d"
@@ -94,7 +94,7 @@
                                 ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
                                 AllowFiltering="True" ColumnSizer="SizeToHeader" AllowResizingColumns="True"
                                 ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
-                                HeaderLinesVisibility="Horizontal" ScrollMode="Async" AllowGrouping="True" ShowGroupDropArea="True">
+                                HeaderLinesVisibility="Both" ScrollMode="Async" AllowGrouping="True" ShowGroupDropArea="True">
             <syncfusion:SfDataGrid.GroupDropAreaContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=local:ContextMenuCommands.ExpandAll}}"
