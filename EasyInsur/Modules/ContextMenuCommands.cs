@@ -14,7 +14,7 @@ using Syncfusion.Data;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Utility;
 
-namespace HandyControlWpfCoreApp1.Modules
+namespace EasyInsur.Modules
 {
     public static class ContextMenuCommands
     {

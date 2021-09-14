@@ -10,7 +10,9 @@
 			 xmlns:viewModels="clr-namespace:EasyInsur.ViewModels"
 			 xmlns:local="clr-namespace:EasyInsur.Models"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-			 xmlns:modules="clr-namespace:HandyControlWpfCoreApp1.Modules"
+			 xmlns:modules="clr-namespace:EasyInsur.Modules" 
+			 xmlns:local1="clr-namespace:EasyInsur.Models.SearchControl"
+			 xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
 			 prism:ViewModelLocator.AutoWireViewModel="True"
 			 syncfusion:SfSkinManager.VisualStyle="FluentLight">
 	<DockPanel LastChildFill="True">
@@ -19,20 +21,43 @@
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
+				<!--<ColumnDefinition Width="Auto"/>-->
 			</Grid.ColumnDefinitions>
 			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}" SelectedIndex="0" SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5"/>
-			<hc:SearchBar Grid.Column="1" VerticalAlignment="Top" Command="{Binding SearchCommand}" CommandParameter="{Binding Text,RelativeSource={RelativeSource Self}}"  ShowClearButton="True" hc:InfoElement.TitleWidth="140" hc:InfoElement.Placeholder="Search here..." hc:InfoElement.TitlePlacement="Top" hc:InfoElement.Title="Search" Margin="5" Style="{StaticResource SearchBarPlusBaseStyle}"/>
+			<Grid Grid.Column="1" Margin="5" VerticalAlignment="Top">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+				</Grid.ColumnDefinitions>
+				<hc:SearchBar x:Name="SearchBarForGrid" VerticalAlignment="Center" SearchStarted="SearchBar_OnSearchStarted"
+							  ShowClearButton="True" hc:InfoElement.TitleWidth="140"
+							  hc:InfoElement.Placeholder="Search here..." hc:InfoElement.TitlePlacement="Top"
+							  hc:InfoElement.Title="Search" Style="{StaticResource SearchBarPlusBaseStyle}"
+							  IsRealTime="True"/>
+				<Button Grid.Column="1" Content="Prev" HorizontalAlignment="Stretch" Margin="5,30,5,5" Style="{StaticResource FindPreviousButtonStyle}" Click="FindPreviousClicked"/>
+				<Button Grid.Column="2" Content="Next" HorizontalAlignment="Stretch" Style="{StaticResource FindNextButtonStyle}" Click="FindNextClicked" Margin="5,30,5,5"/>
+			</Grid>
 			<StackPanel Grid.Column="2" HorizontalAlignment="Right">
-				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource SaveGeometry}" Content="Save" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,30,5,5"/>
-				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource ReloadGeometry}" Content="Reload" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"/>
+				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource SaveGeometry}"
+						Content="Save" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,30,5,5"
+						Command="{Binding SaveCommand}" />
+				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource ReloadGeometry}"
+						Content="Reload" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"
+						Command="{Binding ReloadCommand}" />
 			</StackPanel>
+			<!--<local1:SearchControl x:Name="searchControl" Grid.Column="3"
+								  Visibility="Visible"
+								  VerticalAlignment="Top" 
+								  DataGrid="{Binding ElementName=DataGrid}"
+								  HorizontalAlignment="Right"/>-->
 		</Grid>
 		<syncfusion:SfDataPager DockPanel.Dock="Bottom" x:Name="SfDataPager"
 								 NumericButtonCount="10"
 								 PageSize="10" 
 								 HorizontalAlignment="Right"
-								 Source="{Binding PersonData}" />
-		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1"  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="7" AutoGenerateColumns="False"
+								 Source="{Binding People}" />
+		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
 							   AllowFiltering="True" ColumnSizer="AutoLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"

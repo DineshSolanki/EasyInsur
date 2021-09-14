@@ -1,4 +1,4 @@
-﻿namespace HandyControlWpfCoreApp1.Modules
+﻿namespace EasyInsur.Modules
 {
     public static class Resources
     {

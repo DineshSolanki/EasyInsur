@@ -1,7 +1,7 @@
 ﻿
 using Prism.Mvvm;
 
-namespace HandyControlWpfCoreApp1.ViewModels
+namespace EasyInsur.ViewModels
 {
     public class InsuranceWindowViewModel : BindableBase
     {

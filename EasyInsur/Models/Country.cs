@@ -1,8 +1,7 @@
 ﻿using System;
 using EasyInsur.Modules;
-using HandyControlWpfCoreApp1.Modules;
 
-namespace HandyControlWpfCoreApp1.Models
+namespace EasyInsur.Models
 {
     public class Country
     {

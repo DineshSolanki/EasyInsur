@@ -5,7 +5,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 
-namespace HandyControlWpfCoreApp1.ViewModels
+namespace EasyInsur.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {

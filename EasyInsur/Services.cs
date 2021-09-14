@@ -1,8 +1,8 @@
-﻿using HandyControl.Tools;
-using HandyControlWpfCoreApp1.Modules;
+﻿using EasyInsur.Modules;
+using HandyControl.Tools;
 using PhoneNumbers;
 
-namespace HandyControlWpfCoreApp1
+namespace EasyInsur
 {
     internal class Services
     {

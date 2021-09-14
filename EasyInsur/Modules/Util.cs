@@ -4,9 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using HandyControlWpfCoreApp1;
-using HandyControlWpfCoreApp1.Models;
-using HandyControlWpfCoreApp1.Modules;
+using EasyInsur.Models;
 using Newtonsoft.Json;
 using PhoneNumbers;
 

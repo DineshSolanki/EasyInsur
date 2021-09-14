@@ -1,14 +1,11 @@
-﻿
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
 using EasyInsur.Views;
 using Prism.Ioc;
 using Prism.Regions;
-using HandyControlWpfCoreApp1.Views;
-using Syncfusion.SfSkinManager;
 
-namespace HandyControlWpfCoreApp1
+namespace EasyInsur
 {
     public partial class App
     {

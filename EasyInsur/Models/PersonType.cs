@@ -3,6 +3,7 @@
     public enum PersonType
     {
         Agent,
-        Customer
+        Customer,
+        Any
     }
 }

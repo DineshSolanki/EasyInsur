@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace HandyControlWpfCoreApp1.Views
+namespace EasyInsur.Views
 {
     /// <summary>
     /// Interaction logic for PaymentWindow

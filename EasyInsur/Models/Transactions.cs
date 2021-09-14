@@ -1,6 +1,6 @@
 ﻿using RepoDb.Attributes;
 
-namespace HandyControlWpfCoreApp1.Models
+namespace EasyInsur.Models
 {
     public class Transactions
     {

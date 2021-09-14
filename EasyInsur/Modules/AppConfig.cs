@@ -2,7 +2,7 @@
 using System.Text.Json;
 using HandyControl.Tools;
 
-namespace HandyControlWpfCoreApp1.Modules
+namespace EasyInsur.Modules
 {
     internal class AppConfig : GlobalDataHelper
     {

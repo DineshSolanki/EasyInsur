@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
-using HandyControlWpfCoreApp1.Models;
+using EasyInsur.Models;
 using RepoDb;
 
-namespace HandyControlWpfCoreApp1.Modules
+namespace EasyInsur.Modules
 {
     public static class DBMethods
     {

@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.Linq;
+using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
-using HandyControlWpfCoreApp1.Models;
-using HandyControlWpfCoreApp1.Modules;
-using PhoneNumbers;
 using Prism.Commands;
+using Prism.Mvvm;
 using RepoDb;
 
-namespace HandyControlWpfCoreApp1.ViewModels
+namespace EasyInsur.ViewModels
 {
     public class PersonDetailsViewModel : BindableBase
     {

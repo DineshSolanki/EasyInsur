@@ -1,5 +1,5 @@
 ﻿
-namespace HandyControlWpfCoreApp1.Views
+namespace EasyInsur.Views
 {
     public partial class MainWindow
     {

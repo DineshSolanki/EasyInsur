@@ -1,16 +1,15 @@
-﻿using HandyControlWpfCoreApp1.Models;
-using HandyControlWpfCoreApp1.Modules;
-using Prism.Mvvm;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Prism.Commands;
+using Prism.Mvvm;
 
-namespace HandyControlWpfCoreApp1.ViewModels
+namespace EasyInsur.ViewModels
 {
     public class PaymentWindowViewModel : BindableBase
     {
