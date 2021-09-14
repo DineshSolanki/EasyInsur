@@ -10,11 +10,12 @@
 			 xmlns:viewModels="clr-namespace:EasyInsur.ViewModels"
 			 xmlns:local="clr-namespace:EasyInsur.Models"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-			 xmlns:modules="clr-namespace:EasyInsur.Modules" 
-			 xmlns:local1="clr-namespace:EasyInsur.Models.SearchControl"
-			 xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+			 xmlns:modules="clr-namespace:EasyInsur.Modules"
 			 prism:ViewModelLocator.AutoWireViewModel="True"
 			 syncfusion:SfSkinManager.VisualStyle="FluentLight">
+	<UserControl.Resources>
+		<local:CellStyleSelector x:Key="CellStyleSelector" />
+	</UserControl.Resources>
 	<DockPanel LastChildFill="True">
 		<Grid DockPanel.Dock="Top">
 			<Grid.ColumnDefinitions>
@@ -23,7 +24,7 @@
 				<ColumnDefinition Width="Auto"/>
 				<!--<ColumnDefinition Width="Auto"/>-->
 			</Grid.ColumnDefinitions>
-			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}" SelectedIndex="0" SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5"/>
+			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}" SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5"/>
 			<Grid Grid.Column="1" Margin="5" VerticalAlignment="Top">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
@@ -61,7 +62,9 @@
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
 							   AllowFiltering="True" ColumnSizer="AutoLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
-							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True">
+							   HeaderLinesVisibility="Horizontal" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
+							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
+							   CellStyleSelector="{StaticResource CellStyleSelector}">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
@@ -270,9 +273,9 @@
 					</ContextMenu>
 				</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
-				<syncfusion:GridTextColumn  MappingName="Id" HeaderText="ID" IsHidden="True"/>
-				<syncfusion:GridTextColumn  MappingName="PersonID" HeaderText="PID"/>
-				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
+				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
+				<syncfusion:GridTextColumn MappingName="PersonID" HeaderText="PID"/>
+				<syncfusion:GridTextColumn MappingName="FirstName" AllowEditing="True" HeaderText="First Name"/>
 				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
 				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
 				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>

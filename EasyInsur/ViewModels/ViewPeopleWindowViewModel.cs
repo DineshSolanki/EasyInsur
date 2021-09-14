@@ -11,16 +11,18 @@ namespace EasyInsur.ViewModels
     {
         public ViewPeopleWindowViewModel()
         {
+            AllPeople = DBMethods.GetPeople();
+            PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(() =>
             {
-                _allPersons = DBMethods.GetPeople();
+                AllPeople = DBMethods.GetPeople();
                 PersonType = _personType;
             });
         }
 
         #region Properties
 
-        private PersonType _personType = PersonType.Agent;
+        private PersonType _personType;
         public PersonType PersonType
         {
             get => _personType;
@@ -29,14 +31,27 @@ namespace EasyInsur.ViewModels
                 SetProperty(ref _personType, value);
                 People = PersonType switch
                 {
-                    PersonType.Agent => _allPersons.Where(p => p.Type == "Agent"),
-                    PersonType.Customer => _allPersons.Where(p => p.Type == "Customer"),
-                    _ => _allPersons
+                    PersonType.Agent => Agents,
+                    PersonType.Customer => Customers,
+                    _ => AllPeople
                 };
             }
         }
 
-        private IEnumerable<Person> _allPersons = DBMethods.GetPeople();
+        private IEnumerable<Person> _allPeople;
+        private IEnumerable<Person> AllPeople
+        {
+            get => _allPeople;
+            set
+            {
+                SetProperty(ref _allPeople, value);
+                var enumerable = _allPeople.ToList();
+                Agents = enumerable.Where(p => p.Type == "Agent");
+                Customers = enumerable.Where(p => p.Type == "Customer");
+            } 
+        }
+        private IEnumerable<Person> Agents { get; set; }
+        private IEnumerable<Person> Customers { get; set; }
         private IEnumerable<Person> _people;
         public IEnumerable<Person> People
         {

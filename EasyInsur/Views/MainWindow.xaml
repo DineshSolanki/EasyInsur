@@ -6,7 +6,7 @@
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:regions="http://prismlibrary.com/"
         mc:Ignorable="d"
-        Title="MainWindow" 
+        Title="EasyInsur" 
         WindowStartupLocation="CenterScreen"
         Style="{StaticResource WindowWin10}"
         ShowTitle="True"
