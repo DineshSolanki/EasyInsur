@@ -1,0 +1,38 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*"
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - name: Checkout GitHub actions
+      uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+    - name: Install dependencies
+      run: dotnet restore "./EasyInsur"
+    - name: Build
+      shell: bash
+      run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="EasyInsur-$tag-win-x64"
+          # Build everything
+          dotnet publish ./EasyInsur -r win-x64 -p:PublishSingleFile=true --self-contained false -c Release -o "$release_name"
+          # Pack files
+          7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          # Delete output directory
+          rm -r "$release_name"
+          
+    - name: Publish
+      uses: softprops/action-gh-release@v1
+      with:
+        files: "EasyInsur*"
+      env:
+        GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
