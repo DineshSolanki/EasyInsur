@@ -5,3 +5,13 @@ dotnet_diagnostic.CS8618.severity = none
 
 # CS8602: Dereference of a possibly null reference.
 dotnet_diagnostic.CS8602.severity = none
+
+# IDE0008: Use explicit type
+csharp_style_var_when_type_is_apparent = true
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = true
+
+# IDE0008: Use explicit type
+csharp_style_var_for_built_in_types = true
+csharp_style_expression_bodied_methods=when_on_single_line:silent

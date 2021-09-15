@@ -60,11 +60,12 @@
 								 Source="{Binding People}" />
 		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" ColumnSizer="AutoLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 							   HeaderLinesVisibility="Horizontal" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
-							   CellStyleSelector="{StaticResource CellStyleSelector}">
+							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
+							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
@@ -270,18 +271,33 @@
 							</Grid>
 						</MenuItem.Icon>
 					</MenuItem>
+					<MenuItem
+						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Cut}}"
+						CommandParameter="{Binding}"
+						Header="Cut">
+						<MenuItem.Icon>
+							<Grid x:Name="Cut" Height="16" Width="16">
+								<Path 
+									Data="M5.5000009,2.500005 L10.500001,2.500005 14.500001,6.500005 14.500001,14.500005 5.5000009,14.500005 z M0,0 L4.0000037,0 4.0000037,12 0,12 z" 
+									Fill="White" Margin="1,1,0.5,0.5" Stretch="Fill"/>
+								<Path 
+									Data="M9.0000026,11.999999 L13.000003,11.999999 13.000003,12.999999 9.0000026,12.999999 z M9.0000026,9.9999986 L13.000003,9.9999986 13.000003,10.999999 9.0000026,10.999999 z M12,4.7070035 L12,7.0000033 14.293,7.0000033 z M6.9999967,4.0000001 L6.9999967,15 14.999997,15 14.999997,8.0000033 11,8.0000033 11,4.0000001 z M5.9999967,2.9999999 L11.706997,2.9999999 15.999997,7.293 15.999997,16 5.9999967,16 z M0,0 L6.9999967,0 6.9999967,2 5.9999971,2 5.9999971,1 1,1 1,13 4.9999976,13 4.9999976,14 0,14 z" 
+									Fill="#FF3A3939" Stretch="Fill"/>
+							</Grid>
+						</MenuItem.Icon>
+					</MenuItem>
 					</ContextMenu>
 				</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
-				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
-				<syncfusion:GridTextColumn MappingName="PersonID" HeaderText="PID"/>
-				<syncfusion:GridTextColumn MappingName="FirstName" AllowEditing="True" HeaderText="First Name"/>
+				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" AllowEditing="False" IsHidden="True"/>
+				<syncfusion:GridTextColumn MappingName="PersonID" AllowEditing="False" HeaderText="PID"/>
+				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
 				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
 				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
 				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
 				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
 				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
-				<syncfusion:GridImageColumn MappingName="ImagePath" AllowGrouping="False" HeaderText="" AllowFocus="False" AllowFiltering="False" Stretch="Fill" StretchDirection="Both" ImageWidth="32" TextAlignment="Center" ImageHeight="32" VerticalAlignment="Center" />
+				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="True" AllowGrouping="False" HeaderText="" AllowFocus="False" AllowFiltering="False" Stretch="Fill" StretchDirection="Both" ImageWidth="32" TextAlignment="Center" ImageHeight="32" VerticalAlignment="Center" />
 			</syncfusion:SfDataGrid.Columns>
 			<syncfusion:SfDataGrid.DetailsViewDefinition>
 				<syncfusion:TemplateViewDefinition  RowTemplate="{StaticResource DetailsViewTemplate}"/>

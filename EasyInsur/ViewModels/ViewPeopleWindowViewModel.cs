@@ -13,11 +13,14 @@ namespace EasyInsur.ViewModels
         {
             AllPeople = DBMethods.GetPeople();
             PersonType = PersonType.Any;
-            ReloadCommand = new DelegateCommand(() =>
-            {
-                AllPeople = DBMethods.GetPeople();
-                PersonType = _personType;
-            });
+            ReloadCommand = new DelegateCommand(ReloadMethod);
+            SaveCommand = new DelegateCommand(SaveMethod);
+        }
+
+        private void ReloadMethod()
+        {
+            AllPeople = DBMethods.GetPeople();
+            PersonType = _personType;
         }
 
         #region Properties
@@ -48,7 +51,7 @@ namespace EasyInsur.ViewModels
                 var enumerable = _allPeople.ToList();
                 Agents = enumerable.Where(p => p.Type == "Agent");
                 Customers = enumerable.Where(p => p.Type == "Customer");
-            } 
+            }
         }
         private IEnumerable<Person> Agents { get; set; }
         private IEnumerable<Person> Customers { get; set; }
@@ -63,10 +66,25 @@ namespace EasyInsur.ViewModels
         #region Delegates
 
         public DelegateCommand<string> SearchCommand { get; }
-        public DelegateCommand<string> SaveCommand { get; }
+        public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
 
 
         #endregion
+
+        private void SaveMethod()
+        {
+            IEnumerable<Person> r = AllPeople.Where(p => p.EditedColumns.Any());
+            var enumerable = r.ToList();
+            if (!enumerable.Any()) return;
+            DBMethods.UpdatePeople(enumerable);
+            ReloadMethod();
+            //foreach (var person in AllPeople.Where(p => p.EditedColumns.Any()))
+            //{
+            //    DBMethods.UpdatePerson(person);
+            //}
+            
+            
+        }
     }
 }

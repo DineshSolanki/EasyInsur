@@ -4,7 +4,9 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 using EasyInsur.Models;
+using HandyControl.Tools.Extension;
 using RepoDb;
+using Syncfusion.Data.Extensions;
 
 namespace EasyInsur.Modules
 {
@@ -36,7 +38,7 @@ namespace EasyInsur.Modules
                 Debug.WriteLine(e);
                 throw;
             }
-            
+
             return person.FirstOrDefault().Balance;
         }
 
@@ -67,15 +69,7 @@ namespace EasyInsur.Modules
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             IEnumerable<Transactions> transaction;
-            try
-            {
-                transaction = connection.QueryAllAsync<Transactions>().Result;
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw;
-            }
+            transaction = connection.QueryAllAsync<Transactions>().Result;
             return transaction;
         }
 
@@ -111,10 +105,23 @@ namespace EasyInsur.Modules
                 (i => i.VehicleNo == vehicleNo);
             return id.FirstOrDefault().Id;
         }
+        public static int UpdatePersonBalance(Person person)
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return connection.UpdateAsync(person, person.Id, Field.Parse<Person>(person1 => person1.Balance)).Result;
+        }
         public static int UpdatePerson(Person person)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.UpdateAsync(person, person.Id,Field.Parse<Person>(person1 => person1.Balance)).Result;
+            var field = new List<Field>();
+            person.EditedColumns.ForEach(s =>
+                field.Add(new Field(s)));
+            return connection.UpdateAsync(person, person.Id, field).Result;
+        }
+        public static int UpdatePeople(IEnumerable<Person> people)
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return connection.UpdateAllAsync(people).Result;
         }
     }
 }
