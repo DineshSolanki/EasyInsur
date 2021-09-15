@@ -11,94 +11,122 @@
 			 xmlns:local="clr-namespace:EasyInsur.Models"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 			 xmlns:modules="clr-namespace:EasyInsur.Modules"
-			 xmlns:xlsIo="clr-namespace:Syncfusion.XlsIO;assembly=Syncfusion.XlsIO.Base"
-			 prism:ViewModelLocator.AutoWireViewModel="True"
+			 xmlns:xlsIo="clr-namespace:Syncfusion.XlsIO;assembly=Syncfusion.XlsIO.Base" xmlns:system="clr-namespace:System;assembly=System.Runtime"
+             prism:ViewModelLocator.AutoWireViewModel="True"
 			 syncfusion:SfSkinManager.VisualStyle="FluentLight">
-	<UserControl.Resources>
-		<local:CellStyleSelector x:Key="CellStyleSelector" />
-	</UserControl.Resources>
-	<DockPanel LastChildFill="True">
-		<Grid DockPanel.Dock="Top">
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="Auto"/>
-				<!--<ColumnDefinition Width="Auto"/>-->
-			</Grid.ColumnDefinitions>
-			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
+    <UserControl.Resources>
+        <modules:MutliCommandParameterConvertor x:Key="CommandParamConvertor"/>
+        <system:String x:Key="excel">excel</system:String>
+        <system:String x:Key="pdf">pdf</system:String>
+        <local:CellStyleSelector x:Key="CellStyleSelector" />
+    </UserControl.Resources>
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Top">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <!--<ColumnDefinition Width="Auto"/>-->
+            </Grid.ColumnDefinitions>
+            <hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
 						 SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5" />
-			<Grid Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Top">
-				<Grid.ColumnDefinitions>
-					<ColumnDefinition Width="*"/>
-					<ColumnDefinition Width="auto"/>
-					<ColumnDefinition Width="auto"/>
-				</Grid.ColumnDefinitions>
-				<hc:SearchBar x:Name="SearchBarForGrid" VerticalAlignment="Center" SearchStarted="SearchBar_OnSearchStarted"
+            <Grid Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <hc:SearchBar x:Name="SearchBarForGrid" VerticalAlignment="Center" SearchStarted="SearchBar_OnSearchStarted"
 							  ShowClearButton="True" hc:InfoElement.TitleWidth="140"
 							  hc:InfoElement.Placeholder="Search here..." hc:InfoElement.TitlePlacement="Top"
 							  hc:InfoElement.Title="Search" Style="{StaticResource SearchBarPlusBaseStyle}"
 							  IsRealTime="True"/>
-				<Button Grid.Column="1" Content="Prev" HorizontalAlignment="Stretch" Margin="5,30,5,5" Style="{StaticResource FindPreviousButtonStyle}" Click="FindPreviousClicked"/>
-				<Button Grid.Column="2" Content="Next" HorizontalAlignment="Stretch" Style="{StaticResource FindNextButtonStyle}" Click="FindNextClicked" Margin="5,30,5,5"/>
-			</Grid>
-			<StackPanel Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right">
-				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource SaveGeometry}"
-						Content="Save" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,30,5,5"
+                <Button Grid.Column="1" Content="Prev" HorizontalAlignment="Stretch" Margin="5,30,5,5" Style="{StaticResource FindPreviousButtonStyle}" Click="FindPreviousClicked"/>
+                <Button Grid.Column="2" Content="Next" HorizontalAlignment="Stretch" Style="{StaticResource FindNextButtonStyle}" Click="FindNextClicked" Margin="5,30,5,5"/>
+            </Grid>
+             <Button Grid.Row="0" Grid.Column="2" Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource SaveGeometry}"
+						Content="Save" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="5,30,5,5"
 						Command="{Binding SaveCommand}" />
-				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource ReloadGeometry}"
-						Content="Reload" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"
+            <Button Grid.Row="1" Grid.Column="2" Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource ReloadGeometry}"
+						Content="Reload" Margin="5,0" VerticalAlignment="Top" HorizontalAlignment="Right"
 						Command="{Binding ReloadCommand}" />
-			</StackPanel>
-			<Expander Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Header="More Options"
+            <Expander Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Header="More Options"
 					  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0">
-				<WrapPanel>
-					<GroupBox Header="Export to excel">
-						<WrapPanel>
-							<!--<hc:SimpleStackPanel>-->
-								<CheckBox
+                <WrapPanel>
+                    <GroupBox Header="Export options">
+                        <WrapPanel>
+                            <hc:SimpleStackPanel>
+                                <CheckBox
 									x:Name="allowOutlining"
 									Margin="5"
-									Content="Allow Outlining"
-									IsChecked="True" ToolTip="Allows to expand/collapse groups in excel"/>
-								<!--<CheckBox
+									Content="Allow Outlining [Excel]"
+									IsChecked="True" ToolTip="Allows to expand/collapse groups"/>
+                                <CheckBox
+                                    x:Name="ExportCurrentPageOnly"
 									Margin="5"
-									Content="Show stacked header"
-									IsChecked="True" ToolTip="Export as exactly shown with headers."/>-->
-							<!--</hc:SimpleStackPanel>-->
-							<hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type xlsIo:ExcelVersion},{StaticResource ExcelVersions}}}"
+									Content="Export current page only"
+									IsChecked="True" ToolTip="Export all data or only what is shown on page."/>
+                                 <CheckBox
+                                    x:Name="ExportSelectedDataOnly"
+                                     IsEnabled="False"
+									Margin="5"
+									Content="Export Selected data only"
+									IsChecked="False" ToolTip="Export all data or only selected data"/>
+                            </hc:SimpleStackPanel>
+                            <hc:SimpleStackPanel>
+                                <CheckBox
+                                    x:Name="AutoFitColumns"
+									Margin="5"
+									Content="Auto fit width and column [PDF]"
+									IsChecked="True" ToolTip="Export all data or only what is shown on page."/>
+                                <CheckBox
+                                    x:Name="ExportFormatted"
+									Margin="5"
+									Content="Export with format? [PDF]"
+									IsChecked="True" ToolTip="Export formatted data or values only."/>
+                                <CheckBox
+                                    x:Name="UseHeaderFooter"
+                                    IsEnabled="False"
+									Margin="5"
+									Content="Export with header/footer [PDF]"
+									IsChecked="False" ToolTip="Header/footer will be shown in pdf"/>
+                            </hc:SimpleStackPanel>
+                            <!--<hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type xlsIo:ExcelVersion},{StaticResource ExcelVersions}}}"
 										 ToolTip="Excel version" Margin="5" DisplayMemberPath="Value"
 										 AutoComplete="True" Style="{StaticResource ComboBoxPlusBaseStyle}" 
-										 Width="Auto" hc:DropDownElement.ConsistentWidth="False"/>
-							<!--<hc:Transfer Height="200" Margin="5">
+										 Width="Auto" hc:DropDownElement.ConsistentWidth="False"/>-->
+                            <!--<hc:Transfer Height="200" Margin="5">
 								<hc:Transfer.ItemTemplate>
 									<DataTemplate>
 										<TextBlock Text="{Binding Name}"/>
 									</DataTemplate>
 								</hc:Transfer.ItemTemplate>
 							</hc:Transfer>-->
-							<Button Style="{StaticResource ButtonDefault}" Content="Export to Excel"/>
-						</WrapPanel>
-						
-					</GroupBox>
-					
-				</WrapPanel>
-			</Expander>
-			<!--<local1:SearchControl x:Name="searchControl" Grid.Column="3"
+                            <hc:SimpleStackPanel VerticalAlignment="Center">
+                                <Button Style="{StaticResource ButtonDefault}" Margin="5" Click="ExportExcelButton_Click" Content="Export to Excel"/>
+                             <Button Style="{StaticResource ButtonDefault}" Margin="5" Click="ExportPDFButton_Click" Content="Export to PDF"/>
+                            </hc:SimpleStackPanel>
+                        </WrapPanel>
+
+                    </GroupBox>
+                </WrapPanel>
+            </Expander>
+            <!--<local1:SearchControl x:Name="searchControl" Grid.Column="3"
 								  Visibility="Visible"
 								  VerticalAlignment="Top" 
 								  DataGrid="{Binding ElementName=DataGrid}"
 								  HorizontalAlignment="Right"/>-->
-		</Grid>
-		<syncfusion:SfDataPager DockPanel.Dock="Bottom" x:Name="SfDataPager"
+        </Grid>
+        <syncfusion:SfDataPager DockPanel.Dock="Bottom" x:Name="SfDataPager"
 								 NumericButtonCount="10"
 								 PageSize="10" 
 								 HorizontalAlignment="Right"
 								 Source="{Binding People}" />
-		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
+        <syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
 							   AllowFiltering="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
@@ -106,12 +134,12 @@
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
 							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
 							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit">
-			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
-				<ContextMenu>
-					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
+            <syncfusion:SfDataGrid.GroupDropAreaContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
 							  CommandParameter="{Binding}">
-						<MenuItem.Icon>
-							<Path
+                        <MenuItem.Icon>
+                            <Path
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
@@ -119,14 +147,14 @@
 								Data="F1M65.8418,72.2030999999999L63.4438,69.8030999999999L59.2608,73.9850999999999L57.2318,71.9561L61.4128,67.7761L59.0138,65.3750999999999L65.8418,65.3750999999999z M55.8888,82.2811L49.0608,82.2811L49.0608,75.4541L51.4588,77.8531L55.6428,73.6700999999999L57.6708,75.7000999999999L53.4888,79.8821z M45.4508,85.8280999999999L69.4508,85.8280999999999L69.4508,61.8280999999999L45.4508,61.8280999999999z"
 								Fill="#FF5A5A5B"
 								Stretch="Fill" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem x:Name="CollapseAll"
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="CollapseAll"
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.CollapseAll}}"
 						CommandParameter="{Binding}"
 						Header="Collapse All">
-						<MenuItem.Icon>
-							<Path
+                        <MenuItem.Icon>
+                            <Path
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
@@ -134,42 +162,42 @@
 								Data="F1M62.4873,119.8345L55.6593,119.8345L55.6593,113.0065L58.0573,115.4065L62.2403,111.2245L64.2693,113.2535L60.0883,117.4335z M54.2233,128.0975L51.8253,125.6985L47.6413,129.8805L45.6123,127.8515L49.7943,123.6695L47.3953,121.2705L54.2233,121.2705z M42.9413,132.5525L66.9413,132.5525L66.9413,108.5525L42.9413,108.5525z"
 								Fill="#FF5A5A5B"
 								Stretch="Fill" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator />
-					<MenuItem x:Name="ClearGroups"
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem x:Name="ClearGroups"
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ClearGroups}}"
 						CommandParameter="{Binding}"
 						Header="ClearGroups">
-						<MenuItem.Icon>
-							<Grid
+                        <MenuItem.Icon>
+                            <Grid
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center">
-								<Path
+                                <Path
 									Margin="0,0,0,4.039"
 									Data="M3.2219992,8.1850124 L5.6019993,8.1850124 C5.8519993,8.1850122 6.0919991,8.2200121 6.3259993,8.2740122 5.5969992,9.15801 5.1599998,10.289007 5.1599998,11.520005 L5.1599998,15.626996 0,15.626996 0,11.408005 C0,9.6270089 1.4439993,8.1850122 3.2219992,8.1850124 z M18.399999,8.1850099 L20.779,8.1850099 C22.558999,8.1850099 24.000999,9.6270081 24.000999,11.407995 L24.000999,15.62701 18.483998,15.62701 18.483998,11.520025 C18.483999,10.329018 18.071,9.2340188 17.385,8.3640108 17.706998,8.257016 18.043001,8.1850099 18.399999,8.1850099 z M10.267998,7.313 L13.373998,7.313 C15.697998,7.3129997 17.580998,9.1969992 17.580998,11.520999 L17.580998,17.030997 6.0599976,17.030997 6.0599976,11.520999 C6.0599976,9.1969992 7.9439974,7.3129997 10.267998,7.313 z M19.666999,2.5850015 C21.105999,2.5850015 22.274,3.7530026 22.274,5.1930039 22.274,6.6340051 21.105999,7.8020061 19.666999,7.8020063 18.224999,7.8020061 17.056999,6.6340051 17.056999,5.1930039 17.056999,3.7530026 18.224999,2.5850015 19.666999,2.5850015 z M4.4889994,2.5849981 C5.9289999,2.5849981 7.0970001,3.7530012 7.0970001,5.1930046 7.0970001,6.6350081 5.9289999,7.8030111 4.4889994,7.8030109 3.0489998,7.8030111 1.8809996,6.6350081 1.8809996,5.1930046 1.8809996,3.7530012 3.0489998,2.5849981 4.4889994,2.5849981 z M11.921997,0 C13.803997,0 15.328997,1.5250025 15.328997,3.4060054 15.328997,5.2870088 13.803997,6.8130114 11.921997,6.8130114 10.040997,6.8130114 8.5159969,5.2870088 8.5159969,3.4060054 8.5159969,1.5250025 10.040997,0 11.921997,0 z"
 									Fill="#FF5A5A5B"
 									Stretch="Fill" />
-								<Path
+                                <Path
 									Margin="5.831,8.185,6.191,0"
 									Data="F1M44.9253,266.7363L49.3283,260.0123L45.3383,253.8513L48.3793,253.8513L50.9633,257.9913L53.4943,253.8513L56.5093,253.8513L52.5013,260.1093L56.9043,266.7363L53.7673,266.7363L50.9103,262.2803L48.0453,266.7363z"
 									Fill="#FFC1272D"
 									Stretch="Fill" />
-							</Grid>
-						</MenuItem.Icon>
-					</MenuItem>
-				</ContextMenu>
-			</syncfusion:SfDataGrid.GroupDropAreaContextMenu>
-			<syncfusion:SfDataGrid.HeaderContextMenu>
-				<ContextMenu>
-					<MenuItem
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </syncfusion:SfDataGrid.GroupDropAreaContextMenu>
+            <syncfusion:SfDataGrid.HeaderContextMenu>
+                <ContextMenu>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.SortAscending}}"
 						CommandParameter="{Binding}"
 						Header="Sort Ascending">
-						<MenuItem.Icon>
-							<Path
+                        <MenuItem.Icon>
+                            <Path
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
@@ -177,14 +205,14 @@
 								Data="M1.824003,13.121994 L9.1479977,13.121994 9.1479977,14.577987 3.5840002,21.99899 4.2400025,21.99899 C5.1440014,21.99899 5.8199996,21.91499 6.2690009,21.746991 6.7159995,21.578992 7.129001,21.281995 7.5079988,20.853986 7.8879999,20.426984 8.1829981,19.90199 8.3949994,19.279996 L9.774001,19.747999 8.3939999,23.643993 0.36100233,23.643993 0.36100233,22.181989 5.9469985,14.781997 5.071999,14.781997 C4.4790004,14.781997 4.0019995,14.851989 3.6409997,14.991988 3.2790004,15.132995 2.9650012,15.341994 2.6980029,15.617995 2.4310011,15.893996 2.0500007,16.473998 1.5520036,17.357985 L0.22500067,16.769987 z M5.1379994,3.2519941 L4.0669993,6.141995 6.1559995,6.141995 z M4.3819994,0.47799301 L6.7459992,0.47799301 9.9039992,8.6009955 C10.074999,9.0339956 10.225999,9.3009958 10.358999,9.399996 10.491999,9.501996 10.737999,9.5499961 11.094999,9.5439961 L11.094999,10.998996 6.1169995,10.998996 6.1169995,9.5439961 6.4199995,9.5369961 C6.6949991,9.5369961 6.8899993,9.4999959 6.9999994,9.4279959 7.110999,9.353996 7.1659993,9.265996 7.1659993,9.1589959 7.1659993,9.068996 7.1179994,8.8829956 7.0229992,8.6009955 L6.708999,7.6429954 3.5089997,7.6429954 3.1149997,8.7069955 C3.0339996,8.9329958 2.9949998,9.080996 2.9949998,9.1519959 2.9949998,9.232996 3.0249997,9.304996 3.0819994,9.370996 3.1389996,9.4359961 3.2339996,9.4839959 3.364,9.5149958 3.4499997,9.5339961 3.6869997,9.5439961 4.0729998,9.5439961 L4.0729998,10.998996 0,10.998996 0,9.5439961 C0.26199996,9.5439961 0.45199995,9.5209961 0.57299981,9.4759963 0.69299993,9.4309959 0.79399991,9.363996 0.87100005,9.271996 0.94799989,9.1829958 1.0349999,9.0139956 1.1319999,8.7669959 z M18.708,0 L21.254,0 21.254,19.13 24.702999,15.681 26.505998,17.481999 19.986999,24 19.977999,23.988999 19.968,24 13.452,17.481999 15.25,15.681 18.708,19.138 z"
 								Fill="#FF5A5A5B"
 								Stretch="Uniform" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.SortDescending}}"
 						CommandParameter="{Binding}"
 						Header="Sort Descending">
-						<MenuItem.Icon>
-							<Path
+                        <MenuItem.Icon>
+                            <Path
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
@@ -192,126 +220,126 @@
 								Data="M5.1379992,16.252001 L4.0669996,19.141999 6.1559994,19.141999 z M4.3819994,13.478005 L6.745999,13.478005 9.903999,21.600996 C10.074999,22.033995 10.225999,22.300995 10.358999,22.399996 10.491998,22.501996 10.737999,22.549996 11.094999,22.543995 L11.094999,23.998993 6.1169993,23.998993 6.1169993,22.543995 6.4199993,22.536995 C6.6949994,22.536995 6.8899991,22.499995 6.9999992,22.427996 7.1109993,22.353995 7.1659991,22.265995 7.1659991,22.158995 7.1659991,22.068995 7.1179993,21.882996 7.022999,21.600996 L6.7089993,20.642998 3.5089998,20.642998 3.1149997,21.706995 C3.0339996,21.932995 2.9949996,22.080996 2.9949996,22.151995 2.9949996,22.232996 3.0249996,22.304995 3.0819997,22.370995 3.1389996,22.435996 3.2339997,22.483996 3.3639995,22.514996 3.4499995,22.533995 3.6869995,22.543995 4.0729992,22.543995 L4.0729992,23.998993 0,23.998993 0,22.543995 C0.26199996,22.543995 0.45199993,22.520995 0.57299976,22.475995 0.6929999,22.430994 0.79399989,22.363995 0.87099982,22.271996 0.94799986,22.182995 1.0349998,22.013997 1.1319997,21.766997 z M2.3719994,1.9920616E-06 L9.6960008,1.9920616E-06 9.6960008,1.455995 4.1320018,8.8769984 4.7879998,8.8769984 C5.692003,8.8769984 6.3680016,8.7929987 6.817003,8.6249995 7.2640015,8.4570002 7.6769997,8.1600031 8.0560014,7.7319941 8.4360024,7.3049921 8.7310006,6.7799987 8.9430024,6.1579894 L10.322,6.6259918 8.942003,10.522002 0.90900198,10.522002 0.90900198,9.059997 6.4950005,1.6600048 5.6200005,1.6600048 C5.027002,1.660005 4.5500008,1.7299971 4.1890005,1.8699964 3.8270013,2.011003 3.5130021,2.2200024 3.2459998,2.4960033 2.9790017,2.7720043 2.5980012,3.3519906 2.1000002,4.2359928 L0.77300035,3.6479957 z M18.938999,0 L21.484998,0 21.484998,19.13 24.933998,15.681 26.736997,17.482001 20.217998,24 20.208999,23.989001 20.198999,24 13.683001,17.482001 15.481001,15.681 18.938999,19.138001 z"
 								Fill="#FF5A5A5B"
 								Stretch="Uniform" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator />
-					<MenuItem
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ClearSorting}}"
 						CommandParameter="{Binding}"
 						Header="Clear Sorting">
-						<MenuItem.Icon>
-							<Grid
+                        <MenuItem.Icon>
+                            <Grid
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center">
-								<Path
+                                <Path
 									Width="10.306"
 									HorizontalAlignment="Left"
 									Data="M4.7729988,15.095976 L3.7779999,17.779995 5.7190018,17.779995 z M4.0709991,12.519987 L6.2659988,12.519987 9.1990013,20.064968 C9.3590011,20.466976 9.4990005,20.714993 9.6220016,20.806973 9.7460022,20.900997 9.973999,20.94598 10.306,20.939968 L10.306,22.291987 5.6819992,22.291987 5.6819992,20.939968 5.9630012,20.933987 C6.2190018,20.933987 6.4000015,20.89999 6.5019989,20.831997 6.6049995,20.763973 6.656002,20.681973 6.656002,20.582973 6.656002,20.497982 6.6119995,20.325985 6.5229988,20.064968 L6.2319984,19.174984 3.2600021,19.174984 2.894001,20.162991 C2.8190002,20.371975 2.7820015,20.509975 2.7820015,20.575985 2.7820015,20.650997 2.8100014,20.717983 2.8619995,20.778988 2.9160004,20.839993 3.0040016,20.883968 3.125,20.912991 3.2050018,20.929989 3.4249992,20.939968 3.7830009,20.939968 L3.7830009,22.291987 0,22.291987 0,20.939968 C0.24399947,20.939968 0.42100142,20.918972 0.5320016,20.877987 0.64500045,20.834988 0.73799895,20.772976 0.81000142,20.687984 0.88199996,20.604977 0.96200179,20.446987 1.0520019,20.217983 z M2.2040014,0 L9.0059996,0 9.0059996,1.3529987 3.8390009,8.2459912 4.4470005,8.2459912 C5.2870002,8.2459912 5.9150004,8.1679916 6.3320002,8.0119915 6.7469997,7.8549919 7.131,7.5789924 7.4829998,7.1819925 7.8359995,6.7859931 8.1089992,6.2979937 8.3059997,5.7199941 L9.5879993,6.1539936 8.3049993,9.7729897 0.8440017,9.7729897 0.8440017,8.4149914 6.033,1.5419989 5.2200003,1.5419989 C4.6700005,1.5419989 4.2270007,1.6069984 3.891001,1.7369986 3.555001,1.8679981 3.263001,2.0629978 3.0160012,2.3179979 2.7670011,2.5749969 2.4130013,3.1139965 1.9510015,3.9349957 L0.71800183,3.3889961 z"
 									Fill="#FF5A5A5B"
 									Stretch="Uniform" />
-								<Path
+                                <Path
 									Margin="10.841,3.519,0,3.614"
 									Data="F1M69.5771,293.3828L67.1911,290.9968L61.9981,296.1898L56.8051,290.9968L54.4181,293.3828L59.6111,298.5758L54.4181,303.7688L56.8051,306.1558L61.9981,300.9628L67.1911,306.1558L69.5771,303.7688L64.3841,298.5758z"
 									Fill="#FFC1272D"
 									Stretch="Uniform" />
-							</Grid>
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ClearFiltering}}"
 						CommandParameter="{Binding}"
 						Header="Clear Filtering">
-						<MenuItem.Icon>
-							<Grid
+                        <MenuItem.Icon>
+                            <Grid
 								Width="17"
 								Height="17"
 								Margin="3"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center">
-								<Path
+                                <Path
 									Margin="0,0,2.097,0"
 									Data="F1M578.04,215.9512L568.419,215.8282L568.419,215.8272L568.4,215.8282L568.381,215.8272L568.381,215.8282L558.76,215.9512C557.435,215.9682,557.07,216.8432,557.868,217.8992C557.868,217.8992,565.497,225.9902,565.426,225.9912C565.397,225.9922,565.415,226.1842,565.445,226.4952L565.445,231.6702C565.445,232.6302,566.059,233.4082,566.816,233.4082L568.381,233.4082L568.419,233.4082L569.983,233.4082C570.741,233.4082,571.355,232.6302,571.355,231.6702L571.355,226.4952C571.385,226.1842,571.402,225.9922,571.374,225.9912C571.302,225.9902,578.932,217.8992,578.932,217.8992C579.73,216.8432,579.365,215.9682,578.04,215.9512"
 									Fill="#FF5A5A5B"
 									Stretch="Fill" />
-								<Path
+                                <Path
 									Width="10.25"
 									Margin="0,6.779,0,0.552"
 									HorizontalAlignment="Right"
 									Data="F1M581.4487,224.2202L579.8347,222.6062L576.3237,226.1182L572.8117,222.6062L571.1987,224.2202L574.7097,227.7312L571.1987,231.2422L572.8127,232.8562L576.3237,229.3452L579.8347,232.8562L581.4487,231.2422L577.9367,227.7312z"
 									Fill="#FFC1272D"
 									Stretch="Fill" />
-							</Grid>
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator />
-					<MenuItem
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.GroupThisColumn}}"
 						CommandParameter="{Binding}"
 						Header="Group by this Column">
-						<MenuItem.Icon>
-							<Grid
+                        <MenuItem.Icon>
+                            <Grid
 								Width="20"
 								Height="20"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center">
-								<Path
+                                <Path
 									Margin="0,8.922,0,0"
 									Data="M15.666973,6.4920101 L17.692482,6.4920101 C19.207493,6.4920102 20.434986,7.7195423 20.434986,9.2353151 L20.434986,12.829001 15.737955,12.829001 15.737955,9.3313951 C15.737955,8.3168169 15.386628,7.3846956 14.802995,6.6447346 15.07617,6.5529566 15.362967,6.4920102 15.666973,6.4920101 z M2.7424612,6.491997 L4.7686576,6.491997 C4.9816227,6.491997 5.1859445,6.522128 5.3860001,6.5680136 4.7650914,7.3201501 4.3922443,8.2831157 4.3922443,9.331398 L4.3922443,12.828997 0,12.828997 0,9.2353158 C0,7.7195331 1.2281856,6.491997 2.7424612,6.491997 z M8.7439994,5.7489959 L11.387699,5.7489959 C13.366709,5.748996 14.969994,7.3532228 14.969994,9.3317931 L14.969994,14.023995 5.1609883,14.023995 5.1609883,9.3317931 C5.1609883,7.3532228 6.7649898,5.748996 8.7439994,5.7489959 z M16.745207,2.2009945 C17.70553,2.2009945 18.487989,2.9825749 18.487989,3.9441338 18.487989,4.9056926 17.70553,5.6879899 16.745207,5.6879898 15.783448,5.6879899 15.000989,4.9056926 15.000989,3.9441338 15.000989,2.9825749 15.783448,2.2009945 16.745207,2.2009945 z M3.8212742,2.2009945 C4.7827563,2.2009945 5.5649914,2.9825749 5.5649914,3.9441338 5.5649914,4.9056926 4.7827563,5.6879899 3.8212742,5.6879898 2.8605091,5.6879899 2.0789911,4.9056926 2.0789909,3.9441338 2.0789911,2.9825749 2.8605091,2.2009945 3.8212742,2.2009945 z M10.14956,0 C11.486037,0 12.573001,1.0870256 12.573001,2.4221454 12.573001,3.7586994 11.486037,4.8450081 10.14956,4.8450081 8.814517,4.8450081 7.7289877,3.7586994 7.7289877,2.4221454 7.7289877,1.0870256 8.814517,0 10.14956,0 z"
 									Fill="#FF6090FF"
 									Stretch="Fill" />
-								<Path
+                                <Path
 									Height="11.197"
 									Margin="1.717,0,2.022,0"
 									VerticalAlignment="Top"
 									Data="M13.318991,1.5922537E-05 L16.695991,1.5922537E-05 16.695991,10.761041 C16.235687,10.394631 15.660662,10.166624 15.028288,10.166624 14.37655,10.166624 13.78575,10.408264 13.318991,10.794017 z M6.658987,2.4878955E-07 L10.036988,2.4878955E-07 10.036988,8.3886795 C9.8505561,8.2868681 9.6555197,8.2036982 9.4497278,8.1384525 9.3758721,8.1140757 9.3027334,8.0889807 9.2260094,8.069623 9.1507196,8.0509815 9.0747128,8.0352078 8.997272,8.0223017 8.8137083,7.9893208 8.6265597,7.9656601 8.4329572,7.9656601 8.2314677,7.9656601 8.037148,7.9900379 7.8456969,8.0244532 7.7711244,8.0380755 7.6987028,8.0552826 7.6262813,8.0739241 7.5201583,8.1004524 7.416904,8.1334343 7.3150835,8.1707172 7.0892143,8.2510185 6.8748174,8.3499622&#10;6.6733279,8.474 z M0,0 L3.3780003,0 3.3780003,10.500774 C2.9972496,10.29499 2.5677395,10.166643 2.1045284,10.166643 1.2490931,10.166643 0.49476147,10.574628 0,11.197002 z"
 									Fill="#FF5A5A5B"
 									Stretch="Fill" />
-							</Grid>
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ShowHideGroupArea}}"
 						CommandParameter="{Binding}"
 						Header="Expand/Collapse Group Drop Area" />
-					<Separator />
-					<MenuItem
+                    <Separator />
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.BestFit}}"
 						CommandParameter="{Binding}"
 						Header="Best Fit" />
-				</ContextMenu>
-			</syncfusion:SfDataGrid.HeaderContextMenu>
-			<syncfusion:SfDataGrid.GroupCaptionContextMenu>
-				<ContextMenu>
-					<MenuItem
+                </ContextMenu>
+            </syncfusion:SfDataGrid.HeaderContextMenu>
+            <syncfusion:SfDataGrid.GroupCaptionContextMenu>
+                <ContextMenu>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Expand}}"
 						CommandParameter="{Binding}"
 						Header="Expand" />
-					<MenuItem
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Collapse}}"
 						CommandParameter="{Binding}"
 						Header="Collapse" />
-				</ContextMenu>
-			</syncfusion:SfDataGrid.GroupCaptionContextMenu>
-			<syncfusion:SfDataGrid.RecordContextMenu>
-				<ContextMenu>
-					<MenuItem
+                </ContextMenu>
+            </syncfusion:SfDataGrid.GroupCaptionContextMenu>
+            <syncfusion:SfDataGrid.RecordContextMenu>
+                <ContextMenu>
+                    <MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Copy}}"
 						CommandParameter="{Binding}"
 						Header="Copy">
-						<MenuItem.Icon>
-							<Grid x:Name="Copy" Height="16" Width="16">
-								<Path 
+                        <MenuItem.Icon>
+                            <Grid x:Name="Copy" Height="16" Width="16">
+                                <Path 
 									Data="M5.5000009,2.500005 L10.500001,2.500005 14.500001,6.500005 14.500001,14.500005 5.5000009,14.500005 z M0,0 L4.0000037,0 4.0000037,12 0,12 z" 
 									Fill="White" Margin="1,1,0.5,0.5" Stretch="Fill"/>
-								<Path 
+                                <Path 
 									Data="M9.0000026,11.999999 L13.000003,11.999999 13.000003,12.999999 9.0000026,12.999999 z M9.0000026,9.9999986 L13.000003,9.9999986 13.000003,10.999999 9.0000026,10.999999 z M12,4.7070035 L12,7.0000033 14.293,7.0000033 z M6.9999967,4.0000001 L6.9999967,15 14.999997,15 14.999997,8.0000033 11,8.0000033 11,4.0000001 z M5.9999967,2.9999999 L11.706997,2.9999999 15.999997,7.293 15.999997,16 5.9999967,16 z M0,0 L6.9999967,0 6.9999967,2 5.9999971,2 5.9999971,1 1,1 1,13 4.9999976,13 4.9999976,14 0,14 z" 
 									Fill="#FF3A3939" Stretch="Fill"/>
-							</Grid>
-						</MenuItem.Icon>
-					</MenuItem>
-					<!--<MenuItem
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <!--<MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Cut}}"
 						CommandParameter="{Binding}"
 						Header="Cut">
@@ -333,32 +361,32 @@
 							</Grid>
 						</MenuItem.Icon>
 					</MenuItem>-->
-					</ContextMenu>
-				</syncfusion:SfDataGrid.RecordContextMenu>
-			<syncfusion:SfDataGrid.Columns>
-				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" AllowEditing="False" IsHidden="True"/>
-				<syncfusion:GridTextColumn MappingName="PersonID" AllowEditing="False" HeaderText="PID"/>
-				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
-				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
-				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
-				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
-				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
-				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
-				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="True" AllowGrouping="False" HeaderText="" AllowFocus="False" AllowFiltering="False" Stretch="Fill" StretchDirection="Both" ImageWidth="32" TextAlignment="Center" ImageHeight="32" VerticalAlignment="Center" />
-			</syncfusion:SfDataGrid.Columns>
-			<syncfusion:SfDataGrid.DetailsViewDefinition>
-				<syncfusion:TemplateViewDefinition  RowTemplate="{StaticResource DetailsViewTemplate}"/>
-			</syncfusion:SfDataGrid.DetailsViewDefinition>
-			<syncfusion:SfDataGrid.TableSummaryRows>
-				<syncfusion:GridTableSummaryRow ShowSummaryInRow="False" Position="Bottom">
-					<syncfusion:GridSummaryRow.SummaryColumns >
-						<syncfusion:GridSummaryColumn Name="PeopleCount"
+                </ContextMenu>
+            </syncfusion:SfDataGrid.RecordContextMenu>
+            <syncfusion:SfDataGrid.Columns>
+                <syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" AllowEditing="False" IsHidden="True"/>
+                <syncfusion:GridTextColumn MappingName="PersonID" AllowEditing="False" HeaderText="PID"/>
+                <syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
+                <syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
+                <syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
+                <syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
+                <syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
+                <syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
+                <syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="True" AllowGrouping="False" HeaderText="" AllowFocus="False" AllowFiltering="False" Stretch="Fill" StretchDirection="Both" ImageWidth="32" TextAlignment="Center" ImageHeight="32" VerticalAlignment="Center" />
+            </syncfusion:SfDataGrid.Columns>
+            <syncfusion:SfDataGrid.DetailsViewDefinition>
+                <syncfusion:TemplateViewDefinition  RowTemplate="{StaticResource DetailsViewTemplate}"/>
+            </syncfusion:SfDataGrid.DetailsViewDefinition>
+            <syncfusion:SfDataGrid.TableSummaryRows>
+                <syncfusion:GridTableSummaryRow ShowSummaryInRow="False" Position="Bottom">
+                    <syncfusion:GridSummaryRow.SummaryColumns >
+                        <syncfusion:GridSummaryColumn Name="PeopleCount"
 													  Format="'Total People : {Count:d}'"
 													  MappingName="Mobile"
 													  SummaryType="CountAggregate" />
-					</syncfusion:GridSummaryRow.SummaryColumns>
-				</syncfusion:GridTableSummaryRow>
-			</syncfusion:SfDataGrid.TableSummaryRows>
-		</syncfusion:SfDataGrid>
-	</DockPanel>
+                    </syncfusion:GridSummaryRow.SummaryColumns>
+                </syncfusion:GridTableSummaryRow>
+            </syncfusion:SfDataGrid.TableSummaryRows>
+        </syncfusion:SfDataGrid>
+    </DockPanel>
 </UserControl>

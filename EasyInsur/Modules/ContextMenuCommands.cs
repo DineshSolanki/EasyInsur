@@ -290,7 +290,7 @@ namespace EasyInsur.Modules
             if (obj is not GridColumnContextMenuInfo info) return false;
             var grid = info.DataGrid;
             var column = info.Column;
-            bool canGroup = false;
+            var canGroup = false;
             if (grid.GroupColumnDescriptions == null ||
                 grid.GroupColumnDescriptions.Any(x => x.ColumnName == column.MappingName)) return canGroup;
             var groupcolumn = column.ReadLocalValue(GridColumn.AllowGroupingProperty);

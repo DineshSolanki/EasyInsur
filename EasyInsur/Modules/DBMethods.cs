@@ -4,9 +4,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
 using EasyInsur.Models;
-using HandyControl.Tools.Extension;
 using RepoDb;
-using Syncfusion.Data.Extensions;
 
 namespace EasyInsur.Modules
 {
