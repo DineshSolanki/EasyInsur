@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using RepoDb.Attributes;
+using Syncfusion.XlsIO;
 
 namespace EasyInsur.Models
 {

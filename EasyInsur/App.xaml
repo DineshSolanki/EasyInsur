@@ -3,7 +3,8 @@
 						xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 						xmlns:hc="https://handyorg.github.io/handycontrol"
 						xmlns:prism="http://prismlibrary.com/"
-						xmlns:Syncfusion="http://schemas.syncfusion.com/wpf">
+						xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
+						xmlns:system="clr-namespace:System;assembly=System.Runtime">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -97,6 +98,13 @@
 			</StackPanel>
 		</Grid>
 	</DataTemplate>
+			<x:Array Type="system:String" x:Key="ExcelVersions">
+				<system:String>97 to 2003</system:String>
+				<system:String>2007</system:String>
+				<system:String>2010</system:String>
+				<system:String>2013</system:String>
+				<system:String>2016</system:String>
+			</x:Array>
 		</ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>

@@ -11,6 +11,7 @@
 			 xmlns:local="clr-namespace:EasyInsur.Models"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 			 xmlns:modules="clr-namespace:EasyInsur.Modules"
+			 xmlns:xlsIo="clr-namespace:Syncfusion.XlsIO;assembly=Syncfusion.XlsIO.Base"
 			 prism:ViewModelLocator.AutoWireViewModel="True"
 			 syncfusion:SfSkinManager.VisualStyle="FluentLight">
 	<UserControl.Resources>
@@ -18,14 +19,19 @@
 	</UserControl.Resources>
 	<DockPanel LastChildFill="True">
 		<Grid DockPanel.Dock="Top">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
 				<ColumnDefinition Width="Auto"/>
 				<!--<ColumnDefinition Width="Auto"/>-->
 			</Grid.ColumnDefinitions>
-			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}" SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5"/>
-			<Grid Grid.Column="1" Margin="5" VerticalAlignment="Top">
+			<hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
+						 SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" Margin="5" />
+			<Grid Grid.Row="0" Grid.Column="1" Margin="5" VerticalAlignment="Top">
 				<Grid.ColumnDefinitions>
 					<ColumnDefinition Width="*"/>
 					<ColumnDefinition Width="auto"/>
@@ -39,7 +45,7 @@
 				<Button Grid.Column="1" Content="Prev" HorizontalAlignment="Stretch" Margin="5,30,5,5" Style="{StaticResource FindPreviousButtonStyle}" Click="FindPreviousClicked"/>
 				<Button Grid.Column="2" Content="Next" HorizontalAlignment="Stretch" Style="{StaticResource FindNextButtonStyle}" Click="FindNextClicked" Margin="5,30,5,5"/>
 			</Grid>
-			<StackPanel Grid.Column="2" HorizontalAlignment="Right">
+			<StackPanel Grid.Row="0" Grid.Column="2" HorizontalAlignment="Right">
 				<Button Style="{StaticResource ButtonDefault}" hc:IconElement.Geometry="{StaticResource SaveGeometry}"
 						Content="Save" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5,30,5,5"
 						Command="{Binding SaveCommand}" />
@@ -47,6 +53,40 @@
 						Content="Reload" VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="5"
 						Command="{Binding ReloadCommand}" />
 			</StackPanel>
+			<Expander Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Header="More Options"
+					  BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1,1,1,0">
+				<WrapPanel>
+					<GroupBox Header="Export to excel">
+						<WrapPanel>
+							<!--<hc:SimpleStackPanel>-->
+								<CheckBox
+									x:Name="allowOutlining"
+									Margin="5"
+									Content="Allow Outlining"
+									IsChecked="True" ToolTip="Allows to expand/collapse groups in excel"/>
+								<!--<CheckBox
+									Margin="5"
+									Content="Show stacked header"
+									IsChecked="True" ToolTip="Export as exactly shown with headers."/>-->
+							<!--</hc:SimpleStackPanel>-->
+							<hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type xlsIo:ExcelVersion},{StaticResource ExcelVersions}}}"
+										 ToolTip="Excel version" Margin="5" DisplayMemberPath="Value"
+										 AutoComplete="True" Style="{StaticResource ComboBoxPlusBaseStyle}" 
+										 Width="Auto" hc:DropDownElement.ConsistentWidth="False"/>
+							<!--<hc:Transfer Height="200" Margin="5">
+								<hc:Transfer.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Name}"/>
+									</DataTemplate>
+								</hc:Transfer.ItemTemplate>
+							</hc:Transfer>-->
+							<Button Style="{StaticResource ButtonDefault}" Content="Export to Excel"/>
+						</WrapPanel>
+						
+					</GroupBox>
+					
+				</WrapPanel>
+			</Expander>
 			<!--<local1:SearchControl x:Name="searchControl" Grid.Column="3"
 								  Visibility="Visible"
 								  VerticalAlignment="Top" 
@@ -271,21 +311,28 @@
 							</Grid>
 						</MenuItem.Icon>
 					</MenuItem>
-					<MenuItem
+					<!--<MenuItem
 						Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.Cut}}"
 						CommandParameter="{Binding}"
 						Header="Cut">
 						<MenuItem.Icon>
-							<Grid x:Name="Cut" Height="16" Width="16">
+							<Grid x:Name="Cut" 
+								  Height="15.999" 
+								  Width="10">
 								<Path 
-									Data="M5.5000009,2.500005 L10.500001,2.500005 14.500001,6.500005 14.500001,14.500005 5.5000009,14.500005 z M0,0 L4.0000037,0 4.0000037,12 0,12 z" 
-									Fill="White" Margin="1,1,0.5,0.5" Stretch="Fill"/>
+									Data="M0.4800034,0 L3.2370005,5.6329948 5.9950049,0 6.4480002,1.3919982 3.8000043,6.7859942 6.4040015,12.108999 5.4240053,12.385 3.2370005,7.9400011 1.0859987,12.314001 0,12.249991 2.675004,6.7859942 0.027000348,1.3919982 z" 
+									Fill="#FF3A3A38" 
+									Margin="1.747,0,1.805,3.614" 
+									Stretch="Fill"/>
 								<Path 
-									Data="M9.0000026,11.999999 L13.000003,11.999999 13.000003,12.999999 9.0000026,12.999999 z M9.0000026,9.9999986 L13.000003,9.9999986 13.000003,10.999999 9.0000026,10.999999 z M12,4.7070035 L12,7.0000033 14.293,7.0000033 z M6.9999967,4.0000001 L6.9999967,15 14.999997,15 14.999997,8.0000033 11,8.0000033 11,4.0000001 z M5.9999967,2.9999999 L11.706997,2.9999999 15.999997,7.293 15.999997,16 5.9999967,16 z M0,0 L6.9999967,0 6.9999967,2 5.9999971,2 5.9999971,1 1,1 1,13 4.9999976,13 4.9999976,14 0,14 z" 
-									Fill="#FF3A3939" Stretch="Fill"/>
+									Data="M2.0000019,1.0000033 C1.4480005,1.0000033 1.0000028,1.4489932 1.0000028,2.0000033 1.0000028,2.5509982 1.4480005,3.0000033 2.0000019,3.0000033 2.5519957,3.0000033 3.0000009,2.5509982 3.0000009,2.0000033 3.0000009,1.4489932 2.5519957,1.0000033 2.0000019,1.0000033 z M7.9999966,0.99999999 C7.4479966,0.99999993 6.9999966,1.449 6.9999966,2 6.9999966,2.5509999 7.4479966,3 7.9999966,3 8.5519962,3 8.9999962,2.5509999 8.9999962,2 8.9999962,1.449 8.5519962,0.99999993 7.9999966,0.99999999 z M2.0000019,3.2782542E-06 C3.1029978,3.3312692E-06 4,0.89700651 4,2.0000033 4,3.1030002 3.1029978,4.0000033 2.0000019,4.0000033 0.8969985,4.0000033 0,3.1030002 0,2.0000033 0,0.89700651 0.8969985,3.3312692E-06 2.0000019,3.2782542E-06 z M7.9999966,0 C9.1029968,-3.7871359E-08 9.9999962,0.89699995 9.9999962,2 9.9999962,3.1029999 9.1029968,4 7.9999966,4 6.8969965,4 5.9999966,3.1029999 5.9999966,2 5.9999966,0.89699995 6.8969965,-3.7871359E-08 7.9999966,0 z" 
+									Fill="#FF1D8BCC" 
+									Height="4" 
+									Stretch="Fill" 
+									VerticalAlignment="Bottom"/>
 							</Grid>
 						</MenuItem.Icon>
-					</MenuItem>
+					</MenuItem>-->
 					</ContextMenu>
 				</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
