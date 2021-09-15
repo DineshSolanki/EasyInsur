@@ -40,7 +40,7 @@ namespace EasyInsur.Modules
                 var exampleNumber = Services.PhoneNumberUtil.GetExampleNumberForType(regionCode, PhoneNumberType.MOBILE);
                 var formattedNumber = Services.PhoneNumberUtil.FormatNumberForMobileDialing(exampleNumber, regionCode, true)[1..];
                 var mask = Regex.Replace(formattedNumber, @"\d", "0");
-                return new Tuple<string, string>(mask,formattedNumber);
+                return new Tuple<string, string>(mask, formattedNumber);
             }
             catch (Exception)
             {

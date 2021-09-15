@@ -357,7 +357,7 @@ namespace EasyInsur.ViewModels
                 };
                 var id = DBMethods.SaveTransaction(transaction);
                 SelectedPayee.Balance = FinalBalance;
-                DBMethods.UpdatePerson(SelectedPayee);
+                DBMethods.UpdatePersonBalance(SelectedPayee);
                 Insurance = DBMethods.GetInsurances();
                 Transactions = DBMethods.GetTransactions(SelectedPayee.Id);
                 PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);

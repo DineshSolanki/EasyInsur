@@ -44,19 +44,21 @@ namespace EasyInsur.Models
         public string Type { get; set; }
         public string PersonID { get; set; }
         public string Address { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
-        [Display(GroupName = "Sales Details")]
+
+        [Required]
         public string FirstName { get; set; }
-        [Display(GroupName = "Sales Details")]
+        [Required]
         public string LastName { get; set; }
+        [Required]
         public double Balance { get; set; }
         public string ImagePath { get; set; }
+        [Phone]
         public string Mobile { get; set; }
+        [Required]
         public string RegDate { get; set; }
-        public override string ToString()
-        {
-            return $"{FirstName} {LastName}";
-        }
+        public override string ToString() => $"{FirstName} {LastName}";
         private Dictionary<string, object>? _storedValues;
         protected Dictionary<string, object> BackUp()
         {
@@ -66,10 +68,7 @@ namespace EasyInsur.Models
                 .ToDictionary(pDescriptor => pDescriptor.Name,
                     pDescriptor => pDescriptor.GetValue(this))!;
         }
-        public void BeginEdit()
-        {
-            _storedValues = BackUp();
-        }
+        public void BeginEdit() => _storedValues = BackUp();
 
         public void CancelEdit()
         {
@@ -93,6 +92,6 @@ namespace EasyInsur.Models
             _storedValues = null;
         }
 
-        public List<string> EditedColumns = new List<string>();
+        public List<string> EditedColumns = new();
     }
 }
