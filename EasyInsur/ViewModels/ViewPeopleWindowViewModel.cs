@@ -15,6 +15,7 @@ namespace EasyInsur.ViewModels
             PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(ReloadMethod);
             SaveCommand = new DelegateCommand(SaveMethod);
+            ExportCommand = new DelegateCommand<object>(ExportMethod);
         }
 
         private void ReloadMethod()
@@ -25,6 +26,11 @@ namespace EasyInsur.ViewModels
 
         #region Properties
 
+        private bool _allowOutlining = true;
+        public bool AllowOutlining { get => _allowOutlining; set => SetProperty(ref _allowOutlining, value); }
+
+        private bool _exportCurrentPageOnly = true;
+        public bool ExportCurrentPageOnly { get => _exportCurrentPageOnly; set => SetProperty(ref _exportCurrentPageOnly, value); }
         private PersonType _personType;
         public PersonType PersonType
         {
@@ -68,13 +74,14 @@ namespace EasyInsur.ViewModels
         public DelegateCommand<string> SearchCommand { get; }
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
+        public DelegateCommand<object> ExportCommand { get; }
 
 
         #endregion
 
         private void SaveMethod()
         {
-            IEnumerable<Person> r = AllPeople.Where(p => p.EditedColumns.Any());
+            var r = AllPeople.Where(p => p.EditedColumns.Any());
             var enumerable = r.ToList();
             if (!enumerable.Any()) return;
             DBMethods.UpdatePeople(enumerable);
@@ -83,8 +90,9 @@ namespace EasyInsur.ViewModels
             //{
             //    DBMethods.UpdatePerson(person);
             //}
-            
-            
+        }
+        private void ExportMethod(object parameter)
+        { 
         }
     }
 }
