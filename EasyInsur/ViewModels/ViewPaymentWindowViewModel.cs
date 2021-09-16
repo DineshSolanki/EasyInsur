@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace EasyInsur.ViewModels
 {
@@ -110,7 +111,7 @@ namespace EasyInsur.ViewModels
                     PersonType = _personType;
                     return;
                 }
-                Transactions = DBMethods.GetTransactions(SelectedPayee.Id);
+                DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
             }
         }
         #endregion
@@ -123,11 +124,10 @@ namespace EasyInsur.ViewModels
         #region Methods
         private void SaveMethod()
         {
-            //var r = AllPeople.Where(p => p.EditedColumns.Any());
-            //var enumerable = r.ToList();
-            //if (!enumerable.Any()) return;
-            //DBMethods.UpdatePeople(enumerable);
-            ReloadMethod();
+            var r = AllTransactions.Where(p => p.EditedColumns.Any());
+            var enumerable = r.ToList();
+            if (!enumerable.Any()) return;
+            DBMethods.UpdateTransactions(enumerable);
         }
 
         private void ReloadMethod()
@@ -138,12 +138,25 @@ namespace EasyInsur.ViewModels
 
         private void LoadTransactions()
         {
-            Customers = DBMethods.LoadCustomers();
-            Agents = DBMethods.LoadAgents();
-            People = Customers.Join(Agents);
-            CustomerTransactions = DBMethods.GetCustomerTransactions();
-            AgentTransactions = DBMethods.GetAgentTransactions();
-            AllTransactions = CustomerTransactions.Join(AgentTransactions);
+            DBMethods.LoadCustomers().ContinueWith((c) =>
+            {
+                Customers = c.Result;
+                DBMethods.LoadAgents().ContinueWith(a =>
+                {
+                    Agents = a.Result;
+                    People = Customers.Join(Agents);
+                });
+            });
+            DBMethods.GetCustomerTransactions().ContinueWith(ct =>
+            {
+                CustomerTransactions = ct.Result;
+                DBMethods.GetAgentTransactions().ContinueWith(at =>
+                {
+                    AgentTransactions = at.Result;
+                    AllTransactions = CustomerTransactions.Join(AgentTransactions);
+                });
+            });
+
         }
         #endregion
     }

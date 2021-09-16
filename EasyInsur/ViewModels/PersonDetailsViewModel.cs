@@ -55,7 +55,10 @@ namespace EasyInsur.ViewModels
             {
                 SetProperty(ref _personType, value);
                 if (value is null) return;
-                PersonData = PersonType == "Agent" ? DBMethods.LoadAgents() : DBMethods.LoadCustomers();
+                if (PersonType == "Agent")
+                    DBMethods.LoadAgents().ContinueWith(a => PersonData = a.Result);
+                else
+                    DBMethods.LoadCustomers().ContinueWith(c => PersonData = c.Result);
             }
         }
 

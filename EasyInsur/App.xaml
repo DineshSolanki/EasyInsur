@@ -4,7 +4,8 @@
 						xmlns:hc="https://handyorg.github.io/handycontrol"
 						xmlns:prism="http://prismlibrary.com/"
 						xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
-						xmlns:system="clr-namespace:System;assembly=System.Runtime">
+						xmlns:system="clr-namespace:System;assembly=System.Runtime"
+						xmlns:modules="clr-namespace:EasyInsur.Modules">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -105,6 +106,7 @@
 				<system:String>2013</system:String>
 				<system:String>2016</system:String>
 			</x:Array>
+			<modules:StringToImageConverter x:Key="StringToImageConverter"/>
 		</ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>

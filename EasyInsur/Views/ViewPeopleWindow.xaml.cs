@@ -1,5 +1,4 @@
-﻿
-using EasyInsur.Models;
+﻿using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
@@ -11,6 +10,7 @@ using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Converter;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.XlsIO;
+using System;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -40,6 +40,7 @@ namespace EasyInsur.Views
             DataGrid.SearchHelper.FindNext(SearchBarForGrid.Text);
             DataGrid.SelectionController.MoveCurrentCell(DataGrid.SearchHelper.CurrentRowColumnIndex);
         }
+
         private void FindPreviousClicked(object sender, RoutedEventArgs e)
         {
             if (SearchBarForGrid.Text.IsNullOrEmpty()) return;
@@ -61,9 +62,8 @@ namespace EasyInsur.Views
             var options = new ExcelExportingOptions
             {
                 ExcelVersion = ExcelVersion.Excel2013,
-                AllowOutlining = (bool)allowOutlining.IsChecked!,
+                AllowOutlining = (bool)AllowOutlining.IsChecked!,
                 ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!,
-
             };
             var excelEngine = (bool)ExportSelectedDataOnly.IsChecked!
                 ? DataGrid.ExportToExcel(DataGrid.SelectedItems, options)
@@ -77,25 +77,34 @@ namespace EasyInsur.Views
                 FileName = "EasyInsure_People"
             };
 
-            if (sfd.ShowDialog() == true)
+            if (sfd.ShowDialog() != true) return;
+
+            try
             {
-                using (var stream = sfd.OpenFile())
+                using var stream = sfd.OpenFile();
+                workBook.Version = sfd.FilterIndex switch
                 {
-                    workBook.Version = sfd.FilterIndex == 1 ? ExcelVersion.Excel97to2003 : sfd.FilterIndex == 2 ? ExcelVersion.Excel2010 : ExcelVersion.Excel2013;
-                    workBook.SaveAs(stream);
-                }
+                    1 => ExcelVersion.Excel97to2003,
+                    2 => ExcelVersion.Excel2010,
+                    _ => ExcelVersion.Excel2013
+                };
+                workBook.SaveAs(stream);
                 //Message box confirmation to view the created workbook.
                 if (MessageBox.Show("Do you want to view the workbook?",
-                                    "Workbook has been created",
-                                    MessageBoxButton.YesNo,
-                                    MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    "Workbook has been created",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
-
                     //Launching the Excel file using the default Application.[MS Excel Or Free ExcelViewer]
                     Util.StartProcess(sfd.FileName);
                 }
             }
+            catch (Exception exception)
+            {
+                MessageBox.Error(exception.Message);
+            }
         }
+
         private void ExportPDFButton_Click(object sender, RoutedEventArgs e)
         {
             var options = new PdfExportingOptions()
@@ -107,38 +116,35 @@ namespace EasyInsur.Views
             var document = new PdfDocument();
             document.PageSettings.Orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;
             var page = document.Pages.Add();
-            var PDFGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
+            var pdfGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
             var format = new PdfGridLayoutFormat()
             {
                 Layout = PdfLayoutType.Paginate,
                 Break = PdfLayoutBreakType.FitPage
             };
 
-            PDFGrid.Draw(page, new PointF(), format);
+            pdfGrid.Draw(page, new PointF(), format);
             var sfd = new SaveFileDialog
             {
                 Filter = "PDF Files(*.pdf)|*.pdf",
-                FileName = "EasyInsure_Transactions"
+                FileName = "EasyInsure_People"
             };
 
-            if (sfd.ShowDialog() == true)
+            if (sfd.ShowDialog() != true) return;
+            try
             {
-                try
-                {
-                    using var stream = sfd.OpenFile();
-                    document.Save(stream);
-                }
-                catch (System.Exception ex)
-                {
-                    MessageBox.Error(ex.Message);
-                    return;
-                }
-
+                using var stream = sfd.OpenFile();
+                document.Save(stream);
                 if (MessageBox.Show("Do you want to view the Pdf file?", "Pdf file has been created",
-                                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
                     Util.StartProcess(sfd.FileName);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Error(ex.Message);
+                return;
             }
         }
     }
