@@ -4,11 +4,14 @@ using EasyInsur.Modules;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
 using Microsoft.Win32;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
 using Syncfusion.UI.Xaml.Grid;
 using Syncfusion.UI.Xaml.Grid.Converter;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.XlsIO;
-using System.IO;
+using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using MessageBox = HandyControl.Controls.MessageBox;
@@ -95,28 +98,42 @@ namespace EasyInsur.Views
         }
         private void ExportPDFButton_Click(object sender, RoutedEventArgs e)
         {
-            var options = new PdfExportingOptions
+            var options = new PdfExportingOptions()
             {
-                AutoColumnWidth = (bool)AutoFitColumns.IsChecked!,
-                AutoRowHeight = (bool)AutoFitColumns.IsChecked!,
-                FitAllColumnsInOnePage = true,
+                FitAllColumnsInOnePage = (bool)FitOnOnePage.IsChecked!,
                 ExportFormat = (bool)ExportFormatted.IsChecked!,
-                ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!,
+                ExportAllPages = (bool)ExportCurrentPageOnly.IsChecked!
             };
-            var document = (bool)ExportSelectedDataOnly.IsChecked! 
-                ? DataGrid.ExportToPdf(DataGrid.SelectedItems, options) 
-                : DataGrid.ExportToPdf(options);
+            var document = new PdfDocument();
+            document.PageSettings.Orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;
+            var page = document.Pages.Add();
+            var PDFGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
+            var format = new PdfGridLayoutFormat()
+            {
+                Layout = PdfLayoutType.Paginate,
+                Break = PdfLayoutBreakType.FitPage
+            };
+
+            PDFGrid.Draw(page, new PointF(), format);
             var sfd = new SaveFileDialog
             {
-                Filter = "PDF Files(*.pdf)|*.pdf"
+                Filter = "PDF Files(*.pdf)|*.pdf",
+                FileName = "EasyInsure_Transactions"
             };
 
             if (sfd.ShowDialog() == true)
             {
-                using (var stream = sfd.OpenFile())
+                try
                 {
+                    using var stream = sfd.OpenFile();
                     document.Save(stream);
                 }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Error(ex.Message);
+                    return;
+                }
+
                 if (MessageBox.Show("Do you want to view the Pdf file?", "Pdf file has been created",
                                     MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                 {
