@@ -7,9 +7,9 @@ using RepoDb.Attributes;
 
 namespace EasyInsur.Models
 {
-    public class Person : IEditableObject
+    public class Person : EditableTableClass
     {
-        public Person(){}
+        public Person() { }
 
         public Person(string firstName, string lastName, string type, string personId, string imagePath,
             string regDate, string mobile, string address = null!, string email = null!)
@@ -59,39 +59,5 @@ namespace EasyInsur.Models
         [Required]
         public string RegDate { get; set; }
         public override string ToString() => $"{FirstName} {LastName}";
-        private Dictionary<string, object>? _storedValues;
-        protected Dictionary<string, object> BackUp()
-        {
-            var itemProperties = GetType().GetTypeInfo().DeclaredProperties;
-
-            return itemProperties.Where(pDescriptor => pDescriptor.CanWrite)
-                .ToDictionary(pDescriptor => pDescriptor.Name,
-                    pDescriptor => pDescriptor.GetValue(this))!;
-        }
-        public void BeginEdit() => _storedValues = BackUp();
-
-        public void CancelEdit()
-        {
-            if (_storedValues == null)
-                return;
-
-            foreach (var (key, value) in _storedValues)
-            {
-                var itemProperties = GetType().GetTypeInfo().DeclaredProperties;
-                var pDesc = itemProperties.FirstOrDefault(p => p.Name == key);
-
-                if (pDesc != null)
-                    pDesc.SetValue(this, value);
-            }
-        }
-
-        public void EndEdit()
-        {
-            if (_storedValues == null) return;
-            _storedValues.Clear();
-            _storedValues = null;
-        }
-
-        public List<string> EditedColumns = new();
     }
 }

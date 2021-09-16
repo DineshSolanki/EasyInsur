@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using EasyInsur.Models;
@@ -51,13 +52,18 @@ namespace EasyInsur.Modules
         /// <summary>
         /// Starts Process associated with given path.
         /// </summary>
-        /// <param name="path">if path is a URL it opens url in default browser, if path is File Or folder path it will be started.</param>
+        /// <param name="path">if path is a URL it opens url in default browser, 
+        /// if path is File Or folder path it will be started.</param>
         public static void StartProcess(string path)
         {
             Process.Start(new ProcessStartInfo(path)
             {
                 UseShellExecute = true
             });
+        }
+        public static IEnumerable<T> Join<T>(this IEnumerable<T> first, IEnumerable<T> second)
+        {
+            return first == null ? second : second == null ? first : first.Concat(second).ToList();
         }
     }
 }

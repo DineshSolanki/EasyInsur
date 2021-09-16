@@ -6,10 +6,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-             xmlns:local="clr-namespace:EasyInsur.Modules"
+             xmlns:local="clr-namespace:EasyInsur.Modules" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
              syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
              mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModels:PaymentWindowViewModel}"
+             d:DataContext="{d:DesignInstance viewmodels:PaymentWindowViewModel}"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <Grid >
         <Grid.RowDefinitions>
@@ -91,7 +91,7 @@
         </hc:SplitButton>
         <syncfusion:SfDataGrid  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="8" AutoGenerateColumns="False" BorderThickness="1"
                                 ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-                                AllowFiltering="True" ColumnSizer="SizeToHeader" AllowResizingColumns="True"
+                                AllowFiltering="True" ColumnSizer="Auto" AllowResizingColumns="True"
                                 ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
                                 HeaderLinesVisibility="Both" ScrollMode="Async" AllowGrouping="True" ShowGroupDropArea="True">
             <syncfusion:SfDataGrid.GroupDropAreaContextMenu>
@@ -310,6 +310,20 @@
                     </syncfusion:StackedHeaderRow.StackedColumns>
                 </syncfusion:StackedHeaderRow>
             </syncfusion:SfDataGrid.StackedHeaderRows>
+            <syncfusion:SfDataGrid.TableSummaryRows>
+                <syncfusion:GridTableSummaryRow ShowSummaryInRow="False" Position="Top">
+                    <syncfusion:GridSummaryRow.SummaryColumns>
+                        <syncfusion:GridSummaryColumn Name="BalanceSum"
+													  Format="'Balance : {Sum:c}'"
+													  MappingName="FinalBalance"
+													  SummaryType="DoubleAggregate"/>
+                        <syncfusion:GridSummaryColumn Name="CommissionSum"
+													  Format="'Commission : {Sum:c}'"
+													  MappingName="CommissionAmount"
+													  SummaryType="DoubleAggregate" />
+                    </syncfusion:GridSummaryRow.SummaryColumns>
+                </syncfusion:GridTableSummaryRow>
+            </syncfusion:SfDataGrid.TableSummaryRows>
             <syncfusion:SfDataGrid.Columns>
                 <syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
                 <syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>

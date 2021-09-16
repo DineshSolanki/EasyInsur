@@ -121,5 +121,37 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.UpdateAllAsync(people).Result;
         }
+        public static IEnumerable<Transactions> GetCustomerTransactions()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            IEnumerable<Transactions> transaction;
+            try
+            {
+                var query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Customer');";
+                transaction = connection.ExecuteQueryAsync<Transactions>(query).Result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+            return transaction;
+        }
+        public static IEnumerable<Transactions> GetAgentTransactions()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            IEnumerable<Transactions> transaction;
+            try
+            {
+                var query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Agent');";
+                transaction = connection.ExecuteQueryAsync<Transactions>(query).Result;
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                throw;
+            }
+            return transaction;
+        }
     }
 }

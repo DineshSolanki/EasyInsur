@@ -14,7 +14,7 @@ namespace EasyInsur.Models
             if (gridCell.ColumnBase?.GridColumn == null)
                 base.SelectStyle(item, container);
             
-            var record = item as Person;
+            var record = item as EditableTableClass;
 
             return record.EditedColumns.Contains(gridCell.ColumnBase.GridColumn.MappingName)
                 ? Application.Current.Resources["CellStyle"] as Style

@@ -2,7 +2,7 @@
 
 namespace EasyInsur.Models
 {
-    public class Transactions
+    public class Transactions : EditableTableClass
     {
         public Transactions()
         {

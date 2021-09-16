@@ -11,13 +11,9 @@
 			 xmlns:local="clr-namespace:EasyInsur.Models"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 			 xmlns:modules="clr-namespace:EasyInsur.Modules"
-			 xmlns:xlsIo="clr-namespace:Syncfusion.XlsIO;assembly=Syncfusion.XlsIO.Base" xmlns:system="clr-namespace:System;assembly=System.Runtime"
              prism:ViewModelLocator.AutoWireViewModel="True"
 			 syncfusion:SfSkinManager.VisualStyle="FluentLight">
     <UserControl.Resources>
-        <modules:MutliCommandParameterConvertor x:Key="CommandParamConvertor"/>
-        <system:String x:Key="excel">excel</system:String>
-        <system:String x:Key="pdf">pdf</system:String>
         <local:CellStyleSelector x:Key="CellStyleSelector" />
     </UserControl.Resources>
     <DockPanel LastChildFill="True">
@@ -79,21 +75,28 @@
                             </hc:SimpleStackPanel>
                             <hc:SimpleStackPanel>
                                 <CheckBox
-                                    x:Name="AutoFitColumns"
-									Margin="5"
-									Content="Auto fit width and column [PDF]"
-									IsChecked="True" ToolTip="Export all data or only what is shown on page."/>
-                                <CheckBox
                                     x:Name="ExportFormatted"
 									Margin="5"
 									Content="Export with format? [PDF]"
 									IsChecked="True" ToolTip="Export formatted data or values only."/>
                                 <CheckBox
+                                    x:Name="FitOnOnePage"
+                                    IsEnabled="True"
+									Margin="5"
+									Content="Fit columns on single page [PDF]"
+									IsChecked="True" ToolTip="All coulumns will try to fit in one page"/>
+                                <GroupBox Header="Page Orientation">
+                                    <hc:SimpleStackPanel Orientation="Horizontal">
+                                    <RadioButton x:Name="RadioPortrait" GroupName="Orientation" IsChecked="False" Margin="2" Content="Portrait" ToolTip="Export in portrait orientation"/>
+                                    <RadioButton x:Name="RadioLandscape" GroupName="Orientation" IsChecked="True" Margin="2" Content="Landscape" ToolTip="Export in landscape orientation"/>
+                                </hc:SimpleStackPanel>
+                                </GroupBox>
+                                <!--<CheckBox
                                     x:Name="UseHeaderFooter"
                                     IsEnabled="False"
 									Margin="5"
 									Content="Export with header/footer [PDF]"
-									IsChecked="False" ToolTip="Header/footer will be shown in pdf"/>
+									IsChecked="False" ToolTip="Header/footer will be shown in pdf"/>-->
                             </hc:SimpleStackPanel>
                             <!--<hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type xlsIo:ExcelVersion},{StaticResource ExcelVersions}}}"
 										 ToolTip="Excel version" Margin="5" DisplayMemberPath="Value"
