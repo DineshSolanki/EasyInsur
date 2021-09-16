@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using EasyInsur.Models;
 using RepoDb;
 
@@ -10,17 +11,17 @@ namespace EasyInsur.Modules
 {
     public static class DBMethods
     {
-        public static IEnumerable<Person> LoadAgents()
+        public static Task<IEnumerable<Person>> LoadAgents()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             var agents = connection.QueryAsync<Person>(p => p.Type == "Agent");
-            return agents.Result;
+            return agents;
         }
-        public static IEnumerable<Person> LoadCustomers()
+        public static Task<IEnumerable<Person>> LoadCustomers()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             var customers = connection.QueryAsync<Person>(p => p.Type == "Customer");
-            return customers.Result;
+            return customers;
         }
         public static double GetBalance(long? id)
         {
@@ -40,15 +41,15 @@ namespace EasyInsur.Modules
             return person.FirstOrDefault().Balance;
         }
 
-        public static IEnumerable<Transactions> GetTransactions(long? personId)
+        public static Task<IEnumerable<Transactions>> GetTransactions(long? personId)
         {
-            if (personId is null) return new List<Transactions>();
+            //if (personId is null) return new Task<IEnumerable<Transactions>>();
 
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            IEnumerable<Transactions> transaction;
+            Task<IEnumerable<Transactions>> transaction;
             try
             {
-                transaction = connection.QueryAsync<Transactions>(t => t.PersonID == personId).Result;
+                transaction = connection.QueryAsync<Transactions>(t => t.PersonID == personId);
             }
             catch (Exception e)
             {
@@ -63,11 +64,11 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.Insert(transactions);
         }
-        public static IEnumerable<Transactions> GetAllTransactions()
+        public static Task<IEnumerable<Transactions>> GetAllTransactions()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            IEnumerable<Transactions> transaction;
-            transaction = connection.QueryAllAsync<Transactions>().Result;
+            Task<IEnumerable<Transactions>> transaction;
+            transaction = connection.QueryAllAsync<Transactions>();
             return transaction;
         }
 
@@ -121,14 +122,19 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.UpdateAllAsync(people).Result;
         }
-        public static IEnumerable<Transactions> GetCustomerTransactions()
+        public static int UpdateTransactions(IEnumerable<Transactions> transactions)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            IEnumerable<Transactions> transaction;
+            return connection.UpdateAllAsync(transactions).Result;
+        }
+        public static Task<IEnumerable<Transactions>> GetCustomerTransactions()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            Task<IEnumerable<Transactions>> transaction;
             try
             {
-                var query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Customer');";
-                transaction = connection.ExecuteQueryAsync<Transactions>(query).Result;
+                const string? query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Customer');";
+                transaction = connection.ExecuteQueryAsync<Transactions>(query);
             }
             catch (Exception e)
             {
@@ -137,14 +143,14 @@ namespace EasyInsur.Modules
             }
             return transaction;
         }
-        public static IEnumerable<Transactions> GetAgentTransactions()
+        public static Task<IEnumerable<Transactions>> GetAgentTransactions()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            IEnumerable<Transactions> transaction;
+            Task<IEnumerable<Transactions>> transaction;
             try
             {
                 var query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Agent');";
-                transaction = connection.ExecuteQueryAsync<Transactions>(query).Result;
+                transaction = connection.ExecuteQueryAsync<Transactions>(query);
             }
             catch (Exception e)
             {

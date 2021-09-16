@@ -1,8 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Windows.Media.Imaging;
+using HandyControl.Tools.Extension;
 using RepoDb.Attributes;
 
 namespace EasyInsur.Models
@@ -53,7 +56,9 @@ namespace EasyInsur.Models
         public string LastName { get; set; }
         [Required]
         public double Balance { get; set; }
+
         public string ImagePath { get; set; }
+
         [Phone]
         public string Mobile { get; set; }
         [Required]

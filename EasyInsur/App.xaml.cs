@@ -38,7 +38,7 @@ namespace EasyInsur
         protected override void OnInitialized()
         {
             base.OnInitialized();
-            Container.Resolve<IRegionManager>().RegisterViewWithRegion("ContentRegion", typeof(PaymentWindow));
+            Container.Resolve<IRegionManager>().RegisterViewWithRegion("ContentRegion", typeof(Dashboard));
         }
     }
 }

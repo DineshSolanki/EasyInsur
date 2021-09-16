@@ -24,6 +24,7 @@ namespace EasyInsur.ViewModels
         }
         public DelegateCommand ResetCommand { get; }
         public DelegateCommand SaveCommand { get; }
+        #region Properties
         private string _srNo;
         public string SrNo
         {
@@ -190,16 +191,19 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _balance, value);
         }
 
-        private ObservableCollection<Person> agents;
-        private ObservableCollection<Person> customers;
+        private IEnumerable<Person> agents;
+        private IEnumerable<Person> customers;
         private string _payeeType;
         public string PayeeType
         {
             get => _payeeType;
             set
             {
-                PayeeCollection = value == "Customer" ? DBMethods.LoadCustomers().ToObservableCollection() : DBMethods.LoadAgents().ToObservableCollection();
                 SetProperty(ref _payeeType, value);
+                if (value == "Customer")
+                    DBMethods.LoadCustomers().ContinueWith(c => PayeeCollection = c.Result);
+                else
+                    DBMethods.LoadAgents().ContinueWith(a => PayeeCollection = a.Result);
             }
         }
 
@@ -237,16 +241,16 @@ namespace EasyInsur.ViewModels
             }
         }
         private Person _selectedPayee;
-        public Person SelectedPayee
+        public Person? SelectedPayee
         {
             get => _selectedPayee;
             set
             {
-                SetProperty(ref _selectedPayee, value);
+                SetProperty(ref _selectedPayee!, value);
                 if (value is not null)
                 {
                     Insurance = DBMethods.GetInsurances();
-                    Transactions = DBMethods.GetTransactions(SelectedPayee.Id);
+                    DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
                     PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);
                 }
                 else
@@ -263,13 +267,13 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _isPercentageSelected, value);
         }
 
-        private ObservableCollection<Person> _payeeCollection;
-        public ObservableCollection<Person> PayeeCollection
+        private IEnumerable<Person> _payeeCollection;
+        public IEnumerable<Person> PayeeCollection
         {
             get => _payeeCollection;
             set => SetProperty(ref _payeeCollection, value);
         }
-
+        #endregion
         private void CalculateInsuranceAmount()
         {
             TotalAmount = FixedAmount + ODAmount + TPAmount + TaxAmount;
@@ -359,9 +363,9 @@ namespace EasyInsur.ViewModels
                 SelectedPayee.Balance = FinalBalance;
                 DBMethods.UpdatePersonBalance(SelectedPayee);
                 Insurance = DBMethods.GetInsurances();
-                Transactions = DBMethods.GetTransactions(SelectedPayee.Id);
+                DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
                 PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);
-                
+
             }
             catch (Exception e)
             {

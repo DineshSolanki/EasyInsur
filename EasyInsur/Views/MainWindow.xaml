@@ -8,6 +8,7 @@
         mc:Ignorable="d"
         Title="EasyInsur" 
         WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
         Style="{StaticResource WindowWin10}"
         ShowTitle="True"
         Height="450" 
@@ -19,11 +20,11 @@
                     <hc:EventToCommand Command="{Binding NavigateCommand}" PassEventArgsToCommand="True" />
                 </hc:EventTrigger>
             </hc:Interaction.Triggers>
-            <hc:SideMenuItem Header="Dashboard">
+            <hc:SideMenuItem Header="Dashboard" Tag="Dashboard">
                 <hc:SideMenuItem.Icon>
                     <Image Source="../Resources/dashboard.png" Width="24" Height="24"/>
                 </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
+            </hc:SideMenuItem>
             <hc:SideMenuItem Header="Payment">
                 <hc:SideMenuItem.Icon>
                     <Image Source="../Resources/money.png" Width="24" Height="24"/>

@@ -5,13 +5,13 @@
 			 xmlns:hc ="https://handyorg.github.io/handycontrol"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-			 d:DataContext="{d:DesignInstance viewModels:PersonDetailsViewModel}"
+			 mc:Ignorable="d"
+			 d:DataContext="{d:DesignInstance viewmodels:PersonDetailsViewModel}"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 			 xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-             xmlns:barcode="clr-namespace:Syncfusion.UI.Xaml.Controls.Barcode;assembly=Syncfusion.SfBarcode.WPF"
-             xmlns:local="clr-namespace:EasyInsur.Modules"
-             syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
+			 xmlns:barcode="clr-namespace:Syncfusion.UI.Xaml.Controls.Barcode;assembly=Syncfusion.SfBarcode.WPF"
+			 xmlns:local="clr-namespace:EasyInsur.Modules" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
+			 syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
 			 prism:ViewModelLocator.AutoWireViewModel="True">
 	<Grid>
 		<Grid.RowDefinitions>
@@ -39,7 +39,7 @@
 		<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding RegistrationDate}"/>
 		<syncfusion:CurrencyTextBox Grid.Row="0" Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Balance" Value="{Binding Balance}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:ImageSelector Grid.Row="0" Grid.RowSpan="2" Grid.Column="6" Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePath, Mode=TwoWay}"/>
-			<hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
+		<hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
 			<hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True"  MinWidth="120" MaxWidth="120"  AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}"   hc:TitleElement.Title="Country Code" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0"/>
 			<hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True" MaxWidth="60"/>
 		</hc:SimpleStackPanel>
@@ -261,8 +261,8 @@
 							</Grid>
 						</MenuItem.Icon>
 					</MenuItem>
-					</ContextMenu>
-				</syncfusion:SfDataGrid.RecordContextMenu>
+				</ContextMenu>
+			</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn  MappingName="Id" HeaderText="ID" IsHidden="True"/>
 				<syncfusion:GridTextColumn  MappingName="PersonID" HeaderText="PID"/>
@@ -272,7 +272,12 @@
 				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
 				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
 				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
-				<syncfusion:GridImageColumn MappingName="ImagePath" AllowGrouping="False" HeaderText="" AllowFocus="False" AllowFiltering="False" Stretch="Fill" StretchDirection="Both" ImageWidth="32" TextAlignment="Center" ImageHeight="32" VerticalAlignment="Center" />
+				<syncfusion:GridImageColumn MappingName="ImagePath" AllowGrouping="False" HeaderText="" AllowFocus="False"
+											AllowFiltering="False" Stretch="Fill" StretchDirection="Both"
+											ImageWidth="32" TextAlignment="Center" ImageHeight="32"
+											VerticalAlignment="Center" UseBindingValue="True"
+											ValueBinding="{Binding Path=ImagePath, 
+				Converter={StaticResource StringToImageConverter}}"/>
 			</syncfusion:SfDataGrid.Columns>
 			<syncfusion:SfDataGrid.DetailsViewDefinition>
 				<syncfusion:TemplateViewDefinition  RowTemplate="{StaticResource DetailsViewTemplate}"/>
