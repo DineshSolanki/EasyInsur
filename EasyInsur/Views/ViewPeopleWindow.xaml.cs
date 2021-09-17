@@ -11,6 +11,7 @@ using Syncfusion.UI.Xaml.Grid.Converter;
 using Syncfusion.UI.Xaml.Grid.Helpers;
 using Syncfusion.XlsIO;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,6 +63,10 @@ namespace EasyInsur.Views
             var options = new ExcelExportingOptions
             {
                 ExcelVersion = ExcelVersion.Excel2013,
+                ExcludeColumns = new List<string>
+                {
+                    {"ImagePath"}
+                },
                 AllowOutlining = (bool)AllowOutlining.IsChecked!,
                 ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!,
             };
