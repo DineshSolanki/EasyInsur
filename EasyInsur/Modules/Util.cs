@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using EasyInsur.Models;
+using HandyControl.Tools;
 using Newtonsoft.Json;
 using PhoneNumbers;
 
@@ -65,5 +66,7 @@ namespace EasyInsur.Modules
         {
             return first == null ? second : second == null ? first : first.Concat(second).ToList();
         }
+
+        public static string Rtolistpdf = Path.Join(Path.GetDirectoryName(ApplicationHelper.GetExecutablePathNative()),"Resources","rtolist.pdf");
     }
 }

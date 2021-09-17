@@ -28,7 +28,7 @@ namespace EasyInsur.ViewModels
         private void Navigate(FunctionEventArgs<object> functionEventArgs)
         {
             var navigatePath = (functionEventArgs.Info as SideMenuItem)?.Tag?.ToString();
-            if(navigatePath.IsNullOrEmpty()) return;
+            if(navigatePath.IsNullOrEmpty() || navigatePath != "Dashboard") return;
             _regionManager.RequestNavigate("ContentRegion", navigatePath);
         }
     }

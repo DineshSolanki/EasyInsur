@@ -14,13 +14,13 @@
         Height="450" 
         Width="800">
     <DockPanel>
-        <hc:SideMenu>
-            <hc:Interaction.Triggers>
+        <hc:SideMenu AutoSelect="False" ExpandMode="ShowOne" Width="170">
+            <!--<hc:Interaction.Triggers>
                 <hc:EventTrigger EventName="SelectionChanged">
                     <hc:EventToCommand Command="{Binding NavigateCommand}" PassEventArgsToCommand="True" />
                 </hc:EventTrigger>
-            </hc:Interaction.Triggers>
-            <hc:SideMenuItem Header="Dashboard" Tag="Dashboard">
+            </hc:Interaction.Triggers>-->
+            <hc:SideMenuItem Header="Dashboard" Tag="Dashboard" Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
                 <hc:SideMenuItem.Icon>
                     <Image Source="../Resources/dashboard.png" Width="24" Height="24"/>
                 </hc:SideMenuItem.Icon>
