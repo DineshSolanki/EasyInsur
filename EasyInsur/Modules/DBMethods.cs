@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using EasyInsur.Models;
+using HandyControl.Controls;
 using RepoDb;
 
 namespace EasyInsur.Modules
@@ -26,19 +27,23 @@ namespace EasyInsur.Modules
         public static double GetBalance(long? id)
         {
             if (id is null) return 0;
-            IEnumerable<Person>? person;
+            double person;
+            var param = new Dictionary<string, object>
+            {
+                { "Id", id }
+            };
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             try
             {
-                person = connection.QueryAsync<Person>(p => p.Id == id).Result;
+                person = connection.ExecuteScalarAsync<double>("SELECT Balance FROM Person WHERE  id=@Id", param).Result;
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                MessageBox.Show(e.Message);
                 throw;
             }
 
-            return person.FirstOrDefault().Balance;
+            return person;
         }
 
         public static Task<IEnumerable<Transactions>> GetTransactions(long? personId)
@@ -67,8 +72,7 @@ namespace EasyInsur.Modules
         public static Task<IEnumerable<Transactions>> GetAllTransactions()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            Task<IEnumerable<Transactions>> transaction;
-            transaction = connection.QueryAllAsync<Transactions>();
+            Task<IEnumerable<Transactions>> transaction = connection.QueryAllAsync<Transactions>();
             return transaction;
         }
 
@@ -100,9 +104,13 @@ namespace EasyInsur.Modules
             var existing = connection.Exists<Insurance>(i =>
                 i.VehicleNo == vehicleNo);
             if (!existing) return null;
-            var id = connection.Query<Insurance>
-                (i => i.VehicleNo == vehicleNo);
-            return id.FirstOrDefault().Id;
+            var param = new Dictionary<string, object>
+            {
+                { "vehicleNo", vehicleNo }
+            };
+            var id = connection.ExecuteScalarAsync<long>
+                ("SELECT id FROM Insurance WHERE  VehicleNo=@vehicleNo",param).Result;
+            return id;
         }
         public static int UpdatePersonBalance(Person person)
         {
@@ -149,7 +157,7 @@ namespace EasyInsur.Modules
             Task<IEnumerable<Transactions>> transaction;
             try
             {
-                var query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Agent');";
+                const string? query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Agent');";
                 transaction = connection.ExecuteQueryAsync<Transactions>(query);
             }
             catch (Exception e)
@@ -158,6 +166,29 @@ namespace EasyInsur.Modules
                 throw;
             }
             return transaction;
+        }
+
+        public static Task<Tuple<IEnumerable<Person>, IEnumerable<Person>>> GetCustomerAgentCount()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var customerAgent = connection.QueryMultipleAsync<Person, Person>
+            (p => p.Type == "Agent",
+                p1 => p1.Type == "Customer");
+            return customerAgent;
+        }
+
+        public static Task<long> GetCustomerCount()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var count = connection.CountAsync<Person>(p => p.Type == "Customer");
+            return count;
+        }
+
+        public static Task<long> GetAgentCount()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var count = connection.CountAsync<Person>(p => p.Type == "Agent");
+            return count;
         }
     }
 }

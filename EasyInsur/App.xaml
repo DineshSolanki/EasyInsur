@@ -19,91 +19,86 @@
 			<Style x:Key="CellStyle" TargetType="Syncfusion:GridCell">
 				<Setter Property="Background" Value="DarkGray"/>
 			</Style>
+			<modules:StringToImageConverter x:Key="StringToImageConverter"/>
+			<Geometry x:Key="iphone">F1 M 29.2916,19L 46.7083,19C 48.8944,19 50.6666,20.7723 50.6666,22.9584L 50.6666,53.0417C 50.6666,55.2278 48.8944,57 46.7083,57L 29.2916,57C 27.1055,57 25.3333,55.2278 25.3333,53.0417L 25.3333,22.9584C 25.3333,20.7723 27.1055,19 29.2916,19 Z M 33.25,21.375C 32.8128,21.375 32.4583,21.7295 32.4583,22.1667L 32.4583,22.9584C 32.4583,23.3956 32.8128,23.75 33.25,23.75L 42.75,23.75C 43.1872,23.75 43.5416,23.3956 43.5416,22.9584L 43.5416,22.1667C 43.5416,21.7295 43.1872,21.375 42.75,21.375L 33.25,21.375 Z M 28.5,25.3333L 28.5,49.0833L 47.5,49.0833L 47.5,25.3333L 28.5,25.3333 Z M 38,50.6667C 36.6883,50.6667 35.625,51.73 35.625,53.0417C 35.625,54.3533 36.6883,55.4167 38,55.4167C 39.3117,55.4167 40.375,54.3533 40.375,53.0417C 40.375,51.73 39.3117,50.6667 38,50.6667 Z</Geometry>
 			<Geometry x:Key="SaveGeometryEx">M13 9H3V5H13M10 19C8.3 19 7 17.7 7 16S8.3 13 10 13 13 14.3 13 16 11.7 19 10 19M15 3H3C1.9 3 1 3.9 1 5V19C1 20.1 1.9 21 3 21H17C18.1 21 19 20.1 19 19V7L15 3M23 14H21V7H23V14M23 18H21V16H23V18Z</Geometry>
 			<Geometry x:Key="SaveGeometry">M608 320C625.664 320 640 305.696 640 288L640 160C640 142.304 625.664 128 608 128 590.336 128 576 142.304 576 160L576 288C576 305.696 590.336 320 608 320L608 320ZM960 896C960 931.328 931.328 960 896 960L128 960C92.672 960 64 931.328 64 896L64 128C64 92.672 92.672 64 128 64L192 64 192 384C192 419.328 220.672 448 256 448L768 448C803.328 448 832 419.328 832 384L832 64 896 64C931.328 64 960 92.672 960 128L960 896 960 896ZM256 64 768 64 768 352C768 369.696 753.664 384 736 384L288 384C270.336 384 256 369.696 256 352L256 64 256 64ZM896 0 128 0C57.312 0 0 57.312 0 128L0 896C0 966.688 57.312 1024 128 1024L896 1024C966.688 1024 1024 966.688 1024 896L1024 128C1024 57.312 966.688 0 896 0L896 0Z</Geometry>
-		   <Geometry x:Key="ReloadGeometry">M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z</Geometry>
+			<Geometry x:Key="ReloadGeometry">M2 12C2 16.97 6.03 21 11 21C13.39 21 15.68 20.06 17.4 18.4L15.9 16.9C14.63 18.25 12.86 19 11 19C4.76 19 1.64 11.46 6.05 7.05C10.46 2.64 18 5.77 18 12H15L19 16H19.1L23 12H20C20 7.03 15.97 3 11 3C6.03 3 2 7.03 2 12Z</Geometry>
 			<DataTemplate x:Key="DetailsViewTemplate">
-		<Grid>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="125"/>
-			</Grid.RowDefinitions>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="250"/>
-				<ColumnDefinition/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
-			<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="5" Height="150" HorizontalAlignment="Left" 
-				   Source="{Binding Path=Data.ImagePath}" />
-			<Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
+				<Grid>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto"/>
+						<RowDefinition Height="125"/>
+					</Grid.RowDefinitions>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="250"/>
+						<ColumnDefinition/>
+						<ColumnDefinition/>
+					</Grid.ColumnDefinitions>
+					<Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="5" Height="150" Width="150" HorizontalAlignment="Left" 
+				   Source="{Binding Path=Data.ImagePath, Converter={StaticResource StringToImageConverter}}" hc:ImageAttach.SourceFailed="Resources/no_image.jpg"/>
+					<Label Grid.Column="1" Grid.Row="0" HorizontalAlignment="Left"
 				   Margin="25,0,0,0" Content="Personal Details" FontWeight="Bold" />
-			<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" 
+					<StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" 
 						HorizontalAlignment="Left" VerticalAlignment="Center">
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold"
+						<StackPanel Orientation="Horizontal">
+							<Label HorizontalAlignment="Left" VerticalAlignment="Center" FontWeight="SemiBold"
 						   Content="Name :"/>
-					<TextBlock x:Name="NameText" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5">
-						<TextBlock.Text>
-							<MultiBinding StringFormat="{}{0} {1}">
-								<Binding Path="Data.FirstName" />
-								<Binding Path="Data.LastName" />
-							</MultiBinding>
-						</TextBlock.Text>
-					</TextBlock>
-				</StackPanel>
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
+							<TextBlock x:Name="NameText" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5">
+								<TextBlock.Text>
+									<MultiBinding StringFormat="{}{0} {1}">
+										<Binding Path="Data.FirstName" />
+										<Binding Path="Data.LastName" />
+									</MultiBinding>
+								</TextBlock.Text>
+							</TextBlock>
+						</StackPanel>
+						<StackPanel Orientation="Horizontal">
+							<Label HorizontalAlignment="Left" VerticalAlignment="Center"
 						   FontWeight="SemiBold" Content="Mobile No :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
+							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
 							   Text="{Binding Data.Mobile}"/>
-				</StackPanel>
+						</StackPanel>
 
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
+						<StackPanel Orientation="Horizontal">
+							<Label HorizontalAlignment="Left" VerticalAlignment="Center"
 						   FontWeight="SemiBold" Content="Email :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
+							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
 							   Text="{Binding Data.Email}"/>
-				</StackPanel>
+						</StackPanel>
 
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Left" VerticalAlignment="Center"
+						<StackPanel Orientation="Horizontal">
+							<Label HorizontalAlignment="Left" VerticalAlignment="Center"
 						   FontWeight="SemiBold" Content="Registration Date :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
+							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
 							   Text="{Binding Data.RegDate}"/>
-				</StackPanel>
-			</StackPanel>
-			<Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="25,0,0,0"
+						</StackPanel>
+					</StackPanel>
+					<Label Grid.Column="2" Grid.Row="0" HorizontalAlignment="Left" Margin="25,0,0,0"
 				   Content="Transactions Details" FontWeight="Bold" />
-			<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1" 
+					<StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1" 
 						HorizontalAlignment="Left" VerticalAlignment="Center">
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Right" VerticalAlignment="Center"
-						   FontWeight="SemiBold" Content="initial Balance :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
-							   Text="{Binding Data.Balance, StringFormat='{}{0:C}'}"/>
-				</StackPanel>
-
-				<StackPanel Orientation="Horizontal">
-					<Label HorizontalAlignment="Right" VerticalAlignment="Center"
+						<StackPanel Orientation="Horizontal">
+							<Label HorizontalAlignment="Right" VerticalAlignment="Center"
 						   FontWeight="SemiBold" Content="Balance :"/>
-					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
+							<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
 							   Text="{Binding Data.Balance, StringFormat='{}{0:C}'}"/>
-				</StackPanel>
-				<barcode:SfBarcode x:Name="barcode" Symbology="QRBarcode" Height="120" Width="120" DisplayText="False">
-					<barcode:SfBarcode.Text>
-						<MultiBinding StringFormat="{}Name: {0}{2}Mobile: {1}{2}Email: {3}{2}Registration Date: {4}{2}Balance: {5:C}">
-							<Binding Path="Text" ElementName="NameText" />
-							<Binding Path="Data.Mobile" />
-							<Binding Source="{x:Static system:Environment.NewLine}"/>
-							<Binding Path="Data.Email" />
-							<Binding Path="Data.RegDate" />
-							<Binding Path="Data.Balance" />
-						</MultiBinding>
-					</barcode:SfBarcode.Text>
-				</barcode:SfBarcode>
-			</StackPanel>
-		</Grid>
-	</DataTemplate>
+						</StackPanel>
+						<barcode:SfBarcode x:Name="barcode" Symbology="QRBarcode" Height="120" Width="120" DisplayText="False">
+							<barcode:SfBarcode.Text>
+								<MultiBinding StringFormat="{}Name: {0}{2}Mobile: {1}{2}Email: {3}{2}Registration Date: {4}{2}Balance: {5:C}">
+									<Binding Path="Text" ElementName="NameText" />
+									<Binding Path="Data.Mobile" />
+									<Binding Source="{x:Static system:Environment.NewLine}"/>
+									<Binding Path="Data.Email" />
+									<Binding Path="Data.RegDate" />
+									<Binding Path="Data.Balance" />
+								</MultiBinding>
+							</barcode:SfBarcode.Text>
+						</barcode:SfBarcode>
+					</StackPanel>
+				</Grid>
+			</DataTemplate>
 			<x:Array Type="system:String" x:Key="ExcelVersions">
 				<system:String>97 to 2003</system:String>
 				<system:String>2007</system:String>
@@ -111,7 +106,18 @@
 				<system:String>2013</system:String>
 				<system:String>2016</system:String>
 			</x:Array>
-			<modules:StringToImageConverter x:Key="StringToImageConverter"/>
+			<modules:AddValueConvertor x:Key="AddValueConvertor" />
+			<Style x:Key="ListBoxNoHighlight" TargetType="ListBoxItem">
+				<Style.Triggers>
+					<Trigger Property="IsMouseOver" Value="True">
+						<Setter Property="Background" Value="Transparent"/>
+					</Trigger>
+					<Trigger Property="IsSelected" Value="True">
+						<Setter Property="Background" Value="Transparent"/>
+					</Trigger>
+				</Style.Triggers>
+			</Style>
+
 		</ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>

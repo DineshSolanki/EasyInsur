@@ -37,13 +37,26 @@
 		<hc:TextBox Grid.Row="0" Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding RegistrationDate}"/>
 		<syncfusion:CurrencyTextBox Grid.Row="0" Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Balance" Value="{Binding Balance}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<hc:ImageSelector Grid.Row="0" Grid.RowSpan="2" Grid.Column="6" Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePath, Mode=TwoWay}"/>
+		<hc:ImageSelector Grid.Row="0" Grid.RowSpan="2" Grid.Column="6" Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePathTag, Mode=TwoWay}"/>
 		<hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
 			<hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True"  MinWidth="120" MaxWidth="120"  AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}"   hc:TitleElement.Title="Country Code" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0"/>
-			<hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True" MaxWidth="60"/>
+			<hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code"
+						Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}"
+						hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True"
+						MaxWidth="60" />
 		</hc:SimpleStackPanel>
-		<hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True"  Grid.Row="1" Grid.Column="1" hc:TitleElement.Title="Mobile No." hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top"/>
-		<hc:SplitButton Grid.Row="1" Grid.Column="2" Style="{StaticResource SplitButtonPrimary}" Content="Save person" Command="{Binding SaveCommand}" Margin="10,26,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+		<hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}"
+						  Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True"
+						  Grid.Row="1" Grid.Column="1" hc:TitleElement.Title="Mobile No."
+						  hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}"
+						  hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" />
+		<hc:TextBox		hc:InfoElement.Placeholder="Enter email here."
+						  Grid.Row="1" Grid.Column="2" hc:TitleElement.Title="Email"
+						  hc:InfoElement.Necessary="False" Text="{Binding Email,Mode=TwoWay}"
+						  hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" />
+		<hc:SplitButton Grid.Row="1" Grid.Column="3" Style="{StaticResource SplitButtonPrimary}" Content="Save person"
+						Command="{Binding SaveCommand}" Margin="10,26,0,0" HorizontalAlignment="Stretch"
+						VerticalAlignment="Top">
 			<hc:SplitButton.DropDownContent>
 				<StackPanel>
 					<MenuItem Header="Reset form" Command="{Binding ResetCommand}" />
@@ -52,7 +65,7 @@
 		</hc:SplitButton>
 		<syncfusion:SfDataGrid x:Name="DataGrid" BorderThickness="1,1,1,1"  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="7" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" ColumnSizer="AutoLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
@@ -271,10 +284,10 @@
 				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
 				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
 				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
-				<syncfusion:GridImageColumn MappingName="ImagePath" AllowGrouping="False" HeaderText="" AllowFocus="False"
-											AllowFiltering="False" Stretch="Fill" StretchDirection="Both"
-											ImageWidth="32" TextAlignment="Center" ImageHeight="32"
-											VerticalAlignment="Center" UseBindingValue="True"
+				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="False" AllowGrouping="False" HeaderText=""
+											AllowFocus="False" AllowFiltering="False" Stretch="Fill"
+											StretchDirection="Both" ImageWidth="32" TextAlignment="Center"
+											ImageHeight="32" VerticalAlignment="Center" UseBindingValue="True"
 											ValueBinding="{Binding Path=ImagePath, 
 				Converter={StaticResource StringToImageConverter}}"/>
 			</syncfusion:SfDataGrid.Columns>
