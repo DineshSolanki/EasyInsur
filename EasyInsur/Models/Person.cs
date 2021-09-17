@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection;
-using System.Windows.Media.Imaging;
-using HandyControl.Tools.Extension;
+﻿using System.ComponentModel.DataAnnotations;
 using RepoDb.Attributes;
 
 namespace EasyInsur.Models
@@ -15,7 +8,7 @@ namespace EasyInsur.Models
         public Person() { }
 
         public Person(string firstName, string lastName, string type, string personId, string imagePath,
-            string regDate, string mobile, string address = null!, string email = null!)
+            string regDate, string mobile, string address = null!, string email = "")
         {
             FirstName = firstName;
             LastName = lastName;

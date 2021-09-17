@@ -356,7 +356,9 @@
 				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="True" AllowGrouping="False" HeaderText=""
 											AllowFocus="False" AllowFiltering="False" Stretch="Fill"
 											StretchDirection="Both" ImageWidth="32" TextAlignment="Center"
-											ImageHeight="32" VerticalAlignment="Center"/>
+											ImageHeight="32" VerticalAlignment="Center" UseBindingValue="True"
+											ValueBinding="{Binding Path=ImagePath, 
+				Converter={StaticResource StringToImageConverter}}"/>
 			</syncfusion:SfDataGrid.Columns>
 			<syncfusion:SfDataGrid.DetailsViewDefinition>
 				<syncfusion:TemplateViewDefinition  RowTemplate="{StaticResource DetailsViewTemplate}"/>

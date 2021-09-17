@@ -91,7 +91,7 @@
 		</hc:SplitButton>
 		<syncfusion:SfDataGrid  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="8" AutoGenerateColumns="False" BorderThickness="1"
 								ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-								AllowFiltering="True" ColumnSizer="Star" AllowResizingColumns="True"
+								AllowFiltering="True" ColumnSizer="SizeToHeader" AllowResizingColumns="True"
 								ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 								HeaderLinesVisibility="Both" ScrollMode="Async" AllowGrouping="True" ShowGroupDropArea="True" EnableDataVirtualization="True">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>

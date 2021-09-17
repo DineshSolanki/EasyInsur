@@ -14,20 +14,31 @@
 
 	<ItemGroup>
 		<None Remove="EasyInsur.db" />
+		<None Remove="images\no_image.jpg" />
+		<None Remove="Resources\address.png" />
 		<None Remove="Resources\add_people.png" />
+		<None Remove="Resources\agent.png" />
 		<None Remove="Resources\broker.ico" />
 		<None Remove="Resources\broker_16.png" />
 		<None Remove="Resources\broker_32.png" />
 		<None Remove="Resources\clear.png" />
+		<None Remove="Resources\customer.png" />
 		<None Remove="Resources\dashboard.png" />
+		<None Remove="Resources\email.png" />
 		<None Remove="Resources\isd_country_code.json" />
+		<None Remove="Resources\link.png" />
+		<None Remove="Resources\man.png" />
 		<None Remove="Resources\money.png" />
 		<None Remove="Resources\no_image.jpg" />
 		<None Remove="Resources\payment_history.png" />
 		<None Remove="Resources\people.png" />
+		<None Remove="Resources\phone.png" />
+		<None Remove="Resources\rtolist.pdf" />
 		<None Remove="Resources\rupee.png" />
 		<None Remove="Resources\save.png" />
+		<None Remove="Resources\telegram.png" />
 		<None Remove="Resources\view_people.png" />
+		<None Remove="Resources\website.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -60,19 +71,34 @@
     <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="19.2.0.62" />
 </ItemGroup>
 	<ItemGroup>
+		<Content Include="images\no_image.jpg">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Resource Include="Resources\address.png" />
 		<Resource Include="Resources\add_people.png" />
+		<Resource Include="Resources\agent.png" />
 		<Resource Include="Resources\broker.ico" />
 		<Resource Include="Resources\broker_16.png" />
 		<Resource Include="Resources\broker_32.png" />
+		<Content Include="Resources\rtolist.pdf">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Resource Include="Resources\clear.png" />
+		<Resource Include="Resources\customer.png" />
 		<Resource Include="Resources\dashboard.png" />
+		<Resource Include="Resources\email.png" />
+		<Resource Include="Resources\link.png" />
+		<Resource Include="Resources\man.png" />
 		<Resource Include="Resources\money.png" />
 		<Resource Include="Resources\no_image.jpg" />
 		<Resource Include="Resources\payment_history.png" />
 		<Resource Include="Resources\people.png" />
+		<Resource Include="Resources\phone.png" />
 		<Resource Include="Resources\rupee.png" />
 		<Resource Include="Resources\save.png" />
+		<Resource Include="Resources\telegram.png" />
 		<Resource Include="Resources\view_people.png" />
+		<Resource Include="Resources\website.png" />
 	</ItemGroup>
 
 </Project>

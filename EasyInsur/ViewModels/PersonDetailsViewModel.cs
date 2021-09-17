@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
+using System.IO;
 using System.Linq;
 using EasyInsur.Models;
 using EasyInsur.Modules;
@@ -103,11 +104,18 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _mobile, value);
         }
 
-        private string _imagePath = "";
-        public string ImagePath
+        private string _email;
+        public string Email
         {
-            get => _imagePath;
-            set => SetProperty(ref _imagePath, value);
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
+        private string _imagePathTag = "";
+        public string ImagePathTag
+        {
+            get => _imagePathTag;
+            set => SetProperty(ref _imagePathTag, value);
         }
         private Country _selectedCountry;
 
@@ -140,9 +148,24 @@ namespace EasyInsur.ViewModels
                 return;
             }
 
+            string imageName = null;
+            if (!ImagePathTag.IsNullOrEmpty())
+            {
+                try
+                {
+                    var newImagepath = Path.Join(Services.AppPathWithoutName, "images",
+                        $"{PersonID.Trim()}{Path.GetExtension(ImagePathTag)}");
+                    File.Copy(ImagePathTag,newImagepath,true);
+                    if (File.Exists(newImagepath)) imageName = Path.GetFileName(newImagepath);
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
+            }
             var person = new Person(FirstName.Trim(), LastName.Trim(), PersonType, PersonID.Trim(),
-                Balance, ImagePath.Trim(), RegistrationDate.Trim(),
-                $"{SelectedCountry.dial_code}{Mobile}");
+                Balance, imageName, RegistrationDate.Trim(),
+                $"{SelectedCountry.dial_code}{Mobile}", email: Email);
             try
             {
                 using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
