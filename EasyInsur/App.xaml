@@ -5,7 +5,8 @@
 						xmlns:prism="http://prismlibrary.com/"
 						xmlns:Syncfusion="http://schemas.syncfusion.com/wpf"
 						xmlns:system="clr-namespace:System;assembly=System.Runtime"
-						xmlns:modules="clr-namespace:EasyInsur.Modules">
+						xmlns:modules="clr-namespace:EasyInsur.Modules"
+						xmlns:barcode="clr-namespace:Syncfusion.UI.Xaml.Controls.Barcode;assembly=Syncfusion.SfBarcode.WPF">
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -88,14 +89,18 @@
 					<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Margin="5"
 							   Text="{Binding Data.Balance, StringFormat='{}{0:C}'}"/>
 				</StackPanel>
-				<!--<barcode:SfBarcode x:Name="barcode" DisplayText="True">
+				<barcode:SfBarcode x:Name="barcode" Symbology="QRBarcode" Height="120" Width="120" DisplayText="False">
 					<barcode:SfBarcode.Text>
-						<MultiBinding StringFormat="{}{0} {1}">
-							<Binding Path="Data.FirstName" />
+						<MultiBinding StringFormat="{}Name: {0}{2}Mobile: {1}{2}Email: {3}{2}Registration Date: {4}{2}Balance: {5:C}">
+							<Binding Path="Text" ElementName="NameText" />
 							<Binding Path="Data.Mobile" />
+							<Binding Source="{x:Static system:Environment.NewLine}"/>
+							<Binding Path="Data.Email" />
+							<Binding Path="Data.RegDate" />
+							<Binding Path="Data.Balance" />
 						</MultiBinding>
 					</barcode:SfBarcode.Text>
-				</barcode:SfBarcode>-->
+				</barcode:SfBarcode>
 			</StackPanel>
 		</Grid>
 	</DataTemplate>
