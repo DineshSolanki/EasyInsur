@@ -9,7 +9,6 @@
 			 d:DataContext="{d:DesignInstance viewmodels:PersonDetailsViewModel}"
 			 xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
 			 xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
-			 xmlns:barcode="clr-namespace:Syncfusion.UI.Xaml.Controls.Barcode;assembly=Syncfusion.SfBarcode.WPF"
 			 xmlns:local="clr-namespace:EasyInsur.Modules" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
 			 syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
 			 prism:ViewModelLocator.AutoWireViewModel="True">
