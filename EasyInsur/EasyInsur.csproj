@@ -29,6 +29,7 @@
 		<None Remove="Resources\link.png" />
 		<None Remove="Resources\man.png" />
 		<None Remove="Resources\money.png" />
+		<None Remove="Resources\noProfile.png" />
 		<None Remove="Resources\no_image.jpg" />
 		<None Remove="Resources\payment_history.png" />
 		<None Remove="Resources\people.png" />
@@ -38,6 +39,7 @@
 		<None Remove="Resources\save.png" />
 		<None Remove="Resources\telegram.png" />
 		<None Remove="Resources\view_people.png" />
+		<None Remove="Resources\wall.jpg" />
 		<None Remove="Resources\website.png" />
 	</ItemGroup>
 
@@ -90,6 +92,7 @@
 		<Resource Include="Resources\link.png" />
 		<Resource Include="Resources\man.png" />
 		<Resource Include="Resources\money.png" />
+		<Resource Include="Resources\noProfile.png" />
 		<Resource Include="Resources\no_image.jpg" />
 		<Resource Include="Resources\payment_history.png" />
 		<Resource Include="Resources\people.png" />
@@ -98,6 +101,7 @@
 		<Resource Include="Resources\save.png" />
 		<Resource Include="Resources\telegram.png" />
 		<Resource Include="Resources\view_people.png" />
+		<Resource Include="Resources\wall.jpg" />
 		<Resource Include="Resources\website.png" />
 	</ItemGroup>
 
