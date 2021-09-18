@@ -11,16 +11,15 @@ namespace EasyInsur.ViewModels
     {
         public ViewPeopleWindowViewModel()
         {
-            AllPeople = DBMethods.GetPeople();
+            AllPeople = DbMethods.GetPeople();
             PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(ReloadMethod);
             SaveCommand = new DelegateCommand(SaveMethod);
-            ExportCommand = new DelegateCommand<object>(ExportMethod);
         }
 
         private void ReloadMethod()
         {
-            AllPeople = DBMethods.GetPeople();
+            AllPeople = DbMethods.GetPeople();
             PersonType = _personType;
         }
 
@@ -71,11 +70,8 @@ namespace EasyInsur.ViewModels
 
         #region Delegates
 
-        public DelegateCommand<string> SearchCommand { get; }
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
-        public DelegateCommand<object> ExportCommand { get; }
-
 
         #endregion
 
@@ -84,15 +80,12 @@ namespace EasyInsur.ViewModels
             var r = AllPeople.Where(p => p.EditedColumns.Any());
             var enumerable = r.ToList();
             if (!enumerable.Any()) return;
-            DBMethods.UpdatePeople(enumerable);
+            DbMethods.UpdatePeople(enumerable);
             ReloadMethod();
             //foreach (var person in AllPeople.Where(p => p.EditedColumns.Any()))
             //{
             //    DBMethods.UpdatePerson(person);
             //}
-        }
-        private void ExportMethod(object parameter)
-        { 
         }
     }
 }

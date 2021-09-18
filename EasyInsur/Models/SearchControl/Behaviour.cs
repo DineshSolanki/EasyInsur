@@ -7,13 +7,13 @@ namespace EasyInsur.Models.SearchControl
 {
     public class Behaviour : Behavior<UserControl>
     {
-        SfDataGrid? _DataGrid;
+        SfDataGrid? _dataGrid;
         SearchControl? _searchControl;
         protected override void OnAttached()
         {
             var window = AssociatedObject;
-            _DataGrid = window.FindName("DataGrid") as SfDataGrid;
-            _DataGrid.KeyDown += OnDataGridKeyDown;
+            _dataGrid = window.FindName("DataGrid") as SfDataGrid;
+            _dataGrid.KeyDown += OnDataGridKeyDown;
             _searchControl = window.FindName("searchControl") as SearchControl;
         }
 
@@ -31,7 +31,7 @@ namespace EasyInsur.Models.SearchControl
         }
         protected override void OnDetaching()
         {
-            _DataGrid.KeyDown -= OnDataGridKeyDown;
+            _dataGrid.KeyDown -= OnDataGridKeyDown;
         }
     }
 }

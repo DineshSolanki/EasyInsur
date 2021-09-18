@@ -58,7 +58,7 @@ namespace EasyInsur.Views
             var options = new ExcelExportingOptions
             {
                 ExcelVersion = ExcelVersion.Excel2013,
-                AllowOutlining = (bool)allowOutlining.IsChecked!,
+                AllowOutlining = (bool)AllowOutlining.IsChecked!,
                 ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!,
                 ExportStackedHeaders = (bool)ShowStackedHeader.IsChecked!
 
@@ -111,14 +111,14 @@ namespace EasyInsur.Views
             var document = new PdfDocument();
             document.PageSettings.Orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;
             var page = document.Pages.Add();
-            var PDFGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
+            var pdfGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
             var format = new PdfGridLayoutFormat()
             {
                 Layout = PdfLayoutType.Paginate,
                 Break = PdfLayoutBreakType.FitPage
             };
 
-            PDFGrid.Draw(page, new PointF(), format);
+            pdfGrid.Draw(page, new PointF(), format);
             var sfd = new SaveFileDialog
             {
                 Filter = "PDF Files(*.pdf)|*.pdf",

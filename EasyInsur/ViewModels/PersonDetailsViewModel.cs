@@ -38,7 +38,7 @@ namespace EasyInsur.ViewModels
             get => _mobileMask;
             set => SetProperty(ref _mobileMask, value);
         }
-        public IEnumerable<Person> _people;
+        private IEnumerable<Person> _people;
         public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people, value); }
         private ObservableCollection<Country> _countryDetails;
 
@@ -57,17 +57,17 @@ namespace EasyInsur.ViewModels
                 SetProperty(ref _personType, value);
                 if (value is null) return;
                 if (PersonType == "Agent")
-                    DBMethods.LoadAgents().ContinueWith(a => PersonData = a.Result);
+                    DbMethods.LoadAgents().ContinueWith(a => PersonData = a.Result);
                 else
-                    DBMethods.LoadCustomers().ContinueWith(c => PersonData = c.Result);
+                    DbMethods.LoadCustomers().ContinueWith(c => PersonData = c.Result);
             }
         }
 
-        private string _personID;
-        public string PersonID
+        private string _personId;
+        public string PersonId
         {
-            get => _personID;
-            set => SetProperty(ref _personID, value);
+            get => _personId;
+            set => SetProperty(ref _personId, value);
         }
 
         private string _firstName;
@@ -136,13 +136,13 @@ namespace EasyInsur.ViewModels
             Balance = 0;
             FirstName = "";
             LastName = "";
-            PersonID = "";
+            PersonId = "";
             Mobile = "";
         }
 
         private void Save()
         {
-            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || PersonID.IsNullOrEmpty() | RegistrationDate.IsNullOrEmpty())
+            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || PersonId.IsNullOrEmpty() | RegistrationDate.IsNullOrEmpty())
             {
                 MessageBox.Error("Please fill all required values", "Incomplete data");
                 return;
@@ -154,7 +154,7 @@ namespace EasyInsur.ViewModels
                 try
                 {
                     var newImagepath = Path.Join(Services.AppPathWithoutName, "images",
-                        $"{PersonID.Trim()}{Path.GetExtension(ImagePathTag)}");
+                        $"{PersonId.Trim()}{Path.GetExtension(ImagePathTag)}");
                     File.Copy(ImagePathTag,newImagepath,true);
                     if (File.Exists(newImagepath)) imageName = Path.GetFileName(newImagepath);
                 }
@@ -163,7 +163,7 @@ namespace EasyInsur.ViewModels
                     //ignored
                 }
             }
-            var person = new Person(FirstName.Trim(), LastName.Trim(), PersonType, PersonID.Trim(),
+            var person = new Person(FirstName.Trim(), LastName.Trim(), PersonType, PersonId.Trim(),
                 Balance, imageName, RegistrationDate.Trim(),
                 $"{SelectedCountry.dial_code}{Mobile}", email: Email);
             try

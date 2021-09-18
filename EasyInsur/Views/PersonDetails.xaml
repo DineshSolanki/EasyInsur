@@ -32,7 +32,7 @@
 			<ComboBoxItem Content="Customer"/>
 			<ComboBoxItem Content="Agent"/>
 		</hc:ComboBox>
-		<hc:TextBox Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonID}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
+		<hc:TextBox Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:TextBox Grid.Row="0" Grid.Column="2" hc:TitleElement.Title="First Name" hc:InfoElement.Necessary="True" Text="{Binding FirstName}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:TextBox Grid.Row="0" Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding RegistrationDate}"/>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Windows;
 using EasyInsur.Modules;
 using Prism.Mvvm;
 
@@ -43,11 +42,11 @@ namespace EasyInsur.ViewModels
         #endregion
         public DashboardViewModel()
         {
-            DBMethods.GetAgentCount().ContinueWith(ac =>
+            DbMethods.GetAgentCount().ContinueWith(ac =>
             {
                 AgentsCount = ac.Result;
             });
-            DBMethods.GetCustomerCount().ContinueWith(cc =>
+            DbMethods.GetCustomerCount().ContinueWith(cc =>
             {
                 CustomersCount = cc.Result;
             });
