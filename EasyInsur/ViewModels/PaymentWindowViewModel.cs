@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using EasyInsur.Models;
 using EasyInsur.Modules;
@@ -191,8 +190,6 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _balance, value);
         }
 
-        private IEnumerable<Person> agents;
-        private IEnumerable<Person> customers;
         private string _payeeType;
         public string PayeeType
         {
@@ -201,9 +198,9 @@ namespace EasyInsur.ViewModels
             {
                 SetProperty(ref _payeeType, value);
                 if (value == "Customer")
-                    DBMethods.LoadCustomers().ContinueWith(c => PayeeCollection = c.Result);
+                    DbMethods.LoadCustomers().ContinueWith(c => PayeeCollection = c.Result);
                 else
-                    DBMethods.LoadAgents().ContinueWith(a => PayeeCollection = a.Result);
+                    DbMethods.LoadAgents().ContinueWith(a => PayeeCollection = a.Result);
             }
         }
 
@@ -249,9 +246,9 @@ namespace EasyInsur.ViewModels
                 SetProperty(ref _selectedPayee!, value);
                 if (value is not null)
                 {
-                    Insurance = DBMethods.GetInsurances();
-                    DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
-                    PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);
+                    Insurance = DbMethods.GetInsurances();
+                    DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                    PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
                 }
                 else
                 {
@@ -326,12 +323,12 @@ namespace EasyInsur.ViewModels
                     iid = Insurance.First(i => i.VehicleNo == VehicleNo).Id!;
                 else
                 {
-                    DBMethods.SaveInsurance(new Insurance()
+                    DbMethods.SaveInsurance(new Insurance()
                     {
                         RegDate = FirstDate,
                         VehicleNo = VehicleNo
                     });
-                    iid = DBMethods.GetInsuranceId(VehicleNo);
+                    iid = DbMethods.GetInsuranceId(VehicleNo);
                 }
 
                 if (iid is null)
@@ -359,12 +356,12 @@ namespace EasyInsur.ViewModels
                     PaymentDate = PaymentDate,
                     Payment = Payment
                 };
-                var id = DBMethods.SaveTransaction(transaction);
+                var id = DbMethods.SaveTransaction(transaction);
                 SelectedPayee.Balance = FinalBalance;
-                DBMethods.UpdatePersonBalance(SelectedPayee);
-                Insurance = DBMethods.GetInsurances();
-                DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
-                PreviousBalance = DBMethods.GetBalance(SelectedPayee.Id);
+                DbMethods.UpdatePersonBalance(SelectedPayee);
+                Insurance = DbMethods.GetInsurances();
+                DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
 
             }
             catch (Exception e)

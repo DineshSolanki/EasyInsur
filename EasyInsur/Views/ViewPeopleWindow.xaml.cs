@@ -149,7 +149,6 @@ namespace EasyInsur.Views
             catch (Exception ex)
             {
                 MessageBox.Error(ex.Message);
-                return;
             }
         }
     }

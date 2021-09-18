@@ -97,7 +97,7 @@ namespace EasyInsur.Models.SearchControl
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnAdornerLayerKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void OnAdornerLayerKeyDown(object sender, KeyEventArgs e)
         {
             switch (e.Key)
             {

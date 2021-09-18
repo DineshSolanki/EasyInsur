@@ -3,7 +3,6 @@ using EasyInsur.Modules;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace EasyInsur.ViewModels
@@ -111,7 +110,7 @@ namespace EasyInsur.ViewModels
                     PersonType = _personType;
                     return;
                 }
-                DBMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
             }
         }
         #endregion
@@ -127,7 +126,7 @@ namespace EasyInsur.ViewModels
             var r = AllTransactions.Where(p => p.EditedColumns.Any());
             var enumerable = r.ToList();
             if (!enumerable.Any()) return;
-            DBMethods.UpdateTransactions(enumerable);
+            DbMethods.UpdateTransactions(enumerable);
         }
 
         private void ReloadMethod()
@@ -138,19 +137,19 @@ namespace EasyInsur.ViewModels
 
         private void LoadTransactions()
         {
-            DBMethods.LoadCustomers().ContinueWith((c) =>
+            DbMethods.LoadCustomers().ContinueWith((c) =>
             {
                 Customers = c.Result;
-                DBMethods.LoadAgents().ContinueWith(a =>
+                DbMethods.LoadAgents().ContinueWith(a =>
                 {
                     Agents = a.Result;
                     People = Customers.Join(Agents);
                 });
             });
-            DBMethods.GetCustomerTransactions().ContinueWith(ct =>
+            DbMethods.GetCustomerTransactions().ContinueWith(ct =>
             {
                 CustomerTransactions = ct.Result;
-                DBMethods.GetAgentTransactions().ContinueWith(at =>
+                DbMethods.GetAgentTransactions().ContinueWith(at =>
                 {
                     AgentTransactions = at.Result;
                     AllTransactions = CustomerTransactions.Join(AgentTransactions);
