@@ -117,7 +117,7 @@
 					</Trigger>
 				</Style.Triggers>
 			</Style>
-
+			<modules:ColorConverter x:Key="ColorConvertor"/>
 		</ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>
