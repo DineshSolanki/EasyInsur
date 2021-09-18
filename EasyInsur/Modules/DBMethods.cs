@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading.Tasks;
 using EasyInsur.Models;
 using HandyControl.Controls;
@@ -10,7 +9,7 @@ using RepoDb;
 
 namespace EasyInsur.Modules
 {
-    public static class DBMethods
+    public static class DbMethods
     {
         public static Task<IEnumerable<Person>> LoadAgents()
         {
@@ -86,10 +85,10 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.QueryAllAsync<Insurance>().Result;
         }
-        public static IEnumerable<Insurance> GetInsurance(long insuranceID)
+        public static IEnumerable<Insurance> GetInsurance(long insuranceId)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.QueryAsync<Insurance>(i => i.Id == insuranceID).Result;
+            return connection.QueryAsync<Insurance>(i => i.Id == insuranceId).Result;
         }
         public static object SaveInsurance(Insurance insurance)
         {

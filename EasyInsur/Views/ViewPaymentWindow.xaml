@@ -61,7 +61,7 @@
 						<WrapPanel>
 							<hc:SimpleStackPanel>
 								<CheckBox
-									x:Name="allowOutlining"
+									x:Name="AllowOutlining"
 									Margin="5"
 									Content="Allow Outlining [Excel]"
 									IsChecked="True" ToolTip="Allows to expand/collapse groups"/>
