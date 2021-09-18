@@ -347,7 +347,14 @@
 				<syncfusion:GridCurrencyColumn MappingName="Payment" HeaderText="Payment"/>
 				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
 				<syncfusion:GridCurrencyColumn MappingName="PreviousBalance" HeaderText="Previous"/>
-				<syncfusion:GridCurrencyColumn MappingName="FinalBalance" HeaderText="Final"/>
+				<syncfusion:GridCurrencyColumn MappingName="FinalBalance" HeaderText="Final" >
+					<syncfusion:GridCurrencyColumn.CellStyle>
+						<Style TargetType="syncfusion:GridCell">
+							<Setter Property="Background" Value="{Binding FinalBalance, Converter={StaticResource ColorConvertor}}" />
+						</Style>
+						
+					</syncfusion:GridCurrencyColumn.CellStyle>
+				</syncfusion:GridCurrencyColumn>
 			</syncfusion:SfDataGrid.Columns>
 		</syncfusion:SfDataGrid>
 	</DockPanel>
