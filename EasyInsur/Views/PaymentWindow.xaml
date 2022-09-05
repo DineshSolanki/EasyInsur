@@ -29,13 +29,13 @@
 			<ColumnDefinition Width="Auto"/>
 		</Grid.ColumnDefinitions>
 		<hc:TextBox hc:TitleElement.Title="SR. No" Grid.Row="0" Grid.Column="0" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding SrNo}" VerticalAlignment="Top"/>
-		<hc:DatePicker SelectedDateFormat="Short" Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="First Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding FirstDate}" VerticalAlignment="Top"/>
+        <hc:DatePicker SelectedDateFormat="Short" Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="First Date" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5" SelectedDate="{Binding FirstDate}" VerticalAlignment="Top"/>
 		<hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="2" AutoComplete="True" Text="{Binding PayeeType}" hc:TitleElement.Title="Payee type" hc:TitleElement.TitlePlacement="Top" Margin="5">
 			<ComboBoxItem Content="Customer"/>
 			<ComboBoxItem Content="Agents"/>
 		</hc:ComboBox>
-		<hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" hc:TitleElement.Title="Payee Name" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" Grid.Row="0" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
+        <hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" hc:TitleElement.Title="Payee Name" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5"/>
+        <syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" Grid.Row="0" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
 		<GroupBox Header="Insurance Amount" Grid.Row="0" Grid.Column="5" Style="{StaticResource GroupBoxTab}" BorderThickness="0" Margin="5">
 			<Grid>
 				<Grid.ColumnDefinitions>
@@ -75,8 +75,8 @@
 	/>
 			</syncfusion:CurrencyTextBox.ToolTip>
 		</syncfusion:CurrencyTextBox>
-		<hc:DatePicker SelectedDateFormat="Short" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="2" hc:TitleElement.Title="Payment Date" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding PaymentDate}"/>
-		<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Row="1" Grid.Column="4" hc:TitleElement.Title="Payment" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Payment}"/>
+        <hc:DatePicker SelectedDateFormat="Short" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="2" hc:TitleElement.Title="Payment Date" hc:InfoElement.Necessary="True" hc:TitleElement.TitlePlacement="Top" Margin="5" SelectedDate="{Binding PaymentDate}"/>
+        <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Row="1" Grid.Column="4" hc:TitleElement.Title="Payment" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Payment}"/>
 		<hc:SimpleStackPanel Grid.Row="1" Grid.Column="5" Orientation="Horizontal">
 			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Balance}" HorizontalAlignment="Left" IsReadOnly="True"/>
 			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Previous Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding PreviousBalance}" HorizontalAlignment="Left" IsReadOnly="True"/>
