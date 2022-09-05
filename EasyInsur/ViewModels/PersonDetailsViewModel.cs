@@ -84,8 +84,8 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _lastName, value);
         }
 
-        private string _registrationDate;
-        public string RegistrationDate
+        private DateTime _registrationDate = DateTime.Today;
+        public DateTime RegistrationDate
         {
             get => _registrationDate;
             set => SetProperty(ref _registrationDate, value);
@@ -131,7 +131,7 @@ namespace EasyInsur.ViewModels
 
         private void ResetFields()
         {
-            RegistrationDate = DateTime.Now.ToShortDateString();
+            RegistrationDate = DateTime.Today;
             SelectedCountry = CountryDetails.FirstOrDefault(c => c.code == "IN")!;
             Balance = 0;
             FirstName = "";
@@ -142,7 +142,7 @@ namespace EasyInsur.ViewModels
 
         private void Save()
         {
-            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || PersonId.IsNullOrEmpty() | RegistrationDate.IsNullOrEmpty())
+            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || PersonId.IsNullOrEmpty())
             {
                 MessageBox.Error("Please fill all required values", "Incomplete data");
                 return;
@@ -164,7 +164,7 @@ namespace EasyInsur.ViewModels
                 }
             }
             var person = new Person(FirstName.Trim(), LastName.Trim(), PersonType, PersonId.Trim(),
-                Balance, imageName, RegistrationDate.Trim(),
+                Balance, imageName, RegistrationDate.ToShortDateString(),
                 $"{SelectedCountry.dial_code}{Mobile}", email: Email);
             try
             {
