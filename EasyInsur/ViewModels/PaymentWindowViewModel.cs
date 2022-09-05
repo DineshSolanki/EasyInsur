@@ -31,8 +31,8 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _srNo, value);
         }
 
-        private string _firstDate = DateTime.Now.ToShortDateString();
-        public string FirstDate
+        private DateTime _firstDate = DateTime.Now;
+        public DateTime FirstDate
         {
             get => _firstDate;
             set => SetProperty(ref _firstDate, value);
@@ -148,8 +148,8 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _amtAfterCommission, value);
         }
 
-        private string _paymentDate = DateTime.Now.ToShortDateString();
-        public string PaymentDate
+        private DateTime _paymentDate = DateTime.Now;
+        public DateTime PaymentDate
         {
             get => _paymentDate;
             set => SetProperty(ref _paymentDate, value);
@@ -297,7 +297,7 @@ namespace EasyInsur.ViewModels
         }
         private void ResetFields()
         {
-            PaymentDate = FirstDate = DateTime.Now.ToShortDateString();
+            PaymentDate = FirstDate = DateTime.Now;
             SelectedPayee = null;
             VehicleNo = "";
             FixedAmount = ODAmount = TPAmount = TaxAmount = TotalAmount = 0;
@@ -307,11 +307,8 @@ namespace EasyInsur.ViewModels
 
         private void Save()
         {
-            if (FirstDate.IsNullOrEmpty() ||
-                PaymentDate.IsNullOrEmpty() ||
-                SelectedPayee is null ||
-                VehicleNo.IsNullOrEmpty() ||
-                TotalAmount == 0 || Payment == 0)
+            if (SelectedPayee is null ||
+                VehicleNo.IsNullOrEmpty())
             {
                 MessageBox.Error("Please fill all required values", "Incomplete data");
                 return;
@@ -325,7 +322,7 @@ namespace EasyInsur.ViewModels
                 {
                     DbMethods.SaveInsurance(new Insurance()
                     {
-                        RegDate = FirstDate,
+                        RegDate = FirstDate.ToShortDateString(),
                         VehicleNo = VehicleNo
                     });
                     iid = DbMethods.GetInsuranceId(VehicleNo);
@@ -353,7 +350,7 @@ namespace EasyInsur.ViewModels
                     FinalBalance = FinalBalance,
                     ODPercent = ODPercent,
                     TPPercent = TPPercent,
-                    PaymentDate = PaymentDate,
+                    PaymentDate = PaymentDate.ToShortDateString(),
                     Payment = Payment
                 };
                 var id = DbMethods.SaveTransaction(transaction);
