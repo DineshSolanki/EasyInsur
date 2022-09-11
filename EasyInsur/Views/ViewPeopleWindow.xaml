@@ -341,7 +341,19 @@
 									Fill="#FF3A3939" Stretch="Fill"/>
 							</Grid>
 						</MenuItem.Icon>
-					</MenuItem>
+                    </MenuItem>
+                    <MenuItem
+                        Command="{Binding DataGrid.DataContext.AddPayment}"
+                        CommandParameter="{Binding}"
+                        Header="Add Payment">
+                        <MenuItem.Icon>
+                            <Grid x:Name="Add" Height="16" Width="16">
+                                <Path 
+                                    Data="M938.666667 426.666667h-341.333334V85.333333c0-46.933333-38.4-85.333333-85.333333-85.333333s-85.333333 38.4-85.333333 85.333333v341.333334H85.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333s38.4 85.333333 85.333333 85.333333h341.333334v341.333334c0 46.933333 38.4 85.333333 85.333333 85.333333s85.333333-38.4 85.333333-85.333333v-341.333334h341.333334c46.933333 0 85.333333-38.4 85.333333-85.333333s-38.4-85.333333-85.333333-85.333333z" 
+                                    Fill="Black" Margin="1,1,0.5,0.5" Stretch="Fill"/>
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
 				</ContextMenu>
 			</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>

@@ -151,5 +151,10 @@ namespace EasyInsur.Views
                 MessageBox.Error(ex.Message);
             }
         }
+
+        private void DataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            MessageBox.Error("clicke");
+        }
     }
 }
