@@ -2,19 +2,25 @@
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 using EasyInsur.Models;
 using EasyInsur.Modules;
+using Prism.Regions;
+using Syncfusion.UI.Xaml.Grid;
+using Syncfusion.UI.Xaml.Utility;
 
 namespace EasyInsur.ViewModels
 {
     public class ViewPeopleWindowViewModel : BindableBase
     {
-        public ViewPeopleWindowViewModel()
+        public ViewPeopleWindowViewModel(IRegionManager regionManager)
         {
+            _regionManager = regionManager;
             AllPeople = DbMethods.GetPeople();
             PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(ReloadMethod);
             SaveCommand = new DelegateCommand(SaveMethod);
+            AddPayment = new DelegateCommand<object>(PerformAddPayment);
         }
 
         private void ReloadMethod()
@@ -24,6 +30,7 @@ namespace EasyInsur.ViewModels
         }
 
         #region Properties
+        private readonly IRegionManager _regionManager;
 
         private bool _allowOutlining = true;
         public bool AllowOutlining { get => _allowOutlining; set => SetProperty(ref _allowOutlining, value); }
@@ -72,6 +79,20 @@ namespace EasyInsur.ViewModels
 
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
+        public DelegateCommand<object> AddPayment { get; }
+
+        private void PerformAddPayment(object commandParameter)
+        {
+            if (commandParameter is GridRecordContextMenuInfo info)
+            {
+                var grid = info.DataGrid;
+                var parameters = new NavigationParameters
+                {
+                    { "person", grid.SelectedItem as Person}
+                };
+                _regionManager.RequestNavigate("ContentRegion", "PaymentWindow", parameters);
+            }
+        }
 
         #endregion
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Syncfusion.UI.Xaml.Utility;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
@@ -10,19 +11,24 @@ using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 using RepoDb;
+using System.Windows.Input;
+using Syncfusion.UI.Xaml.Grid;
 
 namespace EasyInsur.ViewModels
 {
     public class PersonDetailsViewModel : BindableBase
     {
-        public PersonDetailsViewModel()
+        public PersonDetailsViewModel(IRegionManager regionManager)
         {
+            _regionManager = regionManager;
             CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.name));
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
-            LoadPeople();
             ResetFields();
+            PersonId = DbMethods.GetPeopleLastId().Result.ToString() ?? string.Empty;
+            LoadPeople();
         }
 
         private void LoadPeople()
@@ -41,6 +47,7 @@ namespace EasyInsur.ViewModels
         private IEnumerable<Person> _people;
         public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people, value); }
         private ObservableCollection<Country> _countryDetails;
+        private readonly IRegionManager _regionManager;
 
         public ObservableCollection<Country> CountryDetails
         {
@@ -180,5 +187,20 @@ namespace EasyInsur.ViewModels
 
         }
 
+        private BaseCommand addPayment;
+        public ICommand AddPayment => addPayment ??= new BaseCommand(PerformAddPayment);
+
+        private void PerformAddPayment(object commandParameter)
+        {
+            if (commandParameter is GridRecordContextMenuInfo info)
+            {
+                var grid = info.DataGrid;
+                var parameters = new NavigationParameters
+                {
+                    { "person", grid.SelectedItem as Person}
+                };
+                _regionManager.RequestNavigate("ContentRegion", "PaymentWindow", parameters);
+            }
+        }
     }
 }

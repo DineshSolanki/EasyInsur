@@ -32,7 +32,7 @@
 			<ComboBoxItem Content="Customer"/>
 			<ComboBoxItem Content="Agent"/>
 		</hc:ComboBox>
-		<hc:TextBox Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
+		<hc:TextBox Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId, Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:TextBox Grid.Row="0" Grid.Column="2" hc:TitleElement.Title="First Name" hc:InfoElement.Necessary="True" Text="{Binding FirstName}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:TextBox Grid.Row="0" Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
 		<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" SelectedDate="{Binding RegistrationDate}"/>
@@ -273,7 +273,19 @@
 							</Grid>
 						</MenuItem.Icon>
 					</MenuItem>
-				</ContextMenu>
+                    <MenuItem
+						Command="{Binding DataGrid.DataContext.AddPayment}"
+						CommandParameter="{Binding}"
+						Header="Add Payment">
+                        <MenuItem.Icon>
+                            <Grid x:Name="Add" Height="16" Width="16">
+                                <Path 
+									Data="M938.666667 426.666667h-341.333334V85.333333c0-46.933333-38.4-85.333333-85.333333-85.333333s-85.333333 38.4-85.333333 85.333333v341.333334H85.333333c-46.933333 0-85.333333 38.4-85.333333 85.333333s38.4 85.333333 85.333333 85.333333h341.333334v341.333334c0 46.933333 38.4 85.333333 85.333333 85.333333s85.333333-38.4 85.333333-85.333333v-341.333334h341.333334c46.933333 0 85.333333-38.4 85.333333-85.333333s-38.4-85.333333-85.333333-85.333333z" 
+									Fill="Black" Margin="1,1,0.5,0.5" Stretch="Fill"/>
+                            </Grid>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
 			</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn  MappingName="Id" HeaderText="ID" IsHidden="True"/>

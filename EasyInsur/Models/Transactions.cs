@@ -1,9 +1,13 @@
-﻿using RepoDb.Attributes;
+﻿using System.Linq;
+using EasyInsur.Modules;
+using RepoDb.Attributes;
 
 namespace EasyInsur.Models
 {
     public class Transactions : EditableTableClass
     {
+        private long? _insuranceId;
+
         public Transactions()
         {
         }
@@ -33,7 +37,18 @@ namespace EasyInsur.Models
         [Identity] // Identity decoration
         public long? Id { get; set; } = null;
 
-        public long? InsuranceID { get; set; }
+        public long? InsuranceID
+        {
+            get => _insuranceId;
+            set
+            {
+                _insuranceId = value;
+                if (value is null) return;
+                DbMethods.GetInsuranceAsync((long)value).ContinueWith(i=> Insurance = i.Result.FirstOrDefault());
+            }
+        }
+
+        public Insurance Insurance { get; set; }
         public long? PersonID { get; set; }
         public double FixedAmount { get; set; }
         public double OD { get; set; }
