@@ -335,7 +335,7 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                grid.GridCopyPaste.Copy();
+                
             }
         }
 
@@ -539,6 +539,31 @@ namespace EasyInsur.Modules
                     grid.TableSummaryRows.Clear();
                     grid.TableSummaryRows.Add(summaryrow);
                 }
+            }
+        }
+
+        #endregion
+
+        #region Add Payment
+        static ICommand _addPayment;
+        public static ICommand AddPayment
+        {
+            get
+            {
+                if (_addPayment == null)
+                    _addPayment = new BaseCommand(OnAddPaymentClicked);
+
+                return _copy;
+            }
+        }
+
+
+        private static void OnAddPaymentClicked(object obj)
+        {
+            if (obj is GridRecordContextMenuInfo info)
+            {
+                var grid = info.DataGrid;
+                grid.GridCopyPaste.Copy();
             }
         }
 

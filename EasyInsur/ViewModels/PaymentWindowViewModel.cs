@@ -5,12 +5,14 @@ using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
+using ImTools;
 using Prism.Commands;
 using Prism.Mvvm;
+using Prism.Regions;
 
 namespace EasyInsur.ViewModels
 {
-    public class PaymentWindowViewModel : BindableBase
+    public class PaymentWindowViewModel : BindableBase, INavigationAware
     {
         public PaymentWindowViewModel()
         {
@@ -21,10 +23,14 @@ namespace EasyInsur.ViewModels
             //ci.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy"; //for the second type
             //Thread.CurrentThread.CurrentCulture = ci;
         }
+
         public DelegateCommand ResetCommand { get; }
         public DelegateCommand SaveCommand { get; }
+
         #region Properties
+
         private string _srNo;
+
         public string SrNo
         {
             get => _srNo;
@@ -32,6 +38,7 @@ namespace EasyInsur.ViewModels
         }
 
         private DateTime _firstDate = DateTime.Now;
+
         public DateTime FirstDate
         {
             get => _firstDate;
@@ -39,11 +46,13 @@ namespace EasyInsur.ViewModels
         }
 
         private IEnumerable<Transactions> _transactions;
+
         public IEnumerable<Transactions> Transactions
         {
             get => _transactions;
             set => SetProperty(ref _transactions, value);
         }
+
         private double _totalAmount;
         private double _taxAmount;
         private double _tPAmount;
@@ -57,6 +66,7 @@ namespace EasyInsur.ViewModels
             get => _totalCommission;
             set => SetProperty(ref _totalCommission, value);
         }
+
         public double TotalAmount
         {
             get => _totalAmount;
@@ -66,6 +76,7 @@ namespace EasyInsur.ViewModels
                 CalculateCommissionAmount();
             }
         }
+
         public double TaxAmount
         {
             get => _taxAmount;
@@ -107,6 +118,7 @@ namespace EasyInsur.ViewModels
         }
 
         private double _commissionAmount;
+
         public double CommissionAmount
         {
             get => _commissionAmount;
@@ -118,6 +130,7 @@ namespace EasyInsur.ViewModels
         }
 
         private double _odPercent;
+
         public double ODPercent
         {
             get => _odPercent;
@@ -142,6 +155,7 @@ namespace EasyInsur.ViewModels
         }
 
         private double _amtAfterCommission;
+
         public double AmtAfterCommission
         {
             get => _amtAfterCommission;
@@ -149,6 +163,7 @@ namespace EasyInsur.ViewModels
         }
 
         private DateTime _paymentDate = DateTime.Now;
+
         public DateTime PaymentDate
         {
             get => _paymentDate;
@@ -156,6 +171,7 @@ namespace EasyInsur.ViewModels
         }
 
         private double _payment;
+
         public double Payment
         {
             get => _payment;
@@ -190,27 +206,40 @@ namespace EasyInsur.ViewModels
             set => SetProperty(ref _balance, value);
         }
 
-        private string _payeeType;
-        public string PayeeType
+        private PersonType _payeeType;
+
+        public PersonType PayeeType
         {
             get => _payeeType;
             set
             {
                 SetProperty(ref _payeeType, value);
-                if (value == "Customer")
-                    DbMethods.LoadCustomers().ContinueWith(c => PayeeCollection = c.Result);
-                else
-                    DbMethods.LoadAgents().ContinueWith(a => PayeeCollection = a.Result);
+                switch (value)
+                {
+                    case PersonType.Customer:
+                        PayeeCollection = DbMethods.LoadCustomers().Result;
+                        break;
+                    case PersonType.Agent:
+                        PayeeCollection = DbMethods.LoadAgents().Result;
+                        break;
+                    case PersonType.Any:
+                    default:
+                        PayeeCollection = DbMethods.GetPeople();
+                        break;
+                }
             }
         }
 
         private IEnumerable<Insurance> _insurance;
+
         public IEnumerable<Insurance> Insurance
         {
             get => _insurance;
             set => SetProperty(ref _insurance, value);
         }
+
         private string _vehicleNo;
+
         public string VehicleNo
         {
             get => _vehicleNo;
@@ -218,6 +247,7 @@ namespace EasyInsur.ViewModels
         }
 
         private string _vehicleRegDate;
+
         public string VehicleRegDate
         {
             get => _vehicleRegDate;
@@ -237,7 +267,9 @@ namespace EasyInsur.ViewModels
                 CalculateBalance();
             }
         }
+
         private Person _selectedPayee;
+
         public Person? SelectedPayee
         {
             get => _selectedPayee;
@@ -257,7 +289,9 @@ namespace EasyInsur.ViewModels
 
             }
         }
+
         private bool _isPercentageSelected;
+
         public bool IsPercentageSelected
         {
             get => _isPercentageSelected;
@@ -265,12 +299,23 @@ namespace EasyInsur.ViewModels
         }
 
         private IEnumerable<Person> _payeeCollection;
+
         public IEnumerable<Person> PayeeCollection
         {
             get => _payeeCollection;
             set => SetProperty(ref _payeeCollection, value);
         }
+
+        private IEnumerable<PersonType> _personTypes;
+
+        public IEnumerable<PersonType> PersonTypes
+        {
+            get => _personTypes;
+            set => SetProperty(ref _personTypes, value);
+        }
+
         #endregion
+
         private void CalculateInsuranceAmount()
         {
             TotalAmount = FixedAmount + ODAmount + TPAmount + TaxAmount;
@@ -295,6 +340,7 @@ namespace EasyInsur.ViewModels
             Balance = AmtAfterCommission - Payment;
             FinalBalance = PreviousBalance + Balance;
         }
+
         private void ResetFields()
         {
             PaymentDate = FirstDate = DateTime.Now;
@@ -313,6 +359,7 @@ namespace EasyInsur.ViewModels
                 MessageBox.Error("Please fill all required values", "Incomplete data");
                 return;
             }
+            CalculateBalance();
             try
             {
                 long? iid;
@@ -333,6 +380,7 @@ namespace EasyInsur.ViewModels
                     MessageBox.Error("An Error Occurred", "Transaction aborted");
                     return;
                 }
+
                 var transaction = new Transactions()
                 {
                     FixedAmount = FixedAmount,
@@ -365,6 +413,25 @@ namespace EasyInsur.ViewModels
             {
                 MessageBox.Error(e.Message);
             }
+
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            var person = navigationContext.Parameters.GetValue<Person>("person");
+            if (person is null) return;
+            Enum.TryParse(person.Type,true,out PersonType personType);
+            PayeeType = personType;
+            SelectedPayee = PayeeCollection.FindFirst(p => p.Id == person.Id);
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
 
         }
     }

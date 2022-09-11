@@ -329,7 +329,8 @@
 			<syncfusion:SfDataGrid.StackedHeaderRows>
 				<syncfusion:StackedHeaderRow>
 					<syncfusion:StackedHeaderRow.StackedColumns>
-						<syncfusion:StackedColumn ChildColumns="FixedAmount,OD,TP,Tax,TotalAmount" HeaderText="Insurance Amount"/>
+						<!--<syncfusion:StackedColumn ChildColumns="Insurance.RegDate, VehicleNo" HeaderText="Insurance Details"/>-->
+                        <syncfusion:StackedColumn ChildColumns="FixedAmount,OD,TP,Tax,TotalAmount" HeaderText="Insurance Amount"/>
 						<syncfusion:StackedColumn ChildColumns="CommissionAmount,AfterCommissionAmount" HeaderText="Commission Details"/>
 						<syncfusion:StackedColumn ChildColumns="Balance,PreviousBalance,FinalBalance" HeaderText="Balance Details"/>
 					</syncfusion:StackedHeaderRow.StackedColumns>
@@ -337,7 +338,9 @@
 			</syncfusion:SfDataGrid.StackedHeaderRows>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
-				<syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>
+                <syncfusion:GridTextColumn MappingName="Insurance.VehicleNo" HeaderText="Vehicle No."/>
+                <syncfusion:GridDateTimeColumn MappingName="Insurance.RegDate" HeaderText="Reg Date"/>
+                <syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>
 				<syncfusion:GridTextColumn MappingName="FixedAmount" HeaderText="Fixed"/>
 				<syncfusion:GridTextColumn MappingName="OD" HeaderText="OD"/>
 				<syncfusion:GridTextColumn MappingName="TP" HeaderText="TP"/>

@@ -7,7 +7,8 @@
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 			 xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
 			 xmlns:local="clr-namespace:EasyInsur.Modules" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
-			 syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
+             xmlns:models="clr-namespace:EasyInsur.Models"
+             syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
 			 mc:Ignorable="d"
 			 d:DataContext="{d:DesignInstance viewmodels:PaymentWindowViewModel}"
 			 prism:ViewModelLocator.AutoWireViewModel="True">
@@ -30,10 +31,7 @@
 		</Grid.ColumnDefinitions>
 		<hc:TextBox hc:TitleElement.Title="SR. No" Grid.Row="0" Grid.Column="0" hc:TitleElement.TitlePlacement="Top" Margin="5" Text="{Binding SrNo}" VerticalAlignment="Top"/>
         <hc:DatePicker SelectedDateFormat="Short" Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="First Date" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5" SelectedDate="{Binding FirstDate}" VerticalAlignment="Top"/>
-		<hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="2" AutoComplete="True" Text="{Binding PayeeType}" hc:TitleElement.Title="Payee type" hc:TitleElement.TitlePlacement="Top" Margin="5">
-			<ComboBoxItem Content="Customer"/>
-			<ComboBoxItem Content="Agents"/>
-		</hc:ComboBox>
+		<hc:ComboBox SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type models:PersonType}}}" Grid.Row="0" Grid.Column="2" AutoComplete="True" SelectedItem="{Binding PayeeType}" hc:TitleElement.Title="Payee type" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
         <hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="3" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" hc:TitleElement.Title="Payee Name" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5"/>
         <syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" Grid.Row="0" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="5" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
 		<GroupBox Header="Insurance Amount" Grid.Row="0" Grid.Column="5" Style="{StaticResource GroupBoxTab}" BorderThickness="0" Margin="5">
@@ -45,11 +43,11 @@
 					<ColumnDefinition/>
 					<ColumnDefinition/>
 				</Grid.ColumnDefinitions>
-				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="0" hc:TitleElement.Title="Fixed Amount" MaxWidth="160" hc:TitleElement.TitlePlacement="Left" Value="{Binding FixedAmount}" Margin="5,0,0,0" />
-				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="1" hc:TitleElement.Title="OD" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding ODAmount}" Margin="5,0,0,0"/>
-				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="2" hc:TitleElement.Title="TP" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding TPAmount}" Margin="5,0,0,0"/>
-				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="3" hc:TitleElement.Title="Tax" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding TaxAmount}" Margin="5,0,0,0"/>
-				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="4" hc:TitleElement.Title="Total Amount" MaxWidth="160" hc:TitleElement.TitlePlacement="Left" Value="{Binding TotalAmount}" IsReadOnly="True" Margin="5,0,0,0"/>
+				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="0" hc:TitleElement.Title="Fixed Amount" MaxWidth="160" hc:TitleElement.TitlePlacement="Left" Value="{Binding FixedAmount}" Margin="5,0,0,0" CurrencyDecimalDigits="2"/>
+				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="1" hc:TitleElement.Title="OD" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding ODAmount}" Margin="5,0,0,0" CurrencyDecimalDigits="2"/>
+				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="2" hc:TitleElement.Title="TP" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding TPAmount}" Margin="5,0,0,0" CurrencyDecimalDigits="2"/>
+				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="3" hc:TitleElement.Title="Tax" MaxWidth="100" hc:TitleElement.TitlePlacement="Left" Value="{Binding TaxAmount}" Margin="5,0,0,0" CurrencyDecimalDigits="2"/>
+				<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="4" hc:TitleElement.Title="Total Amount" MaxWidth="160" hc:TitleElement.TitlePlacement="Left" Value="{Binding TotalAmount}" IsReadOnly="True" Margin="5,0,0,0" CurrencyDecimalDigits="2"/>
 			</Grid>
 		</GroupBox>
 		<hc:ComboBox x:Name="Box" SelectedIndex="0" Grid.Row="0" Grid.Column="6" Text="{Binding CommissionType}" AutoComplete="True" hc:TitleElement.Title="Commission type" hc:TitleElement.TitlePlacement="Top" Margin="5">
@@ -59,7 +57,7 @@
 		<GroupBox Header="Commission" Grid.Row="0" Grid.Column="7" Style="{StaticResource GroupBoxTab}" BorderThickness="0" >
 			<VirtualizingStackPanel Orientation="Horizontal">
 				<hc:SimplePanel Visibility="{Binding IsPercentageSelected, Converter={StaticResource Boolean2VisibilityReConverter}}">
-					<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Amount" hc:TitleElement.TitlePlacement="Left" Margin="5,0,0,0" Value="{Binding CommissionAmount}"/>
+					<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Amount" hc:TitleElement.TitlePlacement="Left" Margin="5,0,0,0" Value="{Binding CommissionAmount}" CurrencyDecimalDigits="2"/>
 				</hc:SimplePanel>
 				<hc:SimpleStackPanel Orientation="Horizontal" Visibility="{Binding IsPercentageSelected, Converter={StaticResource Boolean2VisibilityConverter}}">
 					<syncfusion:PercentTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="OD" hc:TitleElement.TitlePlacement="Left" Margin="5,0,0,0" PercentValue="{Binding ODPercent}"/>
@@ -67,7 +65,7 @@
 				</hc:SimpleStackPanel>
 			</VirtualizingStackPanel>
 		</GroupBox>
-		<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" hc:TitleElement.Title="Amount After Commission" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding AmtAfterCommission}" >
+		<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True" hc:TitleElement.Title="Amount After Commission" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding AmtAfterCommission}" CurrencyDecimalDigits="2">
 			<syncfusion:CurrencyTextBox.ToolTip>
 				<ToolTip 
 		Content="{Binding Path=TotalCommission}"
@@ -76,11 +74,11 @@
 			</syncfusion:CurrencyTextBox.ToolTip>
 		</syncfusion:CurrencyTextBox>
         <hc:DatePicker SelectedDateFormat="Short" Grid.ColumnSpan="2" Grid.Row="1" Grid.Column="2" hc:TitleElement.Title="Payment Date" hc:InfoElement.Necessary="True" hc:TitleElement.TitlePlacement="Top" Margin="5" SelectedDate="{Binding PaymentDate}"/>
-        <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Row="1" Grid.Column="4" hc:TitleElement.Title="Payment" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Payment}"/>
+        <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" CurrencyDecimalDigits="2" Grid.Row="1" Grid.Column="4" hc:TitleElement.Title="Payment" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Payment}"/>
 		<hc:SimpleStackPanel Grid.Row="1" Grid.Column="5" Orientation="Horizontal">
-			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Balance}" HorizontalAlignment="Left" IsReadOnly="True"/>
-			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Previous Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding PreviousBalance}" HorizontalAlignment="Left" IsReadOnly="True"/>
-			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Final Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding FinalBalance}" IsReadOnly="True"/>
+			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding Balance}" HorizontalAlignment="Left" IsReadOnly="True" CurrencyDecimalDigits="2"/>
+			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Previous Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding PreviousBalance}" HorizontalAlignment="Left" IsReadOnly="True" CurrencyDecimalDigits="2"/>
+			<syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Final Balance" hc:TitleElement.TitlePlacement="Top" Margin="5" Value="{Binding FinalBalance}" IsReadOnly="True" CurrencyDecimalDigits="2"/>
 		</hc:SimpleStackPanel>
 		<hc:SplitButton Grid.Row="1" Grid.Column="6" Style="{StaticResource SplitButtonPrimary}" Content="Save Transactions" Command="{Binding SaveCommand}" HorizontalAlignment="Stretch" VerticalAlignment="Center" Grid.ColumnSpan="2">
 			<hc:SplitButton.DropDownContent>
@@ -326,6 +324,8 @@
 			</syncfusion:SfDataGrid.TableSummaryRows>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
+                <syncfusion:GridTextColumn MappingName="Insurance.VehicleNo" HeaderText="Vehicle No."/>
+                <syncfusion:GridDateTimeColumn MappingName="Insurance.RegDate" HeaderText="Reg Date"/>
 				<syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>
 				<syncfusion:GridTextColumn MappingName="FixedAmount" HeaderText="Fixed Amount"/>
 				<syncfusion:GridTextColumn MappingName="OD" HeaderText="OD"/>

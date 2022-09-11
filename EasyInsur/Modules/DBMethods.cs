@@ -90,6 +90,11 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.QueryAsync<Insurance>(i => i.Id == insuranceId).Result;
         }
+        public static Task<IEnumerable<Insurance>> GetInsuranceAsync(long insuranceId)
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return connection.QueryAsync<Insurance>(i => i.Id == insuranceId);
+        }
         public static object SaveInsurance(Insurance insurance)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
@@ -188,6 +193,13 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             var count = connection.CountAsync<Person>(p => p.Type == "Agent");
             return count;
+        }
+
+        public static Task<object> GetPeopleLastId()
+        {
+            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var id = connection.MaxAllAsync<Person>(p=> p.Id);
+            return id;
         }
     }
 }
