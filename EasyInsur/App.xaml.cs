@@ -11,7 +11,7 @@ namespace EasyInsur
     {
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("NDk4MTEyQDMxMzkyZTMyMmUzMEpxK3hOT3ZvblgxVy9UNnpSTlJTTXR2bUJGNUZEQ0MvMUFBMWFBU0tyc3c9");
+            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("SYNCFUSION_KEY_REMOVED");
             RepoDb.SqLiteBootstrap.Initialize();
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),
