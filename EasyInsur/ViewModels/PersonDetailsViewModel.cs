@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using EasyInsur.Models;
@@ -14,6 +13,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using RepoDb;
 using System.Windows.Input;
+using EasyInsur.Repository;
 using MySql.Data.MySqlClient;
 using Syncfusion.UI.Xaml.Grid;
 
@@ -21,14 +21,16 @@ namespace EasyInsur.ViewModels
 {
     public class PersonDetailsViewModel : BindableBase
     {
-        public PersonDetailsViewModel(IRegionManager regionManager)
+        public PersonDetailsViewModel(IRegionManager regionManager, DbRepository dbRepository)
         {
+            
             _regionManager = regionManager;
+            _dbRepository = dbRepository;
             CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.name));
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
             ResetFields();
-            DbMethods.GetPeopleLastId().ContinueWith(result =>
+            _dbRepository.GetPeopleLastIdAsync().ContinueWith(result =>
             {
                 var id = result.Result;
                 PersonId = id.ToString();
@@ -38,7 +40,7 @@ namespace EasyInsur.ViewModels
 
         private void LoadPeople()
         {
-            DbMethods.GetPeopleAsync().ContinueWith(p => PersonData = p.Result);
+            _dbRepository.GetPeopleAsync().ContinueWith(p => PersonData = p.Result);
         }
 
         private string _mobileMask;
@@ -51,6 +53,7 @@ namespace EasyInsur.ViewModels
         public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people, value); }
         private ObservableCollection<Country> _countryDetails;
         private readonly IRegionManager _regionManager;
+        private readonly DbRepository _dbRepository;
 
         public ObservableCollection<Country> CountryDetails
         {
@@ -65,11 +68,10 @@ namespace EasyInsur.ViewModels
             set
             {
                 SetProperty(ref _personType, value);
-                if (value is null) return;
                 if (PersonType == "Agent")
-                    DbMethods.LoadAgents().ContinueWith(a => PersonData = a.Result);
+                    _dbRepository.GetAgentsAsync().ContinueWith(a => PersonData = a.Result);
                 else
-                    DbMethods.LoadCustomers().ContinueWith(c => PersonData = c.Result);
+                    _dbRepository.GetCustomersAsync().ContinueWith(c => PersonData = c.Result);
             }
         }
 

@@ -60,10 +60,10 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Prism.DryIoc" Version="8.1.97" />
 		<PackageReference Include="Prism.Wpf" Version="8.1.97" />
+		<PackageReference Include="RepoDb" Version="1.12.10" />
 		<PackageReference Include="RepoDb.MySql" Version="1.1.6" />
 		<PackageReference Include="Syncfusion.DataGridExcelExport.Wpf" Version="20.2.0.48" />
 		<PackageReference Include="Syncfusion.Themes.FluentLight.WPF" Version="20.2.0.48" />
-		<PackageReference Include="System.Data.SQLite.Core" Version="1.0.115" />
 		<PackageReference Include="Syncfusion.Shared.WPF" Version="20.2.0.48" />
 		<PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="20.2.0.48" />
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="20.2.0.48" />
