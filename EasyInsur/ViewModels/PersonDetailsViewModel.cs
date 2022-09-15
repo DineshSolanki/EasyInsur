@@ -14,6 +14,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using RepoDb;
 using System.Windows.Input;
+using MySql.Data.MySqlClient;
 using Syncfusion.UI.Xaml.Grid;
 
 namespace EasyInsur.ViewModels
@@ -27,15 +28,17 @@ namespace EasyInsur.ViewModels
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
             ResetFields();
-            PersonId = DbMethods.GetPeopleLastId().Result.ToString() ?? string.Empty;
+            DbMethods.GetPeopleLastId().ContinueWith(result =>
+            {
+                var id = result.Result;
+                PersonId = id.ToString();
+            });
             LoadPeople();
         }
 
         private void LoadPeople()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var people = connection.QueryAll<Person>();
-            PersonData = people;
+            DbMethods.GetPeopleAsync().ContinueWith(p => PersonData = p.Result);
         }
 
         private string _mobileMask;
@@ -175,7 +178,7 @@ namespace EasyInsur.ViewModels
                 $"{SelectedCountry.dial_code}{Mobile}", email: Email);
             try
             {
-                using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+                using var connection = new MySqlConnection(Services.Settings.ConnectionString);
                 connection.Insert<Person, int>(person);
                 ResetFields();
                 LoadPeople();
