@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Markup;
 using EasyInsur.Views;
@@ -11,7 +12,11 @@ namespace EasyInsur
     {
         public App()
         {
-            Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("SYNCFUSION_KEY_REMOVED");
+            var syncfusionKey = Environment.GetEnvironmentVariable("SYNCFUSION_LICENSE_KEY");
+            if (!string.IsNullOrEmpty(syncfusionKey))
+            {
+                Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(syncfusionKey);
+            }
             RepoDb.SqLiteBootstrap.Initialize();
             FrameworkElement.LanguageProperty.OverrideMetadata(
                 typeof(FrameworkElement),

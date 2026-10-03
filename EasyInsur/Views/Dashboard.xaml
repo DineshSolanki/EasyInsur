@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EasyInsur.Views.Dashboard"
+<UserControl x:Class="EasyInsur.Views.Dashboard"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:prism="http://prismlibrary.com/"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -35,17 +35,17 @@
                             <TextBlock
                                 FontFamily="Segoe UI"
                                 FontSize="22"
-                                Text="Agency Owner Name" />
+                                Text="{Binding OwnerName}" />
                             <TextBlock
                                 FontFamily="Segoe UI"
                                 FontSize="16"
                                 FontWeight="Light"
-                                Text="Phone  : 0000000000" />
+                                Text="{Binding OwnerPhone}" />
                             <TextBlock
                                 FontFamily="Segoe UI"
                                 FontSize="16"
                                 FontWeight="Light"
-                                Text="Email    : owner@example.com" />
+                                Text="{Binding OwnerEmail}" />
                         </StackPanel>
                     </Viewbox>
                 </Border>
@@ -195,7 +195,7 @@
                                         hc:TextBlockAttach.AutoTooltip="True" Text="GitHub" VerticalAlignment="Bottom">
                             <hc:Interaction.Triggers>
                                 <hc:EventTrigger EventName="MouseDown">
-                                    <hc:LaunchUriOrFileAction Path="mailto:redacted@example.com?subject=FROM_EASYInsure" />
+                                    <hc:LaunchUriOrFileAction Path="https://github.com/DineshSolanki" />
                                 </hc:EventTrigger>
                             </hc:Interaction.Triggers>
                         </hc:SimpleText>
@@ -227,7 +227,7 @@
                                         hc:TextBlockAttach.AutoTooltip="True" Text="GitHub Issues" VerticalAlignment="Bottom">
                             <hc:Interaction.Triggers>
                                 <hc:EventTrigger EventName="MouseDown">
-                                    <hc:LaunchUriOrFileAction Path="https://GitHub Issues" />
+                                    <hc:LaunchUriOrFileAction Path="https://github.com/DineshSolanki/EasyInsur/issues" />
                                 </hc:EventTrigger>
                             </hc:Interaction.Triggers>
                         </hc:SimpleText>

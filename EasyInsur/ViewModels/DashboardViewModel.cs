@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using EasyInsur.Modules;
 using Prism.Mvvm;
 
@@ -39,6 +39,10 @@ namespace EasyInsur.ViewModels
             get => _links;
             set => SetProperty(ref _links, value);
         }
+
+        public string OwnerName => Services.Settings.OwnerName;
+        public string OwnerPhone => $"Phone  : {Services.Settings.OwnerPhone}";
+        public string OwnerEmail => $"Email    : {Services.Settings.OwnerEmail}";
         #endregion
         public DashboardViewModel()
         {
