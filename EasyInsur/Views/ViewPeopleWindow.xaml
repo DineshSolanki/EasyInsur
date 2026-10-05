@@ -129,14 +129,18 @@
 								PageSize="10" 
 								HorizontalAlignment="Right"
 								Source="{Binding People}" />
-		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
+		<syncfusion:SfSmartDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" AllowSorting="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 							   HeaderLinesVisibility="Horizontal" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
 							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
-							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit">
+							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit"
+							   EnableSmartActions="True"
+							   Prompt="Try: filter Balance greaterThan 0"
+							   Suggestions="{Binding AiSuggestions}"
+							   HighlightBrush="LightYellow">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
@@ -385,6 +389,6 @@
 					</syncfusion:GridSummaryRow.SummaryColumns>
 				</syncfusion:GridTableSummaryRow>
 			</syncfusion:SfDataGrid.TableSummaryRows>
-		</syncfusion:SfDataGrid>
+		</syncfusion:SfSmartDataGrid>
 	</DockPanel>
 </UserControl>

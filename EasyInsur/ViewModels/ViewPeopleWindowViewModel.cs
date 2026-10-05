@@ -13,6 +13,13 @@ namespace EasyInsur.ViewModels
 {
     public class ViewPeopleWindowViewModel : BindableBase
     {
+        public IReadOnlyList<string> AiSuggestions { get; } = new[]
+        {
+            "Filter Balance greaterThan 0",
+            "Sort by Balance descending",
+            "Group by Type"
+        };
+
         public ViewPeopleWindowViewModel(IRegionManager regionManager)
         {
             _regionManager = regionManager;

@@ -28,6 +28,7 @@ namespace EasyInsur.Views
         {
             InitializeComponent();
             DataGrid.SearchHelper.AllowFiltering = true;
+            DataGrid.SearchHelper.AllowCaseSensitiveSearch = false;
         }
 
         private void SearchBar_OnSearchStarted(object? sender, FunctionEventArgs<string> e)

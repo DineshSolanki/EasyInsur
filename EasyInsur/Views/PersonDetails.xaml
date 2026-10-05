@@ -65,9 +65,10 @@
 		</hc:SplitButton>
 		<syncfusion:SfDataGrid x:Name="DataGrid" BorderThickness="1,1,1,1"  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="7" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" AllowSorting="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
-							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True">
+							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True"
+							   EnableDataVirtualization="True">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=local:ContextMenuCommands.ExpandAll}}"

@@ -111,14 +111,18 @@
 								 PageSize="10" 
 								 HorizontalAlignment="Right"
 								 Source="{Binding Transactions}" />
-		<syncfusion:SfDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
+		<syncfusion:SfSmartDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" ColumnSizer="Star" AllowResizingColumns="True"
+								AllowFiltering="True" AllowSorting="True" ColumnSizer="Star" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 							   HeaderLinesVisibility="Both" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
 							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
-							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit">
+								EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit"
+								EnableSmartActions="True"
+								Prompt="Try: group by VehicleNo"
+								Suggestions="{Binding AiSuggestions}"
+								HighlightBrush="LightYellow">
 			<syncfusion:SfDataGrid.GroupDropAreaContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="ExpandAll" Header="Expand All" Command="{Binding Source={x:Static Member=modules:ContextMenuCommands.ExpandAll}}"
@@ -341,10 +345,10 @@
                 <syncfusion:GridTextColumn MappingName="Insurance.VehicleNo" HeaderText="Vehicle No."/>
                 <syncfusion:GridDateTimeColumn MappingName="Insurance.RegDate" HeaderText="Reg Date"/>
                 <syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>
-				<syncfusion:GridTextColumn MappingName="FixedAmount" HeaderText="Fixed"/>
-				<syncfusion:GridTextColumn MappingName="OD" HeaderText="OD"/>
-				<syncfusion:GridTextColumn MappingName="TP" HeaderText="TP"/>
-				<syncfusion:GridTextColumn MappingName="Tax" HeaderText="Tax"/>
+				<syncfusion:GridCurrencyColumn MappingName="FixedAmount" HeaderText="Fixed"/>
+				<syncfusion:GridCurrencyColumn MappingName="OD" HeaderText="OD"/>
+				<syncfusion:GridCurrencyColumn MappingName="TP" HeaderText="TP"/>
+				<syncfusion:GridCurrencyColumn MappingName="Tax" HeaderText="Tax"/>
 				<syncfusion:GridCurrencyColumn MappingName="CommissionAmount" HeaderText="Commission"/>
 				<syncfusion:GridCurrencyColumn MappingName="AfterCommissionAmount" HeaderText="Total Amount - Commission"/>
 				<syncfusion:GridCurrencyColumn MappingName="Payment" HeaderText="Payment"/>
@@ -359,6 +363,6 @@
 					</syncfusion:GridCurrencyColumn.CellStyle>
 				</syncfusion:GridCurrencyColumn>
 			</syncfusion:SfDataGrid.Columns>
-		</syncfusion:SfDataGrid>
+		</syncfusion:SfSmartDataGrid>
 	</DockPanel>
 </UserControl>

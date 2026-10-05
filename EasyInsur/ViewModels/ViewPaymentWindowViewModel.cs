@@ -9,6 +9,13 @@ namespace EasyInsur.ViewModels
 {
     public class ViewPaymentWindowViewModel : BindableBase
     {
+        public IReadOnlyList<string> AiSuggestions { get; } = new[]
+        {
+            "Filter FinalBalance greaterThan 0",
+            "Sort by PaymentDate descending",
+            "Group by Insurance.VehicleNo"
+        };
+
         public ViewPaymentWindowViewModel()
         {
             LoadTransactions();
