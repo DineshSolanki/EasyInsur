@@ -3,6 +3,7 @@
 A **WPF desktop application** for managing motor insurance policies, agents, customers, commissions, and payment ledgers. Built with **.NET 5** using the **MVVM pattern with Prism**, featuring rich UI components from **Syncfusion** and **HandyControls**, with local **SQLite** data persistence via **RepoDb**.
 
 ---
+<img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/4da21457-9baa-4870-a9d5-034e79268028" />
 
 ## Features
 
