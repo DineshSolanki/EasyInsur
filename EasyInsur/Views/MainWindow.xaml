@@ -1,4 +1,4 @@
-﻿<hc:Window x:Class="EasyInsur.Views.MainWindow"
+<hc:Window x:Class="EasyInsur.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -35,7 +35,7 @@
                         <Image Source="../Resources/rupee.png" Width="24" Height="24"/>
                     </hc:SideMenuItem.Icon>
                 </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view Payments" Tag="ViewPaymentWindow" Padding="10"
+                <hc:SideMenuItem Header="View Payments" Tag="ViewPaymentWindow" Padding="10"
                                  Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
                     <hc:SideMenuItem.Icon>
                         <Image Source="../Resources/payment_history.png" Width="24" Height="24"/>
@@ -52,7 +52,7 @@
                         <Image Source="../Resources/add_people.png" Width="24" Height="24"/>
                     </hc:SideMenuItem.Icon>
                 </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view" Tag="ViewPeopleWindow" Padding="10"
+                <hc:SideMenuItem Header="View People" Tag="ViewPeopleWindow" Padding="10"
                                  Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
                     <hc:SideMenuItem.Icon>
                         <Image Source="../Resources/view_people.png" Width="24" Height="24"/>

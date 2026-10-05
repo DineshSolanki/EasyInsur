@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
@@ -193,6 +193,96 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             var count = connection.CountAsync<Person>(p => p.Type == "Agent");
             return count;
+        }
+
+        public static async Task<(long customerCount, long agentCount, double totalPremium, double totalCommission, double totalBalance, long transactionCount)> GetDashboardMetricsAsync()
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            await connection.OpenAsync();
+
+            long customerCount = 0;
+            long agentCount = 0;
+            double totalPremium = 0;
+            double totalCommission = 0;
+            double totalBalance = 0;
+            long transactionCount = 0;
+
+            using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Person WHERE Type = 'Customer';", connection))
+            {
+                var val = await cmd.ExecuteScalarAsync();
+                if (val != null && val != DBNull.Value) customerCount = Convert.ToInt64(val);
+            }
+
+            using (var cmd = new SQLiteCommand("SELECT COUNT(*) FROM Person WHERE Type = 'Agent';", connection))
+            {
+                var val = await cmd.ExecuteScalarAsync();
+                if (val != null && val != DBNull.Value) agentCount = Convert.ToInt64(val);
+            }
+
+            using (var cmd = new SQLiteCommand("SELECT COALESCE(SUM(Balance), 0) FROM Person;", connection))
+            {
+                var val = await cmd.ExecuteScalarAsync();
+                if (val != null && val != DBNull.Value) totalBalance = Convert.ToDouble(val);
+            }
+
+            using (var cmd = new SQLiteCommand("SELECT COUNT(*), COALESCE(SUM(TotalAmount), 0), COALESCE(SUM(CommissionAmount), 0) FROM Transactions;", connection))
+            {
+                using var reader = await cmd.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
+                {
+                    transactionCount = reader.GetInt64(0);
+                    totalPremium = reader.IsDBNull(1) ? 0 : reader.GetDouble(1);
+                    totalCommission = reader.IsDBNull(2) ? 0 : reader.GetDouble(2);
+                }
+            }
+
+            return (customerCount, agentCount, totalPremium, totalCommission, totalBalance, transactionCount);
+        }
+
+        public static async Task<List<DashboardActivityItem>> GetRecentDashboardActivityAsync(int limit = 10)
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            await connection.OpenAsync();
+
+            var list = new List<DashboardActivityItem>();
+            const string query = @"
+                SELECT 
+                    t.Id, 
+                    COALESCE(t.PaymentDate, '') as PaymentDate, 
+                    COALESCE(t.TotalAmount, 0) as TotalAmount, 
+                    COALESCE(t.CommissionAmount, 0) as CommissionAmount, 
+                    COALESCE(t.Payment, 0) as Payment, 
+                    COALESCE(t.Balance, 0) as Balance, 
+                    COALESCE(p.FirstName || ' ' || p.LastName, 'Unknown') as PayeeName, 
+                    COALESCE(p.Type, 'Customer') as PayeeType, 
+                    COALESCE(i.VehicleNo, '-') as VehicleNo 
+                FROM Transactions t 
+                LEFT JOIN Person p ON t.PersonID = p.Id 
+                LEFT JOIN Insurance i ON t.InsuranceID = i.Id 
+                ORDER BY t.Id DESC 
+                LIMIT @Limit;";
+
+            using var cmd = new SQLiteCommand(query, connection);
+            cmd.Parameters.AddWithValue("@Limit", limit);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                list.Add(new DashboardActivityItem
+                {
+                    Id = reader.GetInt64(0),
+                    PaymentDate = reader.GetString(1),
+                    TotalAmount = reader.GetDouble(2),
+                    CommissionAmount = reader.GetDouble(3),
+                    Payment = reader.GetDouble(4),
+                    Balance = reader.GetDouble(5),
+                    PayeeName = reader.GetString(6),
+                    PayeeType = reader.GetString(7),
+                    VehicleNo = reader.GetString(8)
+                });
+            }
+
+            return list;
         }
 
         public static Task<object> GetPeopleLastId()

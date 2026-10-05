@@ -1,4 +1,4 @@
-﻿<prism:PrismApplication x:Class="EasyInsur.App"
+<prism:PrismApplication x:Class="EasyInsur.App"
 						xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 						xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 						xmlns:hc="https://handyorg.github.io/handycontrol"
@@ -12,6 +12,9 @@
 			<ResourceDictionary.MergedDictionaries>
 				<hc:ThemeResources/>
 				<hc:Theme/>
+				<!-- Syncfusion Fluent Light Theme Dictionaries -->
+				<ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.FluentLight.WPF;component/Common/common.xaml" />
+				<ResourceDictionary Source="pack://application:,,,/Syncfusion.Themes.FluentLight.WPF;component/SfCalculator/SfCalculator.xaml" />
 				<!-- Other merged dictionaries here -->
 				<ResourceDictionary Source="Models/SearchControl/Themes/Generic.xaml" />
 			</ResourceDictionary.MergedDictionaries>

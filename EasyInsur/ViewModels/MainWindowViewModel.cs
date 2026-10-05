@@ -1,4 +1,4 @@
-﻿using HandyControl.Controls;
+using HandyControl.Controls;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
 using Prism.Commands;
@@ -11,7 +11,7 @@ namespace EasyInsur.ViewModels
     {
         private readonly IRegionManager _regionManager;
 
-        private string _title = "BatchMuxer_Subtitle";
+        private string _title = "EasyInsur - Insurance Management";
         public string Title
         {
             get => _title;
@@ -23,12 +23,18 @@ namespace EasyInsur.ViewModels
         {
             _regionManager = regionManager;
             NavigateCommand = new DelegateCommand<FunctionEventArgs<object>>(Navigate);
-            SelectCmd = new DelegateCommand<string>( i => _regionManager.RequestNavigate("ContentRegion", i));
+            SelectCmd = new DelegateCommand<string>(i =>
+            {
+                if (!string.IsNullOrWhiteSpace(i))
+                {
+                    _regionManager.RequestNavigate("ContentRegion", i);
+                }
+            });
         }
         private void Navigate(FunctionEventArgs<object> functionEventArgs)
         {
             var navigatePath = (functionEventArgs.Info as SideMenuItem)?.Tag?.ToString();
-            if(navigatePath.IsNullOrEmpty() || navigatePath != "Dashboard") return;
+            if (string.IsNullOrWhiteSpace(navigatePath)) return;
             _regionManager.RequestNavigate("ContentRegion", navigatePath);
         }
     }
