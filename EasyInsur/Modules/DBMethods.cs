@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
-using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using EasyInsur.Models;
 using HandyControl.Controls;
@@ -11,17 +11,15 @@ namespace EasyInsur.Modules
 {
     public static class DbMethods
     {
-        public static Task<IEnumerable<Person>> LoadAgents()
+        public static async Task<List<Person>> LoadAgents()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var agents = connection.QueryAsync<Person>(p => p.Type == "Agent");
-            return agents;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return (await connection.QueryAsync<Person>(p => p.Type == "Agent")).ToList();
         }
-        public static Task<IEnumerable<Person>> LoadCustomers()
+        public static async Task<List<Person>> LoadCustomers()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var customers = connection.QueryAsync<Person>(p => p.Type == "Customer");
-            return customers;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return (await connection.QueryAsync<Person>(p => p.Type == "Customer")).ToList();
         }
         public static double GetBalance(long? id)
         {
@@ -34,7 +32,10 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             try
             {
-                person = connection.ExecuteScalarAsync<double>("SELECT Balance FROM Person WHERE  id=@Id", param).Result;
+                connection.Open();
+                using var command = new SQLiteCommand("SELECT Balance FROM Person WHERE Id = @Id", connection);
+                command.Parameters.AddWithValue("@Id", id.Value);
+                person = Convert.ToDouble(command.ExecuteScalar() ?? 0d);
             }
             catch (Exception e)
             {
@@ -45,22 +46,12 @@ namespace EasyInsur.Modules
             return person;
         }
 
-        public static Task<IEnumerable<Transactions>> GetTransactions(long? personId)
+        public static async Task<List<Transactions>> GetTransactions(long? personId)
         {
-            //if (personId is null) return new Task<IEnumerable<Transactions>>();
-
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            Task<IEnumerable<Transactions>> transaction;
-            try
-            {
-                transaction = connection.QueryAsync<Transactions>(t => t.PersonID == personId);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw;
-            }
-            return transaction;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var transactions = (await connection.QueryAsync<Transactions>(t => t.PersonID == personId)).ToList();
+            await AttachInsuranceAsync(transactions);
+            return transactions;
         }
 
         public static object SaveTransaction(Transactions transactions)
@@ -68,32 +59,51 @@ namespace EasyInsur.Modules
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return connection.Insert(transactions);
         }
-        public static Task<IEnumerable<Transactions>> GetAllTransactions()
+        public static async Task<List<Transactions>> GetAllTransactions()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            Task<IEnumerable<Transactions>> transaction = connection.QueryAllAsync<Transactions>();
-            return transaction;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var transactions = (await connection.QueryAllAsync<Transactions>()).ToList();
+            await AttachInsuranceAsync(transactions);
+            return transactions;
         }
 
         public static IEnumerable<Person> GetPeople()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.QueryAllAsync<Person>().Result;
+            return connection.QueryAll<Person>().ToList();
         }
         public static IEnumerable<Insurance> GetInsurances()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.QueryAllAsync<Insurance>().Result;
+            return connection.QueryAll<Insurance>().ToList();
         }
         public static IEnumerable<Insurance> GetInsurance(long insuranceId)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.QueryAsync<Insurance>(i => i.Id == insuranceId).Result;
+            return connection.Query<Insurance>(i => i.Id == insuranceId).ToList();
         }
-        public static Task<IEnumerable<Insurance>> GetInsuranceAsync(long insuranceId)
+        public static async Task<List<Insurance>> GetInsuranceAsync(long insuranceId)
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.QueryAsync<Insurance>(i => i.Id == insuranceId);
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return (await connection.QueryAsync<Insurance>(i => i.Id == insuranceId)).ToList();
+        }
+
+        private static async Task AttachInsuranceAsync(IEnumerable<Transactions> transactions)
+        {
+            var insurances = (await GetInsurancesAsync())
+                .Where(i => i.Id.HasValue)
+                .ToDictionary(i => i.Id!.Value);
+            foreach (var transaction in transactions)
+            {
+                if (transaction.InsuranceID is { } insuranceId && insurances.TryGetValue(insuranceId, out var insurance))
+                    transaction.Insurance = insurance;
+            }
+        }
+
+        private static async Task<List<Insurance>> GetInsurancesAsync()
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return (await connection.QueryAllAsync<Insurance>()).ToList();
         }
         public static object SaveInsurance(Insurance insurance)
         {
@@ -112,64 +122,100 @@ namespace EasyInsur.Modules
             {
                 { "vehicleNo", vehicleNo }
             };
-            var id = connection.ExecuteScalarAsync<long>
-                ("SELECT id FROM Insurance WHERE  VehicleNo=@vehicleNo",param).Result;
-            return id;
+            connection.Open();
+            using var command = new SQLiteCommand("SELECT id FROM Insurance WHERE VehicleNo = @vehicleNo", connection);
+            command.Parameters.AddWithValue("@vehicleNo", vehicleNo);
+            var id = command.ExecuteScalar();
+            return id is null or DBNull ? null : Convert.ToInt64(id);
         }
         public static int UpdatePersonBalance(Person person)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.UpdateAsync(person, person.Id, Field.Parse<Person>(person1 => person1.Balance)).Result;
+            connection.Open();
+            using var command = new SQLiteCommand("UPDATE Person SET Balance = @Balance WHERE Id = @Id", connection);
+            command.Parameters.AddWithValue("@Balance", person.Balance);
+            command.Parameters.AddWithValue("@Id", person.Id);
+            return command.ExecuteNonQuery();
         }
         public static int UpdatePerson(Person person)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var field = new List<Field>();
-            person.EditedColumns.ForEach(s =>
-                field.Add(new Field(s)));
-            return connection.UpdateAsync(person, person.Id, field).Result;
+            var fields = new Dictionary<string, object?>
+            {
+                ["FirstName"] = person.FirstName, ["LastName"] = person.LastName,
+                ["Type"] = person.Type, ["PersonID"] = person.PersonID,
+                ["Address"] = person.Address, ["Email"] = person.Email,
+                ["Balance"] = person.Balance, ["ImagePath"] = person.ImagePath,
+                ["Mobile"] = person.Mobile, ["RegDate"] = person.RegDate
+            };
+            var edited = person.EditedColumns
+                .Where(fields.ContainsKey)
+                .Distinct()
+                .ToList();
+            if (person.Id is null || edited.Count == 0) return 0;
+            using var command = new SQLiteCommand(connection);
+            command.CommandText = $"UPDATE Person SET {string.Join(", ", edited.Select(name => $"{name} = @{name}"))} WHERE Id = @Id";
+            foreach (var name in edited)
+                command.Parameters.AddWithValue($"@{name}", fields[name] ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Id", person.Id.Value);
+            connection.Open();
+            return command.ExecuteNonQuery();
         }
         public static int UpdatePeople(IEnumerable<Person> people)
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.UpdateAllAsync(people).Result;
+            return people.Sum(UpdatePerson);
         }
         public static int UpdateTransactions(IEnumerable<Transactions> transactions)
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            return connection.UpdateAllAsync(transactions).Result;
+            connection.Open();
+            const string query = @"UPDATE Transactions SET InsuranceID=@InsuranceID, PersonID=@PersonID,
+                FixedAmount=@FixedAmount, OD=@OD, TP=@TP, Tax=@Tax, TotalAmount=@TotalAmount,
+                CommissionType=@CommissionType, CommissionAmount=@CommissionAmount, ODPercent=@ODPercent,
+                TPPercent=@TPPercent, AfterCommissionAmount=@AfterCommissionAmount, Payment=@Payment,
+                PaymentDate=@PaymentDate, Balance=@Balance, PreviousBalance=@PreviousBalance,
+                FinalBalance=@FinalBalance WHERE Id=@Id";
+            var count = 0;
+            foreach (var transaction in transactions.Where(t => t.Id.HasValue))
+            {
+                using var command = new SQLiteCommand(query, connection);
+                command.Parameters.AddWithValue("@InsuranceID", transaction.InsuranceID ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@PersonID", transaction.PersonID ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@FixedAmount", transaction.FixedAmount);
+                command.Parameters.AddWithValue("@OD", transaction.OD);
+                command.Parameters.AddWithValue("@TP", transaction.TP);
+                command.Parameters.AddWithValue("@Tax", transaction.Tax);
+                command.Parameters.AddWithValue("@TotalAmount", transaction.TotalAmount);
+                command.Parameters.AddWithValue("@CommissionType", transaction.CommissionType ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@CommissionAmount", transaction.CommissionAmount);
+                command.Parameters.AddWithValue("@ODPercent", transaction.ODPercent);
+                command.Parameters.AddWithValue("@TPPercent", transaction.TPPercent);
+                command.Parameters.AddWithValue("@AfterCommissionAmount", transaction.AfterCommissionAmount);
+                command.Parameters.AddWithValue("@Payment", transaction.Payment);
+                command.Parameters.AddWithValue("@PaymentDate", transaction.PaymentDate ?? (object)DBNull.Value);
+                command.Parameters.AddWithValue("@Balance", transaction.Balance);
+                command.Parameters.AddWithValue("@PreviousBalance", transaction.PreviousBalance);
+                command.Parameters.AddWithValue("@FinalBalance", transaction.FinalBalance);
+                command.Parameters.AddWithValue("@Id", transaction.Id.Value);
+                count += command.ExecuteNonQuery();
+            }
+            return count;
         }
-        public static Task<IEnumerable<Transactions>> GetCustomerTransactions()
+        public static async Task<List<Transactions>> GetCustomerTransactions()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            Task<IEnumerable<Transactions>> transaction;
-            try
-            {
-                const string? query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Customer');";
-                transaction = connection.ExecuteQueryAsync<Transactions>(query);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw;
-            }
-            return transaction;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            const string query = "SELECT t.* FROM Transactions t INNER JOIN Person p ON t.PersonID = p.Id WHERE p.Type = @Type;";
+            var transactions = (await connection.ExecuteQueryAsync<Transactions>(query, new { Type = "Customer" })).ToList();
+            await AttachInsuranceAsync(transactions);
+            return transactions;
         }
-        public static Task<IEnumerable<Transactions>> GetAgentTransactions()
+        public static async Task<List<Transactions>> GetAgentTransactions()
         {
-            using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            Task<IEnumerable<Transactions>> transaction;
-            try
-            {
-                const string? query = "SELECT * FROM Transactions where Transactions.Id in (SELECT Id from Person where Person.Type = 'Agent');";
-                transaction = connection.ExecuteQueryAsync<Transactions>(query);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                throw;
-            }
-            return transaction;
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            const string query = "SELECT t.* FROM Transactions t INNER JOIN Person p ON t.PersonID = p.Id WHERE p.Type = @Type;";
+            var transactions = (await connection.ExecuteQueryAsync<Transactions>(query, new { Type = "Agent" })).ToList();
+            await AttachInsuranceAsync(transactions);
+            return transactions;
         }
 
         public static Task<Tuple<IEnumerable<Person>, IEnumerable<Person>>> GetCustomerAgentCount()
@@ -285,11 +331,18 @@ namespace EasyInsur.Modules
             return list;
         }
 
-        public static Task<object> GetPeopleLastId()
+        public static async Task<object> GetPeopleLastId()
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            return await connection.MaxAllAsync<Person>(p => p.Id);
+        }
+
+        public static long GetPeopleLastIdSync()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var id = connection.MaxAllAsync<Person>(p=> p.Id);
-            return id;
+            connection.Open();
+            using var command = new SQLiteCommand("SELECT COALESCE(MAX(Id), 0) FROM Person;", connection);
+            return Convert.ToInt64(command.ExecuteScalar());
         }
     }
 }

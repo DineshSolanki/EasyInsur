@@ -9,12 +9,13 @@ namespace EasyInsur.Models
 
         public override Style? SelectStyle(object item, DependencyObject container)
         {
-            var gridCell = container as GridCell;
-
-            if (gridCell.ColumnBase?.GridColumn == null)
-                base.SelectStyle(item, container);
+            if (container is not GridCell gridCell || gridCell.ColumnBase?.GridColumn == null)
+                return base.SelectStyle(item, container);
             
             var record = item as EditableTableClass;
+
+            if (record == null)
+                return base.SelectStyle(item, container);
 
             return record.EditedColumns.Contains(gridCell.ColumnBase.GridColumn.MappingName)
                 ? Application.Current.Resources["CellStyle"] as Style

@@ -117,7 +117,7 @@ namespace EasyInsur.Views
             {
                 FitAllColumnsInOnePage = (bool)FitOnOnePage.IsChecked!,
                 ExportFormat = (bool)ExportFormatted.IsChecked!,
-                ExportAllPages = (bool)ExportCurrentPageOnly.IsChecked!
+                ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!
             };
             var document = new PdfDocument();
             document.PageSettings.Orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;

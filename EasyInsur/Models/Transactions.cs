@@ -40,12 +40,7 @@ namespace EasyInsur.Models
         public long? InsuranceID
         {
             get => _insuranceId;
-            set
-            {
-                _insuranceId = value;
-                if (value is null) return;
-                DbMethods.GetInsuranceAsync((long)value).ContinueWith(i=> Insurance = i.Result.FirstOrDefault());
-            }
+            set => _insuranceId = value;
         }
 
         public Insurance Insurance { get; set; }

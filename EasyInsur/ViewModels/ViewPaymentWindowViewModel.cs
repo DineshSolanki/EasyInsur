@@ -4,6 +4,8 @@ using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using System;
 
 namespace EasyInsur.ViewModels
 {
@@ -18,10 +20,10 @@ namespace EasyInsur.ViewModels
 
         public ViewPaymentWindowViewModel()
         {
-            LoadTransactions();
             PersonType = PersonType.Any;
-            ReloadCommand = new DelegateCommand(ReloadMethod);
+            ReloadCommand = new DelegateCommand(async () => await ReloadMethodAsync());
             SaveCommand = new DelegateCommand(SaveMethod);
+            _ = LoadTransactionsAsync();
         }
         #region Properties
         private IEnumerable<Person> _agents;
@@ -117,7 +119,7 @@ namespace EasyInsur.ViewModels
                     PersonType = _personType;
                     return;
                 }
-                DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                _ = LoadSelectedPayeeTransactionsAsync(value);
             }
         }
         #endregion
@@ -136,32 +138,44 @@ namespace EasyInsur.ViewModels
             DbMethods.UpdateTransactions(enumerable);
         }
 
-        private void ReloadMethod()
+        private async Task LoadSelectedPayeeTransactionsAsync(Person payee)
         {
-            LoadTransactions();
+            try
+            {
+                Transactions = await DbMethods.GetTransactions(payee.Id);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+        }
+
+        private async Task ReloadMethodAsync()
+        {
+            await LoadTransactionsAsync();
             PersonType = _personType;
         }
 
-        private void LoadTransactions()
+        private async Task LoadTransactionsAsync()
         {
-            DbMethods.LoadCustomers().ContinueWith((c) =>
+            try
             {
-                Customers = c.Result;
-                DbMethods.LoadAgents().ContinueWith(a =>
-                {
-                    Agents = a.Result;
-                    People = Customers.Join(Agents);
-                });
-            });
-            DbMethods.GetCustomerTransactions().ContinueWith(ct =>
+                var people = await Task.WhenAll(DbMethods.LoadCustomers(), DbMethods.LoadAgents());
+                var transactions = await Task.WhenAll(DbMethods.GetCustomerTransactions(), DbMethods.GetAgentTransactions());
+
+                Customers = people[0];
+                Agents = people[1];
+                People = Customers.Concat(Agents).ToList();
+
+                CustomerTransactions = transactions[0];
+                AgentTransactions = transactions[1];
+                AllTransactions = CustomerTransactions.Concat(AgentTransactions).ToList();
+                PersonType = _personType;
+            }
+            catch (Exception ex)
             {
-                CustomerTransactions = ct.Result;
-                DbMethods.GetAgentTransactions().ContinueWith(at =>
-                {
-                    AgentTransactions = at.Result;
-                    AllTransactions = CustomerTransactions.Join(AgentTransactions);
-                });
-            });
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
 
         }
         #endregion

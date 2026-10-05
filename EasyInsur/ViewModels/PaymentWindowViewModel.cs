@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Controls;
@@ -214,19 +215,7 @@ namespace EasyInsur.ViewModels
             set
             {
                 SetProperty(ref _payeeType, value);
-                switch (value)
-                {
-                    case PersonType.Customer:
-                        PayeeCollection = DbMethods.LoadCustomers().Result;
-                        break;
-                    case PersonType.Agent:
-                        PayeeCollection = DbMethods.LoadAgents().Result;
-                        break;
-                    case PersonType.Any:
-                    default:
-                        PayeeCollection = DbMethods.GetPeople();
-                        break;
-                }
+                _ = LoadPayeesAsync(value);
             }
         }
 
@@ -279,7 +268,7 @@ namespace EasyInsur.ViewModels
                 if (value is not null)
                 {
                     Insurance = DbMethods.GetInsurances();
-                    DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                    _ = RefreshTransactionsAsync(SelectedPayee.Id);
                     PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
                 }
                 else
@@ -354,9 +343,13 @@ namespace EasyInsur.ViewModels
         private void Save()
         {
             if (SelectedPayee is null ||
-                VehicleNo.IsNullOrEmpty())
+                VehicleNo.IsNullOrEmpty() ||
+                FixedAmount < 0 || ODAmount < 0 || TPAmount < 0 || TaxAmount < 0 ||
+                CommissionAmount < 0 || Payment < 0 ||
+                ODPercent is < 0 or > 100 || TPPercent is < 0 or > 100 ||
+                PaymentDate.Date > DateTime.Today)
             {
-                MessageBox.Error("Please fill all required values", "Incomplete data");
+                MessageBox.Error("Please enter valid payment values", "Incomplete data");
                 return;
             }
             CalculateBalance();
@@ -405,7 +398,7 @@ namespace EasyInsur.ViewModels
                 SelectedPayee.Balance = FinalBalance;
                 DbMethods.UpdatePersonBalance(SelectedPayee);
                 Insurance = DbMethods.GetInsurances();
-                DbMethods.GetTransactions(SelectedPayee.Id).ContinueWith(r => Transactions = r.Result);
+                    _ = RefreshTransactionsAsync(SelectedPayee.Id);
                 PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
 
             }
@@ -433,6 +426,35 @@ namespace EasyInsur.ViewModels
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
 
+        }
+
+        private async Task LoadPayeesAsync(PersonType personType)
+        {
+            try
+            {
+                PayeeCollection = personType switch
+                {
+                    PersonType.Customer => await DbMethods.LoadCustomers(),
+                    PersonType.Agent => await DbMethods.LoadAgents(),
+                    _ => DbMethods.GetPeople()
+                };
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
+        }
+
+        private async Task RefreshTransactionsAsync(long? personId)
+        {
+            try
+            {
+                Transactions = await DbMethods.GetTransactions(personId);
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
+            }
         }
     }
 }

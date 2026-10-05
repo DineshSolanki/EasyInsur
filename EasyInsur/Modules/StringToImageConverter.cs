@@ -16,7 +16,12 @@ namespace EasyInsur.Modules
             var imagePath = Path.Join(Services.AppPathWithoutName, "images", imageName);
             try
             {
-                var bitmap = new BitmapImage(new Uri(imagePath));
+                var bitmap = new BitmapImage();
+                bitmap.BeginInit();
+                bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                bitmap.UriSource = new Uri(imagePath);
+                bitmap.EndInit();
+                bitmap.Freeze();
                 return bitmap;
             }
             catch (Exception)

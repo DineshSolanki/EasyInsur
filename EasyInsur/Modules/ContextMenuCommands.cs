@@ -162,7 +162,7 @@ namespace EasyInsur.Modules
             if (obj is not GridColumnContextMenuInfo info) return;
             var grid = info.DataGrid;
             var column = info.Column;
-            if (grid.SortColumnDescriptions != null)
+            if (grid.SortColumnDescriptions == null)
                 return;
 
             grid.SortColumnDescriptions.Clear();
@@ -231,8 +231,11 @@ namespace EasyInsur.Modules
             if (obj == null)
                 return false;
 
-            var grid = (obj as GridContextMenuInfo).DataGrid;
-            var column = (obj as GridColumnContextMenuInfo).Column;
+            if (obj is not GridColumnContextMenuInfo info)
+                return false;
+
+            var grid = info.DataGrid;
+            var column = info.Column;
 
             return grid.SortColumnDescriptions != null && grid.SortColumnDescriptions.Any(x => x.ColumnName == column.MappingName);
         }
@@ -325,7 +328,7 @@ namespace EasyInsur.Modules
                 if (_copy == null)
                     _copy = new BaseCommand(OnCopyClicked);
 
-                return _copy;
+                return _addPayment;
             }
         }
 
@@ -563,7 +566,7 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                grid.GridCopyPaste.Copy();
+                grid.SelectedItem = info.Record;
             }
         }
 

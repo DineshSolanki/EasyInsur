@@ -1,10 +1,12 @@
 ﻿using Syncfusion.UI.Xaml.Utility;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Controls;
@@ -27,14 +29,14 @@ namespace EasyInsur.ViewModels
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
             ResetFields();
-            PersonId = DbMethods.GetPeopleLastId().Result.ToString() ?? string.Empty;
+            PersonId = DbMethods.GetPeopleLastIdSync().ToString();
             LoadPeople();
         }
 
         private void LoadPeople()
         {
             using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
-            var people = connection.QueryAll<Person>();
+            var people = connection.QueryAll<Person>().ToList();
             PersonData = people;
         }
 
@@ -64,9 +66,21 @@ namespace EasyInsur.ViewModels
                 SetProperty(ref _personType, value);
                 if (value is null) return;
                 if (PersonType == "Agent")
-                    DbMethods.LoadAgents().ContinueWith(a => PersonData = a.Result);
+                    _ = LoadPeopleAsync(DbMethods.LoadAgents);
                 else
-                    DbMethods.LoadCustomers().ContinueWith(c => PersonData = c.Result);
+                    _ = LoadPeopleAsync(DbMethods.LoadCustomers);
+            }
+        }
+
+        private async Task LoadPeopleAsync(Func<Task<List<Person>>> loader)
+        {
+            try
+            {
+                PersonData = await loader();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex);
             }
         }
 
@@ -149,9 +163,11 @@ namespace EasyInsur.ViewModels
 
         private void Save()
         {
-            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || PersonId.IsNullOrEmpty())
+            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() ||
+                PersonId.IsNullOrEmpty() || string.IsNullOrWhiteSpace(PersonType) || SelectedCountry is null ||
+                Balance < 0 || (!string.IsNullOrWhiteSpace(Email) && !new EmailAddressAttribute().IsValid(Email)))
             {
-                MessageBox.Error("Please fill all required values", "Incomplete data");
+                MessageBox.Error("Please enter valid person details", "Incomplete data");
                 return;
             }
 
