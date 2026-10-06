@@ -11,16 +11,32 @@ namespace EasyInsur.Modules
         public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
-            var imageName = value as string;
-            if (string.IsNullOrEmpty(imageName)) return null;
-            var imagePath = Path.Join(Services.AppPathWithoutName, "images", imageName);
-            if (!File.Exists(imagePath)) return null;
+            var str = value as string;
+            if (string.IsNullOrWhiteSpace(str)) return null;
+
+            string? finalPath = null;
+            if (File.Exists(str))
+            {
+                finalPath = str;
+            }
+            else
+            {
+                var localAppImage = Path.Combine(Services.AppPathWithoutName, "images", str);
+                if (File.Exists(localAppImage))
+                {
+                    finalPath = localAppImage;
+                }
+            }
+
+            if (finalPath == null) return null;
+
             try
             {
                 var bitmap = new BitmapImage();
                 bitmap.BeginInit();
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
-                bitmap.UriSource = new Uri(imagePath);
+                bitmap.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                bitmap.UriSource = new Uri(finalPath, UriKind.Absolute);
                 bitmap.EndInit();
                 bitmap.Freeze();
                 return bitmap;

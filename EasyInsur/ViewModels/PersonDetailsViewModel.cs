@@ -146,7 +146,24 @@ namespace EasyInsur.ViewModels
         public string ImagePathTag
         {
             get => _imagePathTag;
-            set => SetProperty(ref _imagePathTag, value);
+            set
+            {
+                if (SetProperty(ref _imagePathTag, value))
+                {
+                    RaisePropertyChanged(nameof(HasImage));
+                }
+            }
+        }
+
+        public bool HasImage
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(ImagePathTag)) return false;
+                if (File.Exists(ImagePathTag)) return true;
+                var local = Path.Combine(Services.AppPathWithoutName, "images", ImagePathTag);
+                return File.Exists(local);
+            }
         }
         private Country _selectedCountry;
 
@@ -178,8 +195,26 @@ namespace EasyInsur.ViewModels
 
         private void EditImage()
         {
-            if (string.IsNullOrEmpty(ImagePathTag) || !File.Exists(ImagePathTag)) return;
-            var editor = new EasyInsur.Views.ImageEditorDialog(ImagePathTag);
+            if (string.IsNullOrEmpty(ImagePathTag))
+            {
+                SelectImage();
+                return;
+            }
+
+            string targetPath = ImagePathTag;
+            if (!File.Exists(targetPath))
+            {
+                var local = Path.Combine(Services.AppPathWithoutName, "images", ImagePathTag);
+                if (File.Exists(local)) targetPath = local;
+            }
+
+            if (!File.Exists(targetPath))
+            {
+                SelectImage();
+                return;
+            }
+
+            var editor = new EasyInsur.Views.ImageEditorDialog(targetPath);
             if (editor.ShowDialog() == true && !string.IsNullOrEmpty(editor.ResultPath))
             {
                 ImagePathTag = editor.ResultPath;
@@ -280,18 +315,32 @@ namespace EasyInsur.ViewModels
                 return;
 
             string? imageName = null;
-            if (!ImagePathTag.IsNullOrEmpty())
+            if (!string.IsNullOrWhiteSpace(ImagePathTag))
             {
                 try
                 {
-                    var imagesDir = Path.Join(Services.AppPathWithoutName, "images");
+                    var imagesDir = Path.Combine(Services.AppPathWithoutName, "images");
                     if (!Directory.Exists(imagesDir))
                     {
                         Directory.CreateDirectory(imagesDir);
                     }
-                    var newImagepath = Path.Join(imagesDir, $"{PersonId.Trim()}{Path.GetExtension(ImagePathTag)}");
-                    File.Copy(ImagePathTag, newImagepath, true);
-                    if (File.Exists(newImagepath)) imageName = Path.GetFileName(newImagepath);
+
+                    string sourcePath = ImagePathTag;
+                    if (!File.Exists(sourcePath))
+                    {
+                        var localSource = Path.Combine(imagesDir, ImagePathTag);
+                        if (File.Exists(localSource)) sourcePath = localSource;
+                    }
+
+                    if (File.Exists(sourcePath))
+                    {
+                        var newImagepath = Path.Combine(imagesDir, $"{PersonId.Trim()}{Path.GetExtension(sourcePath)}");
+                        if (!string.Equals(Path.GetFullPath(sourcePath), Path.GetFullPath(newImagepath), StringComparison.OrdinalIgnoreCase))
+                        {
+                            File.Copy(sourcePath, newImagepath, true);
+                        }
+                        imageName = Path.GetFileName(newImagepath);
+                    }
                 }
                 catch (Exception ex)
                 {

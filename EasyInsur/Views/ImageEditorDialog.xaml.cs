@@ -38,22 +38,56 @@ namespace EasyInsur.Views
             }
         }
 
-        private void Save_Click(object sender, RoutedEventArgs e)
+        private bool _isSaving;
+
+        private async void Save_Click(object sender, RoutedEventArgs e)
         {
+            if (_isSaving) return;
+            _isSaving = true;
+
             try
             {
                 string tempDir = Path.Combine(Path.GetTempPath(), "EasyInsur");
                 Directory.CreateDirectory(tempDir);
                 string outPath = Path.Combine(tempDir, $"profile_{Guid.NewGuid():N}.jpg");
 
-                // Save using SfImageEditor
-                Editor.Save(".jpg", new Size(0, 0), outPath);
-                ResultPath = outPath;
-                DialogResult = true;
-                Close();
+                var tcs = new System.Threading.Tasks.TaskCompletionSource<string?>();
+
+                EventHandler<Syncfusion.UI.Xaml.ImageEditor.ImageSavedEventArgs>? handler = null;
+                handler = (s, args) =>
+                {
+                    Editor.ImageSaved -= handler;
+                    tcs.TrySetResult(!string.IsNullOrEmpty(args.Location) && File.Exists(args.Location) ? args.Location : outPath);
+                };
+                Editor.ImageSaved += handler;
+
+                // Syncfusion SfImageEditor format parameter does NOT take a leading dot
+                Editor.Save("jpg", new Size(0, 0), outPath);
+
+                var completedTask = await System.Threading.Tasks.Task.WhenAny(tcs.Task, System.Threading.Tasks.Task.Delay(3000));
+                if (completedTask == tcs.Task)
+                {
+                    ResultPath = await tcs.Task;
+                    DialogResult = true;
+                    Close();
+                    return;
+                }
+
+                // If event didn't fire within 3s, verify if file exists anyway
+                if (File.Exists(outPath))
+                {
+                    ResultPath = outPath;
+                    DialogResult = true;
+                    Close();
+                    return;
+                }
+
+                MessageBox.Show("Image could not be saved. Please try again.", "Image Editor", MessageBoxButton.OK, MessageBoxImage.Warning);
+                _isSaving = false;
             }
             catch (Exception ex)
             {
+                _isSaving = false;
                 MessageBox.Show($"Failed to save edited image: {ex.Message}", "Image Editor", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
