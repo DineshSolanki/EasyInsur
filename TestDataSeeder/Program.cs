@@ -1,14 +1,29 @@
-using System;
-using System.Collections.Generic;
 using System.Data.SQLite;
-using System.IO;
 
-var databasePath = args.Length >= 1
-    ? Path.GetFullPath(args[0])
-    : Path.GetFullPath(@"EasyInsur\EasyInsur.db");
+var databasePath = ResolveDatabasePath(args);
 
-if (!File.Exists(databasePath))
-    throw new FileNotFoundException("Database was not found.", databasePath);
+static string ResolveDatabasePath(string[] args)
+{
+    if (args.Length >= 1 && File.Exists(args[0]))
+        return Path.GetFullPath(args[0]);
+
+    var candidatePaths = new[]
+    {
+        Path.Combine(Directory.GetCurrentDirectory(), "EasyInsur", "EasyInsur.db"),
+        Path.Combine(Directory.GetCurrentDirectory(), "..", "EasyInsur", "EasyInsur.db"),
+        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "EasyInsur", "EasyInsur.db"),
+        Path.Combine(AppContext.BaseDirectory, "EasyInsur.db")
+    };
+
+    foreach (var path in candidatePaths)
+    {
+        var fullPath = Path.GetFullPath(path);
+        if (File.Exists(fullPath))
+            return fullPath;
+    }
+
+    throw new FileNotFoundException("EasyInsur.db was not found. Please provide the path as an argument.");
+}
 
 Console.WriteLine($"Seeding synthetic, legally-safe production-style data into: {databasePath}");
 
