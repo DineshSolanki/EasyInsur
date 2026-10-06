@@ -163,7 +163,7 @@ namespace EasyInsur.ViewModels
                 TotalBalance = metrics.totalBalance;
                 TransactionCount = metrics.transactionCount;
 
-                var activities = await DbMethods.GetRecentDashboardActivityAsync(10);
+                var activities = await DbMethods.GetRecentDashboardActivityAsync(20);
                 RecentActivities = new ObservableCollection<DashboardActivityItem>(activities);
 
                 LastUpdatedText = DateTime.Now.ToString("hh:mm:ss tt");

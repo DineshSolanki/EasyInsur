@@ -341,11 +341,22 @@
 				</syncfusion:GridTableSummaryRow>
 			</syncfusion:SfDataGrid.TableSummaryRows>
 		</syncfusion:SfDataGrid>
-		<syncfusion:SfDataPager x:Name="SfDataPager" 
-							   Grid.Row="2"
-							   NumericButtonCount="10"
-							   PageSize="10" 
-							   HorizontalAlignment="Right"
-							   Source="{Binding PersonData}" />
+		<!-- Footer: Rows per page selector & DataPager -->
+		<Grid Grid.Row="2" Margin="0,4,0,0">
+			<StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+				<TextBlock Text="Rows per page:" VerticalAlignment="Center" Foreground="#6B7280" FontSize="12" Margin="0,0,8,0"/>
+				<hc:ComboBox x:Name="PageSizeCombo" SelectedIndex="1" Width="95" Height="28">
+					<ComboBoxItem Content="10 rows" Tag="10"/>
+					<ComboBoxItem Content="20 rows" Tag="20"/>
+					<ComboBoxItem Content="30 rows" Tag="30"/>
+					<ComboBoxItem Content="50 rows" Tag="50"/>
+				</hc:ComboBox>
+			</StackPanel>
+			<syncfusion:SfDataPager x:Name="SfDataPager" 
+								   NumericButtonCount="10"
+								   PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedValue.Tag, FallbackValue=20, TargetNullValue=20}" 
+								   HorizontalAlignment="Right"
+								   Source="{Binding PersonData}" />
+		</Grid>
 	</Grid>
 </UserControl>

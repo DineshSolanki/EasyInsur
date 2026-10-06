@@ -213,7 +213,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Recent Transactions" FontSize="15" FontWeight="Bold" Foreground="{StaticResource TextPrimary}" />
                             <Border Background="#F3F4F6" CornerRadius="10" Padding="8,2" Margin="10,0,0,0">
-                                <TextBlock Text="Latest 10" FontSize="11" Foreground="{StaticResource TextSecondary}" />
+                                <TextBlock Text="{Binding RecentActivities.Count, StringFormat='{}Latest {0}', FallbackValue='Recent'}" FontSize="11" Foreground="{StaticResource TextSecondary}" />
                             </Border>
                         </StackPanel>
                         <Button Style="{StaticResource ButtonDefault}" Padding="8,4" HorizontalAlignment="Right"
