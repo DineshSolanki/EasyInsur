@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using EasyInsur.Models;
 using EasyInsur.Modules;
-using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using ImTools;
 using Prism.Commands;
@@ -13,16 +12,20 @@ using Prism.Regions;
 
 namespace EasyInsur.ViewModels
 {
-    public class PaymentWindowViewModel : BindableBase, INavigationAware
+    public class PaymentWindowViewModel : BindableBase, IConfirmNavigationRequest
     {
-        public PaymentWindowViewModel()
+        private readonly IAppDialogService _dialogService;
+        private bool _isDirty;
+        public bool IsDirty
         {
+            get => _isDirty;
+            set => SetProperty(ref _isDirty, value);
+        }
+        public PaymentWindowViewModel(IAppDialogService? dialogService = null)
+        {
+            _dialogService = dialogService ?? AppDialogService.Current;
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
-            //CultureInfo ci = CultureInfo.CreateSpecificCulture(CultureInfo.CurrentCulture.Name);
-            //ci.DateTimeFormat.LongDatePattern = "MMM/yyyy"; //This can be used for one type of DatePicker
-            //ci.DateTimeFormat.ShortDatePattern = "dd/MM/yyyy"; //for the second type
-            //Thread.CurrentThread.CurrentCulture = ci;
         }
 
         public DelegateCommand ResetCommand { get; }
@@ -269,7 +272,7 @@ namespace EasyInsur.ViewModels
                 {
                     Insurance = DbMethods.GetInsurances();
                     _ = RefreshTransactionsAsync(SelectedPayee.Id);
-                    PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
+                    PreviousBalance = Util.RoundCurrency(DbMethods.GetBalance(SelectedPayee.Id));
                 }
                 else
                 {
@@ -307,27 +310,35 @@ namespace EasyInsur.ViewModels
 
         private void CalculateInsuranceAmount()
         {
-            TotalAmount = FixedAmount + ODAmount + TPAmount + TaxAmount;
+            var total = (decimal)FixedAmount + (decimal)ODAmount + (decimal)TPAmount + (decimal)TaxAmount;
+            TotalAmount = (double)Math.Round(total, 2, MidpointRounding.AwayFromZero);
+            CalculateCommissionAmount();
         }
 
         private void CalculateCommissionAmount()
         {
             if (IsPercentageSelected)
             {
-                TotalCommission = Util.GetPercentageOf(ODPercent, ODAmount) + Util.GetPercentageOf(TPPercent, TPAmount);
-                AmtAfterCommission = TotalAmount - TotalCommission;
+                var odComm = (decimal)Util.GetPercentageOf(ODPercent, ODAmount);
+                var tpComm = (decimal)Util.GetPercentageOf(TPPercent, TPAmount);
+                var totalComm = Math.Round(odComm + tpComm, 2, MidpointRounding.AwayFromZero);
+                TotalCommission = (double)totalComm;
+                AmtAfterCommission = (double)Math.Round((decimal)TotalAmount - totalComm, 2, MidpointRounding.AwayFromZero);
             }
             else
             {
-                TotalCommission = CommissionAmount;
-                AmtAfterCommission = TotalAmount - TotalCommission;
+                var totalComm = Math.Round((decimal)CommissionAmount, 2, MidpointRounding.AwayFromZero);
+                TotalCommission = (double)totalComm;
+                AmtAfterCommission = (double)Math.Round((decimal)TotalAmount - totalComm, 2, MidpointRounding.AwayFromZero);
             }
+            CalculateBalance();
         }
 
         private void CalculateBalance()
         {
-            Balance = AmtAfterCommission - Payment;
-            FinalBalance = PreviousBalance + Balance;
+            var bal = Math.Round((decimal)AmtAfterCommission - (decimal)Payment, 2, MidpointRounding.AwayFromZero);
+            Balance = (double)bal;
+            FinalBalance = (double)Math.Round((decimal)PreviousBalance + bal, 2, MidpointRounding.AwayFromZero);
         }
 
         private void ResetFields()
@@ -338,73 +349,129 @@ namespace EasyInsur.ViewModels
             FixedAmount = ODAmount = TPAmount = TaxAmount = TotalAmount = 0;
             CommissionAmount = ODPercent = TPPercent = AmtAfterCommission = 0;
             Payment = Balance = PreviousBalance = FinalBalance = 0;
+            IsDirty = false;
+        }
+
+        private bool ValidatePaymentInputs()
+        {
+            if (SelectedPayee is null)
+            {
+                _dialogService.ShowError("Please select a Payee (Customer or Agent).", "Validation Error");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(VehicleNo))
+            {
+                _dialogService.ShowError("Please enter a valid Vehicle Number.", "Validation Error");
+                return false;
+            }
+
+            if (FixedAmount < 0 || ODAmount < 0 || TPAmount < 0 || TaxAmount < 0)
+            {
+                _dialogService.ShowError("Insurance premium and tax amounts cannot be negative.", "Validation Error");
+                return false;
+            }
+
+            if (TotalAmount <= 0)
+            {
+                _dialogService.ShowError("Total premium amount must be greater than zero.", "Validation Error");
+                return false;
+            }
+
+            if (IsPercentageSelected)
+            {
+                if (ODPercent is < 0 or > 100 || TPPercent is < 0 or > 100)
+                {
+                    _dialogService.ShowError("Commission percentage must be between 0% and 100%.", "Validation Error");
+                    return false;
+                }
+            }
+            else
+            {
+                if (CommissionAmount < 0)
+                {
+                    _dialogService.ShowError("Commission amount cannot be negative.", "Validation Error");
+                    return false;
+                }
+            }
+
+            if (Payment < 0)
+            {
+                _dialogService.ShowError("Payment amount cannot be negative.", "Validation Error");
+                return false;
+            }
+
+            if (PaymentDate.Date > DateTime.Today)
+            {
+                _dialogService.ShowError("Payment date cannot be in the future.", "Validation Error");
+                return false;
+            }
+
+            return true;
         }
 
         private void Save()
         {
-            if (SelectedPayee is null ||
-                VehicleNo.IsNullOrEmpty() ||
-                FixedAmount < 0 || ODAmount < 0 || TPAmount < 0 || TaxAmount < 0 ||
-                CommissionAmount < 0 || Payment < 0 ||
-                ODPercent is < 0 or > 100 || TPPercent is < 0 or > 100 ||
-                PaymentDate.Date > DateTime.Today)
-            {
-                MessageBox.Error("Please enter valid payment values", "Incomplete data");
+            if (!ValidatePaymentInputs())
                 return;
-            }
+
             CalculateBalance();
             try
             {
                 long? iid;
-                if (Insurance.Any() && Insurance.Any(i => i.VehicleNo == VehicleNo))
-                    iid = Insurance.First(i => i.VehicleNo == VehicleNo).Id!;
+                var trimmedVehicleNo = VehicleNo.Trim();
+                if (Insurance.Any() && Insurance.Any(i => string.Equals(i.VehicleNo, trimmedVehicleNo, StringComparison.OrdinalIgnoreCase)))
+                    iid = Insurance.First(i => string.Equals(i.VehicleNo, trimmedVehicleNo, StringComparison.OrdinalIgnoreCase)).Id!;
                 else
                 {
                     DbMethods.SaveInsurance(new Insurance()
                     {
                         RegDate = FirstDate.ToShortDateString(),
-                        VehicleNo = VehicleNo
+                        VehicleNo = trimmedVehicleNo
                     });
-                    iid = DbMethods.GetInsuranceId(VehicleNo);
+                    iid = DbMethods.GetInsuranceId(trimmedVehicleNo);
                 }
 
                 if (iid is null)
                 {
-                    MessageBox.Error("An Error Occurred", "Transaction aborted");
+                    _dialogService.ShowError("Could not retrieve vehicle insurance ID. Transaction aborted.", "Database Error");
                     return;
                 }
 
                 var transaction = new Transactions()
                 {
-                    FixedAmount = FixedAmount,
+                    FixedAmount = Util.RoundCurrency(FixedAmount),
                     InsuranceID = iid,
-                    OD = ODAmount,
-                    TP = TPAmount,
-                    Tax = TaxAmount,
-                    TotalAmount = TotalAmount,
-                    CommissionAmount = TotalCommission,
-                    Balance = Balance,
-                    PreviousBalance = PreviousBalance,
+                    OD = Util.RoundCurrency(ODAmount),
+                    TP = Util.RoundCurrency(TPAmount),
+                    Tax = Util.RoundCurrency(TaxAmount),
+                    TotalAmount = Util.RoundCurrency(TotalAmount),
+                    CommissionAmount = Util.RoundCurrency(TotalCommission),
+                    Balance = Util.RoundCurrency(Balance),
+                    PreviousBalance = Util.RoundCurrency(PreviousBalance),
                     PersonID = SelectedPayee.Id,
-                    AfterCommissionAmount = AmtAfterCommission,
+                    AfterCommissionAmount = Util.RoundCurrency(AmtAfterCommission),
                     CommissionType = CommissionType,
-                    FinalBalance = FinalBalance,
-                    ODPercent = ODPercent,
-                    TPPercent = TPPercent,
+                    FinalBalance = Util.RoundCurrency(FinalBalance),
+                    ODPercent = Util.RoundCurrency(ODPercent),
+                    TPPercent = Util.RoundCurrency(TPPercent),
                     PaymentDate = PaymentDate.ToShortDateString(),
-                    Payment = Payment
+                    Payment = Util.RoundCurrency(Payment)
                 };
                 var id = DbMethods.SaveTransaction(transaction);
-                SelectedPayee.Balance = FinalBalance;
+                SelectedPayee.Balance = Util.RoundCurrency(FinalBalance);
                 DbMethods.UpdatePersonBalance(SelectedPayee);
                 Insurance = DbMethods.GetInsurances();
-                    _ = RefreshTransactionsAsync(SelectedPayee.Id);
-                PreviousBalance = DbMethods.GetBalance(SelectedPayee.Id);
+                _ = RefreshTransactionsAsync(SelectedPayee.Id);
+                PreviousBalance = Util.RoundCurrency(DbMethods.GetBalance(SelectedPayee.Id));
 
+                _dialogService.NotifySuccess($"Payment transaction #{id} saved successfully!");
+                IsDirty = false;
             }
             catch (Exception e)
             {
-                MessageBox.Error(e.Message);
+                App.LogException(e, "PaymentWindow Save");
+                _dialogService.ShowError(e.Message, "Transaction Error");
             }
 
         }
@@ -426,6 +493,21 @@ namespace EasyInsur.ViewModels
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
 
+        }
+
+        public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
+        {
+            if (IsDirty)
+            {
+                var confirmed = _dialogService.Confirm(
+                    "You have unsaved payment entries. Are you sure you want to discard them and navigate away?",
+                    "Unsaved Changes");
+                continuationCallback(confirmed);
+            }
+            else
+            {
+                continuationCallback(true);
+            }
         }
 
         private async Task LoadPayeesAsync(PersonType personType)

@@ -243,6 +243,9 @@
                             <syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance" MinimumWidth="95" CurrencySymbol="₹" TextAlignment="Right" />
                         </syncfusion:SfDataGrid.Columns>
                     </syncfusion:SfDataGrid>
+                    <hc:Empty Description="No recent transaction activities recorded."
+                              Visibility="{Binding RecentActivities, Converter={StaticResource CollectionEmptyVisibilityConverter}}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center" IsHitTestVisible="False"/>
                 </Grid>
             </Border>
 

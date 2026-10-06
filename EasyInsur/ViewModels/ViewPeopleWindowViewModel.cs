@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+using System;
+using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace EasyInsur.ViewModels
 {
     public class ViewPeopleWindowViewModel : BindableBase
     {
+        private readonly IRegionManager _regionManager;
+        private readonly IAppDialogService _dialogService;
+
         public IReadOnlyList<string> AiSuggestions { get; } = new[]
         {
             "Filter Balance greaterThan 0",
@@ -20,14 +24,16 @@ namespace EasyInsur.ViewModels
             "Group by Type"
         };
 
-        public ViewPeopleWindowViewModel(IRegionManager regionManager)
+        public ViewPeopleWindowViewModel(IRegionManager regionManager, IAppDialogService? dialogService = null)
         {
             _regionManager = regionManager;
+            _dialogService = dialogService ?? AppDialogService.Current;
             AllPeople = DbMethods.GetPeople();
             PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(ReloadMethod);
             SaveCommand = new DelegateCommand(SaveMethod);
             AddPayment = new DelegateCommand<object>(PerformAddPayment);
+            DeletePersonCommand = new DelegateCommand<object>(PerformDeletePerson);
         }
 
         private void ReloadMethod()
@@ -37,7 +43,6 @@ namespace EasyInsur.ViewModels
         }
 
         #region Properties
-        private readonly IRegionManager _regionManager;
 
         private bool _allowOutlining = true;
         public bool AllowOutlining { get => _allowOutlining; set => SetProperty(ref _allowOutlining, value); }
@@ -87,6 +92,7 @@ namespace EasyInsur.ViewModels
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
         public DelegateCommand<object> AddPayment { get; }
+        public DelegateCommand<object> DeletePersonCommand { get; }
 
         private void PerformAddPayment(object commandParameter)
         {
@@ -98,6 +104,47 @@ namespace EasyInsur.ViewModels
                     { "person", grid.SelectedItem as Person}
                 };
                 _regionManager.RequestNavigate("ContentRegion", "PaymentWindow", parameters);
+            }
+        }
+
+        private async void PerformDeletePerson(object commandParameter)
+        {
+            Person? targetPerson = null;
+            if (commandParameter is GridRecordContextMenuInfo info && info.Record is Person p)
+            {
+                targetPerson = p;
+            }
+            else if (commandParameter is Person directPerson)
+            {
+                targetPerson = directPerson;
+            }
+
+            if (targetPerson?.Id == null) return;
+
+            var confirmed = _dialogService.Confirm(
+                $"Are you sure you want to permanently delete {targetPerson.FirstName} {targetPerson.LastName} ({targetPerson.Type})?\n\nAll associated payment and insurance records for this person will also be permanently deleted. This destructive action cannot be undone.",
+                "Confirm Permanent Deletion");
+
+            if (!confirmed)
+                return;
+
+            try
+            {
+                var success = await DbMethods.DeletePersonAsync(targetPerson.Id.Value);
+                if (success)
+                {
+                    _dialogService.NotifySuccess($"Person '{targetPerson.FirstName} {targetPerson.LastName}' deleted successfully.");
+                    ReloadMethod();
+                }
+                else
+                {
+                    _dialogService.ShowError("Unable to delete person from the database.", "Delete Failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                App.LogException(ex, "Delete Person");
+                _dialogService.ShowError(ex.Message, "Error Deleting Person");
             }
         }
 

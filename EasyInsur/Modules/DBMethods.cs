@@ -100,7 +100,7 @@ namespace EasyInsur.Modules
             }
         }
 
-        private static async Task<List<Insurance>> GetInsurancesAsync()
+        public static async Task<List<Insurance>> GetInsurancesAsync()
         {
             await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
             return (await connection.QueryAllAsync<Insurance>()).ToList();
@@ -196,7 +196,7 @@ namespace EasyInsur.Modules
                 command.Parameters.AddWithValue("@Balance", transaction.Balance);
                 command.Parameters.AddWithValue("@PreviousBalance", transaction.PreviousBalance);
                 command.Parameters.AddWithValue("@FinalBalance", transaction.FinalBalance);
-                command.Parameters.AddWithValue("@Id", transaction.Id.Value);
+                command.Parameters.AddWithValue("@Id", transaction.Id!.Value);
                 count += command.ExecuteNonQuery();
             }
             return count;
@@ -343,6 +343,43 @@ namespace EasyInsur.Modules
             connection.Open();
             using var command = new SQLiteCommand("SELECT COALESCE(MAX(Id), 0) FROM Person;", connection);
             return Convert.ToInt64(command.ExecuteScalar());
+        }
+
+        public static async Task<bool> DeleteTransactionAsync(long id)
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            var deletedCount = await connection.DeleteAsync<Transactions>(t => t.Id == id);
+            return deletedCount > 0;
+        }
+
+        public static async Task<bool> DeletePersonAsync(long id)
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            await connection.OpenAsync();
+            using (var pragmaCmd = new SQLiteCommand("PRAGMA foreign_keys = ON;", connection))
+            {
+                await pragmaCmd.ExecuteNonQueryAsync();
+            }
+            await connection.DeleteAsync<Transactions>(t => t.PersonID == id);
+            var deletedCount = await connection.DeleteAsync<Person>(p => p.Id == id);
+            return deletedCount > 0;
+        }
+
+        public static async Task<bool> DeleteInsuranceAsync(long id)
+        {
+            await using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
+            await connection.OpenAsync();
+            using (var pragmaCmd = new SQLiteCommand("PRAGMA foreign_keys = ON;", connection))
+            {
+                await pragmaCmd.ExecuteNonQueryAsync();
+            }
+            using (var updateCmd = new SQLiteCommand("UPDATE Transactions SET InsuranceID = NULL WHERE InsuranceID = @id;", connection))
+            {
+                updateCmd.Parameters.AddWithValue("@id", id);
+                await updateCmd.ExecuteNonQueryAsync();
+            }
+            var deletedCount = await connection.DeleteAsync<Insurance>(i => i.Id == id);
+            return deletedCount > 0;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Syncfusion.UI.Xaml.Utility;
+using Syncfusion.UI.Xaml.Utility;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +9,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using EasyInsur.Models;
 using EasyInsur.Modules;
-using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -20,11 +19,20 @@ using Syncfusion.UI.Xaml.Grid;
 
 namespace EasyInsur.ViewModels
 {
-    public class PersonDetailsViewModel : BindableBase
+    public class PersonDetailsViewModel : BindableBase, IConfirmNavigationRequest
     {
-        public PersonDetailsViewModel(IRegionManager regionManager)
+        private readonly IRegionManager _regionManager;
+        private readonly IAppDialogService _dialogService;
+        private bool _isDirty;
+        public bool IsDirty
+        {
+            get => _isDirty;
+            set => SetProperty(ref _isDirty, value);
+        }
+        public PersonDetailsViewModel(IRegionManager regionManager, IAppDialogService? dialogService = null)
         {
             _regionManager = regionManager;
+            _dialogService = dialogService ?? AppDialogService.Current;
             CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.name));
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
@@ -49,7 +57,6 @@ namespace EasyInsur.ViewModels
         private IEnumerable<Person> _people;
         public IEnumerable<Person> PersonData { get => _people; set => SetProperty(ref _people, value); }
         private ObservableCollection<Country> _countryDetails;
-        private readonly IRegionManager _regionManager;
 
         public ObservableCollection<Country> CountryDetails
         {
@@ -153,54 +160,153 @@ namespace EasyInsur.ViewModels
         private void ResetFields()
         {
             RegistrationDate = DateTime.Today;
-            SelectedCountry = CountryDetails.FirstOrDefault(c => c.code == "IN")!;
+            SelectedCountry = CountryDetails?.FirstOrDefault(c => c.code == "IN") ?? CountryDetails?.FirstOrDefault()!;
             Balance = 0;
             FirstName = "";
             LastName = "";
-            PersonId = "";
+            PersonId = (DbMethods.GetPeopleLastIdSync() + 1).ToString();
             Mobile = "";
+            Email = "";
+            ImagePathTag = "";
+            IsDirty = false;
+        }
+
+        private bool ValidatePersonInputs()
+        {
+            if (string.IsNullOrWhiteSpace(FirstName))
+            {
+                _dialogService.ShowError("Please enter First Name.", "Validation Error");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(LastName))
+            {
+                _dialogService.ShowError("Please enter Last Name.", "Validation Error");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(PersonType))
+            {
+                _dialogService.ShowError("Please select Person Type (Customer or Agent).", "Validation Error");
+                return false;
+            }
+
+            if (SelectedCountry == null)
+            {
+                _dialogService.ShowError("Please select a Country.", "Validation Error");
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(Mobile) || Mobile.Trim().Length < 5)
+            {
+                _dialogService.ShowError("Please enter a valid Mobile number.", "Validation Error");
+                return false;
+            }
+
+            try
+            {
+                var fullNumber = $"{SelectedCountry.dial_code}{Mobile.Trim()}";
+                var parsedNumber = Services.PhoneNumberUtil.Parse(fullNumber, SelectedCountry.code);
+                if (!Services.PhoneNumberUtil.IsValidNumber(parsedNumber))
+                {
+                    _dialogService.ShowError($"Mobile number '{Mobile.Trim()}' is not valid for {SelectedCountry.name}.", "Validation Error");
+                    return false;
+                }
+            }
+            catch
+            {
+                if (!Mobile.Trim().All(char.IsDigit) || Mobile.Trim().Length < 7)
+                {
+                    _dialogService.ShowError("Please enter a valid numeric mobile number.", "Validation Error");
+                    return false;
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(Email) && !new EmailAddressAttribute().IsValid(Email.Trim()))
+            {
+                _dialogService.ShowError("Please enter a valid Email address.", "Validation Error");
+                return false;
+            }
+
+            if (Balance < 0)
+            {
+                _dialogService.ShowError("Opening balance cannot be negative.", "Validation Error");
+                return false;
+            }
+
+            return true;
         }
 
         private void Save()
         {
-            if (FirstName.IsNullOrEmpty() || LastName.IsNullOrEmpty() || Mobile.IsNullOrEmpty() ||
-                PersonId.IsNullOrEmpty() || string.IsNullOrWhiteSpace(PersonType) || SelectedCountry is null ||
-                Balance < 0 || (!string.IsNullOrWhiteSpace(Email) && !new EmailAddressAttribute().IsValid(Email)))
-            {
-                MessageBox.Error("Please enter valid person details", "Incomplete data");
+            if (!ValidatePersonInputs())
                 return;
-            }
 
-            string imageName = null;
+            string? imageName = null;
             if (!ImagePathTag.IsNullOrEmpty())
             {
                 try
                 {
-                    var newImagepath = Path.Join(Services.AppPathWithoutName, "images",
-                        $"{PersonId.Trim()}{Path.GetExtension(ImagePathTag)}");
-                    File.Copy(ImagePathTag,newImagepath,true);
+                    var imagesDir = Path.Join(Services.AppPathWithoutName, "images");
+                    if (!Directory.Exists(imagesDir))
+                    {
+                        Directory.CreateDirectory(imagesDir);
+                    }
+                    var newImagepath = Path.Join(imagesDir, $"{PersonId.Trim()}{Path.GetExtension(ImagePathTag)}");
+                    File.Copy(ImagePathTag, newImagepath, true);
                     if (File.Exists(newImagepath)) imageName = Path.GetFileName(newImagepath);
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    //ignored
+                    App.LogException(ex, "PersonDetails Image Copy");
                 }
             }
-            var person = new Person(FirstName.Trim(), LastName.Trim(), PersonType, PersonId.Trim(),
-                Balance, imageName, RegistrationDate.ToShortDateString(),
-                $"{SelectedCountry.dial_code}{Mobile}", email: Email);
+
+            var person = new Person(
+                FirstName.Trim(),
+                LastName.Trim(),
+                PersonType,
+                PersonId.Trim(),
+                Util.RoundCurrency(Balance),
+                imageName,
+                RegistrationDate.ToShortDateString(),
+                $"{SelectedCountry.dial_code}{Mobile.Trim()}",
+                email: string.IsNullOrWhiteSpace(Email) ? null : Email.Trim());
+
             try
             {
                 using var connection = new SQLiteConnection(Services.Settings.ConnectionString);
                 connection.Insert<Person, int>(person);
+                _dialogService.NotifySuccess($"Person '{FirstName.Trim()} {LastName.Trim()}' added successfully!");
+                IsDirty = false;
                 ResetFields();
                 LoadPeople();
             }
             catch (Exception e)
             {
-                MessageBox.Error(e.Message);
+                App.LogException(e, "PersonDetails Save");
+                _dialogService.ShowError(e.Message, "Database Error");
             }
 
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext) { }
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+        public void OnNavigatedFrom(NavigationContext navigationContext) { }
+
+        public void ConfirmNavigationRequest(NavigationContext navigationContext, Action<bool> continuationCallback)
+        {
+            if (IsDirty)
+            {
+                var confirmed = _dialogService.Confirm(
+                    "You have unsaved person details. Are you sure you want to discard them and navigate away?",
+                    "Unsaved Changes");
+                continuationCallback(confirmed);
+            }
+            else
+            {
+                continuationCallback(true);
+            }
         }
 
         private BaseCommand addPayment;

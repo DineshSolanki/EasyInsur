@@ -275,7 +275,7 @@ namespace EasyInsur.Modules
         #region GroupThisColumn
         static ICommand _groupThisColumn;
         public static ICommand GroupThisColumn =>
-            _groupThisColumn;
+            _groupThisColumn ??= new BaseCommand(OnGroupThisColumnClicked, CanGroupThisColumn);
 
 
         private static void OnGroupThisColumnClicked(object obj)
@@ -328,7 +328,7 @@ namespace EasyInsur.Modules
                 if (_copy == null)
                     _copy = new BaseCommand(OnCopyClicked);
 
-                return _addPayment;
+                return _copy;
             }
         }
 
@@ -338,7 +338,14 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                
+                if (grid != null)
+                {
+                    if (info.Record != null)
+                    {
+                        grid.SelectedItem = info.Record;
+                    }
+                    grid.GridCopyPaste?.Copy();
+                }
             }
         }
 
@@ -556,7 +563,7 @@ namespace EasyInsur.Modules
                 if (_addPayment == null)
                     _addPayment = new BaseCommand(OnAddPaymentClicked);
 
-                return _copy;
+                return _addPayment;
             }
         }
 
@@ -566,7 +573,10 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                grid.SelectedItem = info.Record;
+                if (grid != null && info.Record != null)
+                {
+                    grid.SelectedItem = info.Record;
+                }
             }
         }
 

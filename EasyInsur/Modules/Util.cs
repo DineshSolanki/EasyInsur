@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -17,7 +17,18 @@ namespace EasyInsur.Modules
     {
         public static double GetPercentageOf(double percentToCalculate, double number)
         {
-            return number * percentToCalculate / 100;
+            var result = (decimal)number * (decimal)percentToCalculate / 100m;
+            return (double)Math.Round(result, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public static double RoundCurrency(double value)
+        {
+            return (double)Math.Round((decimal)value, 2, MidpointRounding.AwayFromZero);
+        }
+
+        public static decimal RoundCurrency(decimal value)
+        {
+            return Math.Round(value, 2, MidpointRounding.AwayFromZero);
         }
         public static ObservableCollection<T> ToObservableCollection<T>(this IEnumerable<T> col)
         {

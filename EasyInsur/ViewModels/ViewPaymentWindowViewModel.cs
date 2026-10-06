@@ -1,7 +1,8 @@
-﻿using EasyInsur.Models;
+using EasyInsur.Models;
 using EasyInsur.Modules;
 using Prism.Commands;
 using Prism.Mvvm;
+using Syncfusion.UI.Xaml.Grid;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,6 +12,8 @@ namespace EasyInsur.ViewModels
 {
     public class ViewPaymentWindowViewModel : BindableBase
     {
+        private readonly IAppDialogService _dialogService;
+
         public IReadOnlyList<string> AiSuggestions { get; } = new[]
         {
             "Filter FinalBalance greaterThan 0",
@@ -18,11 +21,13 @@ namespace EasyInsur.ViewModels
             "Group by Insurance.VehicleNo"
         };
 
-        public ViewPaymentWindowViewModel()
+        public ViewPaymentWindowViewModel(IAppDialogService? dialogService = null)
         {
+            _dialogService = dialogService ?? AppDialogService.Current;
             PersonType = PersonType.Any;
             ReloadCommand = new DelegateCommand(async () => await ReloadMethodAsync());
             SaveCommand = new DelegateCommand(SaveMethod);
+            DeleteTransactionCommand = new DelegateCommand<object>(PerformDeleteTransaction);
             _ = LoadTransactionsAsync();
         }
         #region Properties
@@ -127,9 +132,51 @@ namespace EasyInsur.ViewModels
         #region Delegates
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand ReloadCommand { get; }
+        public DelegateCommand<object> DeleteTransactionCommand { get; }
         #endregion
 
         #region Methods
+        private async void PerformDeleteTransaction(object commandParameter)
+        {
+            Transactions? targetTransaction = null;
+            if (commandParameter is GridRecordContextMenuInfo info && info.Record is Transactions tx)
+            {
+                targetTransaction = tx;
+            }
+            else if (commandParameter is Transactions directTx)
+            {
+                targetTransaction = directTx;
+            }
+
+            if (targetTransaction?.Id == null) return;
+
+            var confirmed = _dialogService.Confirm(
+                $"Are you sure you want to permanently delete Transaction #{targetTransaction.Id} ({targetTransaction.PaymentDate})?\n\nThis destructive action cannot be undone.",
+                "Confirm Permanent Deletion");
+
+            if (!confirmed)
+                return;
+
+            try
+            {
+                var success = await DbMethods.DeleteTransactionAsync(targetTransaction.Id.Value);
+                if (success)
+                {
+                    _dialogService.NotifySuccess($"Transaction #{targetTransaction.Id} deleted successfully.");
+                    await ReloadMethodAsync();
+                }
+                else
+                {
+                    _dialogService.ShowError("Unable to delete the transaction from the database.", "Delete Failed");
+                }
+            }
+            catch (Exception ex)
+            {
+                App.LogException(ex, "Delete Transaction");
+                _dialogService.ShowError(ex.Message, "Error Deleting Transaction");
+            }
+        }
+
         private void SaveMethod()
         {
             var r = AllTransactions.Where(p => p.EditedColumns.Any());

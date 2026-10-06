@@ -1,4 +1,4 @@
-﻿using EasyInsur.Models;
+using EasyInsur.Models;
 using EasyInsur.Modules;
 using HandyControl.Data;
 using HandyControl.Tools.Extension;
@@ -59,103 +59,31 @@ namespace EasyInsur.Views
             DataGrid.UpdateDataRow(args.RowColumnIndex.RowIndex);
         }
 
-        private void ExportExcelButton_Click(object sender, RoutedEventArgs e)
+        private async void ExportExcelButton_Click(object sender, RoutedEventArgs e)
         {
             var options = new ExcelExportingOptions
             {
                 ExcelVersion = ExcelVersion.Excel2013,
                 ExcludeColumns = new List<string>
                 {
-                    {"ImagePath"}
+                    "ImagePath"
                 },
                 AllowOutlining = (bool)AllowOutlining.IsChecked!,
                 ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!,
             };
-            var excelEngine = (bool)ExportSelectedDataOnly.IsChecked!
-                ? DataGrid.ExportToExcel(DataGrid.SelectedItems, options)
-                : DataGrid.ExportToExcel(DataGrid.View, options);
-            var workBook = excelEngine.Excel.Workbooks[0];
-            workBook.Worksheets[0].AutoFilters.FilterRange = workBook.Worksheets[0].UsedRange;
-            var sfd = new SaveFileDialog
-            {
-                FilterIndex = 2,
-                Filter = "Excel 97 to 2003 Files(*.xls)|*.xls|Excel 2007 to 2010 Files(*.xlsx)|*.xlsx|Excel 2013 File(*.xlsx)|*.xlsx",
-                FileName = "EasyInsure_People"
-            };
-
-            if (sfd.ShowDialog() != true) return;
-
-            try
-            {
-                using var stream = sfd.OpenFile();
-                workBook.Version = sfd.FilterIndex switch
-                {
-                    1 => ExcelVersion.Excel97to2003,
-                    2 => ExcelVersion.Excel2010,
-                    _ => ExcelVersion.Excel2013
-                };
-                workBook.SaveAs(stream);
-                //Message box confirmation to view the created workbook.
-                if (MessageBox.Show("Do you want to view the workbook?",
-                    "Workbook has been created",
-                    MessageBoxButton.YesNo,
-                    MessageBoxImage.Information) == MessageBoxResult.Yes)
-                {
-                    //Launching the Excel file using the default Application.[MS Excel Or Free ExcelViewer]
-                    Util.StartProcess(sfd.FileName);
-                }
-            }
-            catch (Exception exception)
-            {
-                MessageBox.Error(exception.Message);
-            }
+            await DataExportService.ExportToExcelAsync(DataGrid, options, "EasyInsure_People");
         }
 
-        private void ExportPDFButton_Click(object sender, RoutedEventArgs e)
+        private async void ExportPDFButton_Click(object sender, RoutedEventArgs e)
         {
-            var options = new PdfExportingOptions()
+            var options = new PdfExportingOptions
             {
                 FitAllColumnsInOnePage = (bool)FitOnOnePage.IsChecked!,
                 ExportFormat = (bool)ExportFormatted.IsChecked!,
                 ExportAllPages = !(bool)ExportCurrentPageOnly.IsChecked!
             };
-            var document = new PdfDocument();
-            document.PageSettings.Orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;
-            var page = document.Pages.Add();
-            var pdfGrid = DataGrid.ExportToPdfGrid(DataGrid.View, options);
-            var format = new PdfGridLayoutFormat()
-            {
-                Layout = PdfLayoutType.Paginate,
-                Break = PdfLayoutBreakType.FitPage
-            };
-
-            pdfGrid.Draw(page, new PointF(), format);
-            var sfd = new SaveFileDialog
-            {
-                Filter = "PDF Files(*.pdf)|*.pdf",
-                FileName = "EasyInsure_People"
-            };
-
-            if (sfd.ShowDialog() != true) return;
-            try
-            {
-                using var stream = sfd.OpenFile();
-                document.Save(stream);
-                if (MessageBox.Show("Do you want to view the Pdf file?", "Pdf file has been created",
-                    MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
-                {
-                    Util.StartProcess(sfd.FileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Error(ex.Message);
-            }
-        }
-
-        private void DataGrid_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            MessageBox.Error("clicke");
+            var orientation = (bool)RadioLandscape.IsChecked! ? PdfPageOrientation.Landscape : PdfPageOrientation.Portrait;
+            await DataExportService.ExportToPdfAsync(DataGrid, options, orientation, "EasyInsure_People");
         }
     }
 }

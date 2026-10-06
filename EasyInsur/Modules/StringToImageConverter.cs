@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
@@ -8,12 +8,13 @@ namespace EasyInsur.Modules
 {
     internal class StringToImageConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public object? Convert(object? value, Type targetType, object? parameter, System.Globalization.CultureInfo culture)
         {
             if (value == null) return null;
-            var imageName = (value as string)!;
-            if (imageName.IsNullOrEmpty()) return null;
+            var imageName = value as string;
+            if (string.IsNullOrEmpty(imageName)) return null;
             var imagePath = Path.Join(Services.AppPathWithoutName, "images", imageName);
+            if (!File.Exists(imagePath)) return null;
             try
             {
                 var bitmap = new BitmapImage();
@@ -28,7 +29,6 @@ namespace EasyInsur.Modules
             {
                 return null;
             }
-            
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

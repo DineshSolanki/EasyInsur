@@ -122,6 +122,9 @@
 				</Style.Triggers>
 			</Style>
 			<modules:ColorConverter x:Key="ColorConvertor"/>
+			<modules:CollectionEmptyVisibilityConverter x:Key="CollectionEmptyVisibilityConverter"/>
+			<modules:EqualityToBooleanConverter x:Key="EqualityToBooleanConverter"/>
+			<modules:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 		</ResourceDictionary>
 	</Application.Resources>
 </prism:PrismApplication>
