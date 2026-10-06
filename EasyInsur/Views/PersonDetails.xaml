@@ -113,13 +113,13 @@
                     </Grid.RowDefinitions>
 
                     <!-- Row 0: Basic Identity Details -->
-                    <Grid Grid.Row="0" Margin="0,0,0,8">
+                    <Grid Grid.Row="0" Margin="0,0,0,10">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
                             <Border Background="#E0E7FF" CornerRadius="4" Padding="6,2" Margin="0,0,8,0">
                                 <TextBlock Text="1" FontSize="11" FontWeight="Bold" Foreground="#4338CA"/>
                             </Border>
@@ -136,15 +136,50 @@
                                 <ColumnDefinition Width="1.1*"/>
                             </Grid.ColumnDefinitions>
 
-                            <hc:ComboBox SelectedIndex="0" Grid.Column="0" AutoComplete="True" Text="{Binding PersonType}" hc:TitleElement.Title="Person Type" hc:TitleElement.TitlePlacement="Top" Margin="4,0">
-                                <ComboBoxItem Content="Customer"/>
-                                <ComboBoxItem Content="Agent"/>
-                            </hc:ComboBox>
-                            <hc:TextBox Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId, Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
-                            <hc:TextBox Grid.Column="2" hc:TitleElement.Title="First Name" hc:InfoElement.Necessary="True" Text="{Binding FirstName}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
-                            <hc:TextBox Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
-                            <hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="4,0" SelectedDate="{Binding RegistrationDate}"/>
-                            <syncfusion:CurrencyTextBox Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Opening Balance" Value="{Binding Balance}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="Person Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <hc:ComboBox SelectedIndex="0" AutoComplete="True" Text="{Binding PersonType}" Height="34">
+                                    <ComboBoxItem Content="Customer"/>
+                                    <ComboBoxItem Content="Agent"/>
+                                </hc:ComboBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                <TextBlock Margin="0,0,0,4">
+                                    <Run Text="Person ID" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                                </TextBlock>
+                                <hc:TextBox Text="{Binding PersonId, Mode=TwoWay}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,8,0">
+                                <TextBlock Margin="0,0,0,4">
+                                    <Run Text="First Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                                </TextBlock>
+                                <hc:TextBox Text="{Binding FirstName}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="3" Margin="0,0,8,0">
+                                <TextBlock Margin="0,0,0,4">
+                                    <Run Text="Last Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                                </TextBlock>
+                                <hc:TextBox Text="{Binding LastName}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="4" Margin="0,0,8,0">
+                                <TextBlock Margin="0,0,0,4">
+                                    <Run Text="Registration Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                                </TextBlock>
+                                <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding RegistrationDate}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="5" Margin="0,0,4,0">
+                                <TextBlock Text="Opening Balance (₹)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Value="{Binding Balance}" Height="34" CurrencyDecimalDigits="2"/>
+                            </StackPanel>
                         </Grid>
                     </Grid>
 
@@ -155,7 +190,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,6">
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
                             <Border Background="#DCFCE7" CornerRadius="4" Padding="6,2" Margin="0,0,8,0">
                                 <TextBlock Text="2" FontSize="11" FontWeight="Bold" Foreground="#15803D"/>
                             </Border>
@@ -164,17 +199,35 @@
 
                         <Grid Grid.Row="1">
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="190"/>
+                                <ColumnDefinition Width="200"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="1.5*"/>
                             </Grid.ColumnDefinitions>
 
-                            <hc:SimpleStackPanel Grid.Column="0" Orientation="Horizontal" Margin="4,0">
-                                <hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True" Width="120" AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}" hc:TitleElement.Title="Country" hc:TitleElement.TitlePlacement="Top"/>
-                                <hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="4,0,0,0" VerticalAlignment="Top" IsReadOnly="True" Width="60"/>
-                            </hc:SimpleStackPanel>
-                            <hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True" Grid.Column="1" hc:TitleElement.Title="Mobile No." hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0" VerticalAlignment="Top"/>
-                            <hc:TextBox hc:InfoElement.Placeholder="Enter email address" Grid.Column="2" hc:TitleElement.Title="Email Address" hc:InfoElement.Necessary="False" Text="{Binding Email,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0" VerticalAlignment="Top"/>
+                            <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                                <TextBlock Text="Country Code" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="65"/>
+                                    </Grid.ColumnDefinitions>
+                                    <hc:ComboBox x:Name="CountryBox" Grid.Column="0" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True" AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}" Height="34" Margin="0,0,4,0"/>
+                                    <hc:TextBox Grid.Column="1" IsTabStop="False" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" IsReadOnly="True" Height="34"/>
+                                </Grid>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                                <TextBlock Margin="0,0,0,4">
+                                    <Run Text="Mobile Number" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                                </TextBlock>
+                                <hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True" Text="{Binding Mobile,Mode=TwoWay}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,4,0">
+                                <TextBlock Text="Email Address" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <hc:TextBox hc:InfoElement.Placeholder="Enter email address" Text="{Binding Email,Mode=TwoWay}" Height="34"/>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Grid>

@@ -131,12 +131,47 @@
                             <ColumnDefinition Width="135"/>
                         </Grid.ColumnDefinitions>
 
-                        <hc:TextBox hc:TitleElement.Title="SR. No" Grid.Column="0" hc:TitleElement.TitlePlacement="Top" Margin="4,0" Text="{Binding SrNo}" VerticalAlignment="Top"/>
-                        <hc:DatePicker SelectedDateFormat="Short" Grid.Column="1" hc:TitleElement.Title="First Date" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="4,0" SelectedDate="{Binding FirstDate}" VerticalAlignment="Top"/>
-                        <hc:ComboBox SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type models:PersonType}}}" Grid.Column="2" AutoComplete="True" SelectedItem="{Binding PayeeType}" hc:TitleElement.Title="Payee Type" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
-                        <hc:ComboBox SelectedIndex="0" Grid.Column="3" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" hc:TitleElement.Title="Payee Name" hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="4,0"/>
-                        <syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" Grid.Column="4" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" SuggestionMode="StartsWith" IgnoreCase="True" MinimumPrefixCharacters="1" MaximumSuggestionsCount="10" hc:TitleElement.Title="Vehicle No." hc:TitleElement.TitlePlacement="Top" hc:InfoElement.Necessary="True" Margin="4,0" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" VerticalAlignment="Top"/>
-                        <hc:DatePicker SelectedDateFormat="Short" Grid.Column="5" hc:TitleElement.Title="Payment Date" hc:InfoElement.Necessary="True" hc:TitleElement.TitlePlacement="Top" Margin="4,0" SelectedDate="{Binding PaymentDate}" VerticalAlignment="Top"/>
+                        <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                            <TextBlock Text="SR. No" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                            <hc:TextBox Text="{Binding SrNo}" Height="34"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" Margin="0,0,6,0">
+                            <TextBlock Margin="0,0,0,4">
+                                <Run Text="First Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                            </TextBlock>
+                            <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding FirstDate}" Height="34"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Margin="0,0,6,0">
+                            <TextBlock Text="Payee Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                            <hc:ComboBox SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type models:PersonType}}}" AutoComplete="True" SelectedItem="{Binding PayeeType}" Height="34"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="3" Margin="0,0,6,0">
+                            <TextBlock Margin="0,0,0,4">
+                                <Run Text="Payee Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                            </TextBlock>
+                            <hc:ComboBox SelectedIndex="0" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" Height="34"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="4" Margin="0,0,6,0">
+                            <TextBlock Margin="0,0,0,4">
+                                <Run Text="Vehicle No." FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                            </TextBlock>
+                            <syncfusion:SfTextBoxExt SearchItemPath="VehicleNo" AutoCompleteSource="{Binding Insurance}" AutoCompleteMode="SuggestAppend" SuggestionMode="StartsWith" IgnoreCase="True" MinimumPrefixCharacters="1" MaximumSuggestionsCount="10" Text="{Binding VehicleNo}" Style="{StaticResource TextBoxExtend}" Height="34"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="5" Margin="0,0,0,0">
+                            <TextBlock Margin="0,0,0,4">
+                                <Run Text="Payment Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                            </TextBlock>
+                            <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding PaymentDate}" Height="34"/>
+                        </StackPanel>
                     </Grid>
                 </Grid>
             </Border>
@@ -172,15 +207,33 @@
                                 <ColumnDefinition Width="1.15*"/>
                             </Grid.ColumnDefinitions>
 
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="0" hc:TitleElement.Title="Fixed Amount" MinValue="0" MaxValue="100000000" hc:TitleElement.TitlePlacement="Top" Value="{Binding FixedAmount}" Margin="3,0" CurrencyDecimalDigits="2"/>
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="1" hc:TitleElement.Title="OD" MinValue="0" MaxValue="100000000" hc:TitleElement.TitlePlacement="Top" Value="{Binding ODAmount}" Margin="3,0" CurrencyDecimalDigits="2"/>
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="2" hc:TitleElement.Title="TP" MinValue="0" MaxValue="100000000" hc:TitleElement.TitlePlacement="Top" Value="{Binding TPAmount}" Margin="3,0" CurrencyDecimalDigits="2"/>
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="3" hc:TitleElement.Title="Tax" MinValue="0" MaxValue="100000000" hc:TitleElement.TitlePlacement="Top" Value="{Binding TaxAmount}" Margin="3,0" CurrencyDecimalDigits="2"/>
-                            
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="Fixed Amount" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" Value="{Binding FixedAmount}" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,6,0">
+                                <TextBlock Text="OD Amount" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" Value="{Binding ODAmount}" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,6,0">
+                                <TextBlock Text="TP Amount" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" Value="{Binding TPAmount}" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="3" Margin="0,0,6,0">
+                                <TextBlock Text="Tax Amount" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" Value="{Binding TaxAmount}" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
+
                             <!-- Highlighted Total Amount -->
-                            <Border Grid.Column="4" Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6" Margin="3,0" Padding="2">
-                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Total Amount" hc:TitleElement.TitlePlacement="Top" Value="{Binding TotalAmount}" IsReadOnly="True" Margin="2,0" FontWeight="Bold" Foreground="#1E293B" CurrencyDecimalDigits="2"/>
-                            </Border>
+                            <StackPanel Grid.Column="4" Margin="0,0,0,0">
+                                <TextBlock Text="Total Amount" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <Border Background="#F8FAFC" BorderBrush="#CBD5E1" BorderThickness="1" CornerRadius="6" Height="34">
+                                    <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Value="{Binding TotalAmount}" IsReadOnly="True" FontWeight="Bold" Foreground="#1E293B" CurrencyDecimalDigits="2" VerticalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Border>
@@ -202,37 +255,52 @@
                         </StackPanel>
 
                         <!-- Commission Type & Value -->
-                        <Grid Grid.Row="1" Margin="0,0,0,8">
+                        <Grid Grid.Row="1" Margin="0,0,0,10">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="130"/>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="1.2*"/>
                             </Grid.ColumnDefinitions>
 
-                            <hc:ComboBox x:Name="Box" SelectedIndex="0" Grid.Column="0" Text="{Binding CommissionType}" AutoComplete="True" hc:TitleElement.Title="Commission" hc:TitleElement.TitlePlacement="Top" Margin="3,0">
-                                <ComboBoxItem Content="Amount"/>
-                                <ComboBoxItem Content="Percentage"/>
-                            </hc:ComboBox>
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="Commission" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <hc:ComboBox x:Name="Box" SelectedIndex="0" Text="{Binding CommissionType}" AutoComplete="True" Height="34">
+                                    <ComboBoxItem Content="Amount"/>
+                                    <ComboBoxItem Content="Percentage"/>
+                                </hc:ComboBox>
+                            </StackPanel>
 
                             <!-- Amount or Percentage mode -->
-                            <Grid Grid.Column="1">
-                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" hc:TitleElement.Title="Comm. Amount" hc:TitleElement.TitlePlacement="Top" Margin="3,0" Value="{Binding CommissionAmount}" CurrencyDecimalDigits="2" Visibility="{Binding IsPercentageSelected, Converter={StaticResource Boolean2VisibilityReConverter}}"/>
+                            <Grid Grid.Column="1" Margin="0,0,6,0">
+                                <StackPanel Visibility="{Binding IsPercentageSelected, Converter={StaticResource Boolean2VisibilityReConverter}}">
+                                    <TextBlock Text="Comm. Amount" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                    <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" Value="{Binding CommissionAmount}" CurrencyDecimalDigits="2" Height="34"/>
+                                </StackPanel>
                                 <Grid Visibility="{Binding IsPercentageSelected, Converter={StaticResource Boolean2VisibilityConverter}}">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
-                                    <syncfusion:PercentTextBox Grid.Column="0" Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100" MinValidation="OnKeyPress" MaxValidation="OnKeyPress" PercentDecimalDigits="2" hc:TitleElement.Title="OD %" hc:TitleElement.TitlePlacement="Top" Margin="2,0" PercentValue="{Binding ODPercent}"/>
-                                    <syncfusion:PercentTextBox Grid.Column="1" Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100" MinValidation="OnKeyPress" MaxValidation="OnKeyPress" PercentDecimalDigits="2" hc:TitleElement.Title="TP %" hc:TitleElement.TitlePlacement="Top" Margin="2,0" PercentValue="{Binding TPPercent}"/>
+                                    <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                                        <TextBlock Text="OD %" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                        <syncfusion:PercentTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100" MinValidation="OnKeyPress" MaxValidation="OnKeyPress" PercentDecimalDigits="2" PercentValue="{Binding ODPercent}" Height="34"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                        <TextBlock Text="TP %" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                        <syncfusion:PercentTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100" MinValidation="OnKeyPress" MaxValidation="OnKeyPress" PercentDecimalDigits="2" PercentValue="{Binding TPPercent}" Height="34"/>
+                                    </StackPanel>
                                 </Grid>
                             </Grid>
 
                             <!-- After Commission -->
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="2" IsReadOnly="True" hc:TitleElement.Title="Net (After Comm)" hc:TitleElement.TitlePlacement="Top" Margin="3,0" Value="{Binding AmtAfterCommission}" CurrencyDecimalDigits="2">
-                                <syncfusion:CurrencyTextBox.ToolTip>
-                                    <ToolTip Content="{Binding Path=TotalCommission}" ContentStringFormat="{}Total Commission: {0:C}"/>
-                                </syncfusion:CurrencyTextBox.ToolTip>
-                            </syncfusion:CurrencyTextBox>
+                            <StackPanel Grid.Column="2" Margin="0,0,0,0">
+                                <TextBlock Text="Net (After Comm)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" IsReadOnly="True" Value="{Binding AmtAfterCommission}" CurrencyDecimalDigits="2" Height="34">
+                                    <syncfusion:CurrencyTextBox.ToolTip>
+                                        <ToolTip Content="{Binding Path=TotalCommission}" ContentStringFormat="{}Total Commission: {0:C}"/>
+                                    </syncfusion:CurrencyTextBox.ToolTip>
+                                </syncfusion:CurrencyTextBox>
+                            </StackPanel>
                         </Grid>
 
                         <!-- Settlement Balances Ribbon -->
@@ -244,14 +312,28 @@
                                 <ColumnDefinition Width="1.15*"/>
                             </Grid.ColumnDefinitions>
 
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" CurrencyDecimalDigits="2" Grid.Column="0" hc:TitleElement.Title="Payment Received" hc:TitleElement.TitlePlacement="Top" Margin="3,0" Value="{Binding Payment}"/>
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="1" hc:TitleElement.Title="Current Balance" hc:TitleElement.TitlePlacement="Top" Margin="3,0" Value="{Binding Balance}" IsReadOnly="True" CurrencyDecimalDigits="2"/>
-                            <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="2" hc:TitleElement.Title="Previous Balance" hc:TitleElement.TitlePlacement="Top" Margin="3,0" Value="{Binding PreviousBalance}" IsReadOnly="True" CurrencyDecimalDigits="2"/>
+                            <StackPanel Grid.Column="0" Margin="0,0,6,0">
+                                <TextBlock Text="Payment Received" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" MinValue="0" MaxValue="100000000" CurrencyDecimalDigits="2" Value="{Binding Payment}" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="1" Margin="0,0,6,0">
+                                <TextBlock Text="Current Balance" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Value="{Binding Balance}" IsReadOnly="True" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
+
+                            <StackPanel Grid.Column="2" Margin="0,0,6,0">
+                                <TextBlock Text="Previous Balance" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Value="{Binding PreviousBalance}" IsReadOnly="True" CurrencyDecimalDigits="2" Height="34"/>
+                            </StackPanel>
 
                             <!-- Final Balance badge/box -->
-                            <Border Grid.Column="3" Background="#F8FAFC" BorderBrush="#93C5FD" BorderThickness="1.5" CornerRadius="6" Margin="3,0" Padding="2">
-                                <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Grid.Column="4" hc:TitleElement.Title="Final Balance" hc:TitleElement.TitlePlacement="Top" Margin="2,0" Value="{Binding FinalBalance}" IsReadOnly="True" FontWeight="Bold" Foreground="#1E3A8A" CurrencyDecimalDigits="2"/>
-                            </Border>
+                            <StackPanel Grid.Column="3" Margin="0,0,0,0">
+                                <TextBlock Text="Final Balance" FontSize="12" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,4"/>
+                                <Border Background="#F8FAFC" BorderBrush="#93C5FD" BorderThickness="1.5" CornerRadius="6" Height="34">
+                                    <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}" Value="{Binding FinalBalance}" IsReadOnly="True" FontWeight="Bold" Foreground="#1E3A8A" CurrencyDecimalDigits="2" VerticalAlignment="Center"/>
+                                </Border>
+                            </StackPanel>
                         </Grid>
                     </Grid>
                 </Border>

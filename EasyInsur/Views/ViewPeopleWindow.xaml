@@ -112,28 +112,27 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <hc:ComboBox Grid.Column="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
-                                 SelectedItem="{Binding PersonType}" hc:TitleElement.Title="Person Type" hc:TitleElement.TitlePlacement="Top" Margin="0,0,8,0" Height="32"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                        <TextBlock Text="Person Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
+                                     SelectedItem="{Binding PersonType}" Height="34"/>
+                    </StackPanel>
 
-                    <!-- Search Bar + Prev/Next -->
-                    <Grid Grid.Column="1" Margin="0,0,8,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <hc:SearchBar Grid.Column="0" x:Name="SearchBarForGrid" SearchStarted="SearchBar_OnSearchStarted"
+                    <!-- Search Bar -->
+                    <StackPanel Grid.Column="1" Margin="0,0,8,0">
+                        <TextBlock Text="Search Directory" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <hc:SearchBar x:Name="SearchBarForGrid" SearchStarted="SearchBar_OnSearchStarted"
                                       ShowClearButton="True"
-                                      hc:InfoElement.Placeholder="Search people by name, phone, email, PID..." hc:TitleElement.Title="Search Directory" hc:TitleElement.TitlePlacement="Top"
-                                      Style="{StaticResource SearchBarPlusBaseStyle}" IsRealTime="True" Height="32"/>
-                        <Button Grid.Column="1" Content="Prev" Margin="4,21,2,0" Height="32" Padding="8,0" Style="{StaticResource FindPreviousButtonStyle}" Click="FindPreviousClicked"/>
-                        <Button Grid.Column="2" Content="Next" Margin="2,21,0,0" Height="32" Padding="8,0" Style="{StaticResource FindNextButtonStyle}" Click="FindNextClicked"/>
-                    </Grid>
+                                      hc:InfoElement.Placeholder="Search people by name, phone, email, PID..."
+                                      Style="{StaticResource SearchBarPlusBaseStyle}" IsRealTime="True" Height="34"/>
+                    </StackPanel>
 
                     <!-- Export Toggle Button -->
-                    <ToggleButton x:Name="ExportToggle" Grid.Column="2" Margin="0,21,0,0" Height="32" Padding="12,0"
-                                  Style="{StaticResource ToggleButtonDefault}"
-                                  Content="Export Data ▾" ToolTip="Show Excel and PDF Export Options"/>
+                    <StackPanel Grid.Column="2" VerticalAlignment="Bottom">
+                        <ToggleButton x:Name="ExportToggle" Height="34" Padding="14,0"
+                                      Style="{StaticResource ToggleButtonDefault}"
+                                      Content="Export Data ▾" ToolTip="Show Excel and PDF Export Options"/>
+                    </StackPanel>
                 </Grid>
             </Grid>
         </Border>

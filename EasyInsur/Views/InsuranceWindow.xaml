@@ -110,24 +110,32 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                    <hc:TextBox Grid.Column="0" Text="{Binding VehicleNo, UpdateSourceTrigger=PropertyChanged}" 
-                                hc:TitleElement.Title="Vehicle Number" hc:TitleElement.TitlePlacement="Top"
-                                hc:InfoElement.Necessary="True" hc:InfoElement.Placeholder="e.g. MH02AB1234" Height="32" Margin="0,0,10,0"/>
+                    <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock Margin="0,0,0,4">
+                            <Run Text="Vehicle Number" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
+                        </TextBlock>
+                        <hc:TextBox Text="{Binding VehicleNo, UpdateSourceTrigger=PropertyChanged}" 
+                                    hc:InfoElement.Placeholder="e.g. MH02AB1234" Height="34"/>
+                    </StackPanel>
 
-                    <hc:DatePicker Grid.Column="1" SelectedDate="{Binding RegDate, UpdateSourceTrigger=PropertyChanged}" 
-                                   hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top"
-                                   Height="32" Margin="0,0,10,0"/>
+                    <StackPanel Grid.Column="1" Margin="0,0,10,0">
+                        <TextBlock Text="Registration Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <hc:DatePicker SelectedDate="{Binding RegDate, UpdateSourceTrigger=PropertyChanged}" Height="34"/>
+                    </StackPanel>
 
-                    <syncfusion:CurrencyTextBox Grid.Column="2" Style="{StaticResource TextBoxExtend}"
-                                                Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" 
-                                                hc:TitleElement.Title="Insured Valuation" hc:TitleElement.TitlePlacement="Top"
-                                                Height="32" CurrencyDecimalDigits="2" MinValue="0" Margin="0,0,10,0"/>
+                    <StackPanel Grid.Column="2" Margin="0,0,10,0">
+                        <TextBlock Text="Insured Valuation (₹)" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
+                        <syncfusion:CurrencyTextBox Style="{StaticResource TextBoxExtend}"
+                                                    Value="{Binding Amount, UpdateSourceTrigger=PropertyChanged}" 
+                                                    Height="34" CurrencyDecimalDigits="2" MinValue="0"/>
+                    </StackPanel>
 
-                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom" Margin="0,21,0,0">
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Bottom">
                         <Button Style="{StaticResource ButtonDefault}" Command="{Binding ResetCommand}" 
-                                Content="Reset" Height="32" Margin="0,0,6,0" Padding="12,0"/>
+                                Content="Reset" Height="34" Margin="0,0,6,0" Padding="12,0"/>
                         <Button Style="{StaticResource ButtonPrimary}" Command="{Binding SaveCommand}" 
-                                Content="Add Vehicle" Height="32" Padding="14,0"/>
+                                Content="Add Vehicle" Height="34" Padding="14,0"/>
                     </StackPanel>
                 </Grid>
             </Grid>
