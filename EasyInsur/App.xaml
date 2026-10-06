@@ -154,19 +154,35 @@
 						</Border>
 
 						<!-- COL 3: QR Verification Card -->
-						<Border Grid.Column="3" Width="130" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="8" VerticalAlignment="Center">
+						<Border Grid.Column="3" Width="155" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" Padding="10,8" VerticalAlignment="Center">
 							<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-								<barcode:SfBarcode x:Name="barcode" Symbology="QRBarcode" Height="86" Width="86" DisplayText="False" HorizontalAlignment="Center">
+								<barcode:SfBarcode x:Name="barcode" Symbology="QRBarcode"
+												   Height="120" Width="120"
+												   DisplayText="False"
+												   HorizontalAlignment="Center"
+												   RenderOptions.BitmapScalingMode="NearestNeighbor"
+												   RenderOptions.EdgeMode="Aliased"
+												   UseLayoutRounding="True"
+												   SnapsToDevicePixels="True">
+									<barcode:SfBarcode.QuietZone>
+										<barcode:BarcodeQuietZones All="6"/>
+									</barcode:SfBarcode.QuietZone>
+									<barcode:SfBarcode.SymbologySettings>
+										<barcode:QRBarcodeSetting ErrorCorrectionLevel="Low" XDimension="3"/>
+									</barcode:SfBarcode.SymbologySettings>
 									<barcode:SfBarcode.Text>
-										<MultiBinding StringFormat="{}Name: {0}{2}Mobile: {1}{2}Email: {3}{2}Registration Date: {4}{2}Balance: {5:C}">
-											<Binding Path="Text" ElementName="NameText" />
+										<MultiBinding StringFormat="{}Name: {0} {1}&#x0a;Mobile: {2}&#x0a;Email: {3}&#x0a;Reg Date: {4}&#x0a;Balance: {5:C}">
+											<Binding Path="Data.FirstName" />
+											<Binding Path="Data.LastName" />
 											<Binding Path="Data.Mobile" />
-											<Binding Source="{x:Static system:Environment.NewLine}"/>
 											<Binding Path="Data.Email" />
 											<Binding Path="Data.RegDate" />
 											<Binding Path="Data.Balance" />
 										</MultiBinding>
 									</barcode:SfBarcode.Text>
+									<barcode:SfBarcode.ToolTip>
+										<ToolTip Content="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}"/>
+									</barcode:SfBarcode.ToolTip>
 								</barcode:SfBarcode>
 								<TextBlock Text="Scan to Verify" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,4,0,0"/>
 							</StackPanel>
