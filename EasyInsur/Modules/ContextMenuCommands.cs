@@ -162,7 +162,7 @@ namespace EasyInsur.Modules
             if (obj is not GridColumnContextMenuInfo info) return;
             var grid = info.DataGrid;
             var column = info.Column;
-            if (grid.SortColumnDescriptions != null)
+            if (grid.SortColumnDescriptions == null)
                 return;
 
             grid.SortColumnDescriptions.Clear();
@@ -231,8 +231,11 @@ namespace EasyInsur.Modules
             if (obj == null)
                 return false;
 
-            var grid = (obj as GridContextMenuInfo).DataGrid;
-            var column = (obj as GridColumnContextMenuInfo).Column;
+            if (obj is not GridColumnContextMenuInfo info)
+                return false;
+
+            var grid = info.DataGrid;
+            var column = info.Column;
 
             return grid.SortColumnDescriptions != null && grid.SortColumnDescriptions.Any(x => x.ColumnName == column.MappingName);
         }
@@ -272,7 +275,7 @@ namespace EasyInsur.Modules
         #region GroupThisColumn
         static ICommand _groupThisColumn;
         public static ICommand GroupThisColumn =>
-            _groupThisColumn;
+            _groupThisColumn ??= new BaseCommand(OnGroupThisColumnClicked, CanGroupThisColumn);
 
 
         private static void OnGroupThisColumnClicked(object obj)
@@ -335,7 +338,14 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                
+                if (grid != null)
+                {
+                    if (info.Record != null)
+                    {
+                        grid.SelectedItem = info.Record;
+                    }
+                    grid.GridCopyPaste?.Copy();
+                }
             }
         }
 
@@ -553,7 +563,7 @@ namespace EasyInsur.Modules
                 if (_addPayment == null)
                     _addPayment = new BaseCommand(OnAddPaymentClicked);
 
-                return _copy;
+                return _addPayment;
             }
         }
 
@@ -563,7 +573,10 @@ namespace EasyInsur.Modules
             if (obj is GridRecordContextMenuInfo info)
             {
                 var grid = info.DataGrid;
-                grid.GridCopyPaste.Copy();
+                if (grid != null && info.Record != null)
+                {
+                    grid.SelectedItem = info.Record;
+                }
             }
         }
 

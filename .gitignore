@@ -361,3 +361,13 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# JetBrains Rider & IDE settings
+.idea/
+
+# Playwright CLI cache
+.playwright-cli/
+
+# Backup files
+*.bak
+EasyInsur_error.log

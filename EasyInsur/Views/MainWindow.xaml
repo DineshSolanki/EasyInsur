@@ -1,65 +1,260 @@
-﻿<hc:Window x:Class="EasyInsur.Views.MainWindow"
+<hc:Window x:Class="EasyInsur.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:hc="https://handyorg.github.io/handycontrol"
-        xmlns:regions="http://prismlibrary.com/" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
-           mc:Ignorable="d"
-        Title="EasyInsur" 
+        xmlns:regions="http://prismlibrary.com/"
+        xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
+        xmlns:controls="clr-namespace:EasyInsur.Views.Controls"
+        d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
+        mc:Ignorable="d"
+        Title="EasyInsur - Insurance Management" 
+        Icon="../Resources/EasyInsur Logo.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Style="{StaticResource WindowWin10}"
         ShowTitle="True"
-        Height="450" 
-        Width="800">
-    <DockPanel>
-        <hc:SideMenu AutoSelect="False" ExpandMode="ShowOne" Width="170">
-            <!--<hc:Interaction.Triggers>
-                <hc:EventTrigger EventName="SelectionChanged">
-                    <hc:EventToCommand Command="{Binding NavigateCommand}" PassEventArgsToCommand="True" />
-                </hc:EventTrigger>
-            </hc:Interaction.Triggers>-->
-            <hc:SideMenuItem Header="Dashboard" Tag="Dashboard" Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
-                <hc:SideMenuItem.Icon>
-                    <Image Source="../Resources/dashboard.png" Width="24" Height="24"/>
-                </hc:SideMenuItem.Icon>
-            </hc:SideMenuItem>
-            <hc:SideMenuItem Header="Payment">
-                <hc:SideMenuItem.Icon>
-                    <Image Source="../Resources/money.png" Width="24" Height="24"/>
-                </hc:SideMenuItem.Icon>
-                <hc:SideMenuItem Header="Add Payment" Tag="PaymentWindow" Padding="10"
-                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
-                    <hc:SideMenuItem.Icon>
-                        <Image Source="../Resources/rupee.png" Width="24" Height="24"/>
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view Payments" Tag="ViewPaymentWindow" Padding="10"
-                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
-                    <hc:SideMenuItem.Icon>
-                        <Image Source="../Resources/payment_history.png" Width="24" Height="24"/>
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-            </hc:SideMenuItem>
-            <hc:SideMenuItem Header="People">
-                <hc:SideMenuItem.Icon>
-                    <Image Source="../Resources/people.png" Width="24" Height="24"/>
-                </hc:SideMenuItem.Icon>
-                <hc:SideMenuItem Header="Add Person" Tag="PersonDetails" Padding="10"
-                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
-                    <hc:SideMenuItem.Icon>
-                        <Image Source="../Resources/add_people.png" Width="24" Height="24"/>
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-                <hc:SideMenuItem Header="view" Tag="ViewPeopleWindow" Padding="10"
-                                 Command="{Binding SelectCmd}" CommandParameter="{Binding Tag,RelativeSource={RelativeSource Self}}">
-                    <hc:SideMenuItem.Icon>
-                        <Image Source="../Resources/view_people.png" Width="24" Height="24"/>
-                    </hc:SideMenuItem.Icon>
-                </hc:SideMenuItem>
-            </hc:SideMenuItem>
-        </hc:SideMenu>
-        <ContentControl regions:RegionManager.RegionName="ContentRegion" Margin="5"/>
+        Height="760" 
+        Width="1280"
+        MinHeight="600"
+        MinWidth="1000">
+
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="D1" Command="{Binding SelectCmd}" CommandParameter="Dashboard"/>
+        <KeyBinding Modifiers="Control" Key="D2" Command="{Binding SelectCmd}" CommandParameter="PaymentWindow"/>
+        <KeyBinding Modifiers="Control" Key="D3" Command="{Binding SelectCmd}" CommandParameter="ViewPaymentWindow"/>
+        <KeyBinding Modifiers="Control" Key="D4" Command="{Binding SelectCmd}" CommandParameter="PersonDetails"/>
+        <KeyBinding Modifiers="Control" Key="D5" Command="{Binding SelectCmd}" CommandParameter="ViewPeopleWindow"/>
+        <KeyBinding Modifiers="Control" Key="D6" Command="{Binding SelectCmd}" CommandParameter="InsuranceWindow"/>
+        <KeyBinding Modifiers="Control" Key="NumPad1" Command="{Binding SelectCmd}" CommandParameter="Dashboard"/>
+        <KeyBinding Modifiers="Control" Key="NumPad2" Command="{Binding SelectCmd}" CommandParameter="PaymentWindow"/>
+        <KeyBinding Modifiers="Control" Key="NumPad3" Command="{Binding SelectCmd}" CommandParameter="ViewPaymentWindow"/>
+        <KeyBinding Modifiers="Control" Key="NumPad4" Command="{Binding SelectCmd}" CommandParameter="PersonDetails"/>
+        <KeyBinding Modifiers="Control" Key="NumPad5" Command="{Binding SelectCmd}" CommandParameter="ViewPeopleWindow"/>
+        <KeyBinding Modifiers="Control" Key="NumPad6" Command="{Binding SelectCmd}" CommandParameter="InsuranceWindow"/>
+        <KeyBinding Modifiers="Control" Key="B" Command="{Binding ToggleSidebarCommand}"/>
+    </Window.InputBindings>
+
+    <DockPanel LastChildFill="True" Background="#F8FAFC">
+        
+        <!-- Modern Left Navigation Sidebar -->
+        <Border DockPanel.Dock="Left"
+                Width="{Binding SidebarWidth}"
+                Background="#FFFFFF"
+                BorderBrush="#E2E8F0"
+                BorderThickness="0,0,1,0"
+                SnapsToDevicePixels="True">
+            <DockPanel LastChildFill="True">
+                
+                <!-- TOP HEADER: App Brand & Toggle Button -->
+                <Border DockPanel.Dock="Top" 
+                        Height="64" 
+                        Padding="12,10" 
+                        BorderBrush="#F1F5F9" 
+                        BorderThickness="0,0,0,1">
+                    <Grid>
+                        <!-- Expanded Header: Logo + App Name + Subtitle + Toggle -->
+                        <Grid Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Brand Logo -->
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" Margin="0,0,10,0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                <Image Source="../Resources/EasyInsur Logo.png" Width="30" Height="30" Stretch="Uniform"
+                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- App Title & Tagline -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="EasyInsur" FontSize="15" FontWeight="Bold" Foreground="#0F172A"/>
+                                <TextBlock Text="Insurance Suite" FontSize="10" Foreground="#64748B" FontWeight="Medium"/>
+                            </StackPanel>
+
+                            <!-- Toggle Button (Collapse) -->
+                            <Button Grid.Column="2" 
+                                    Command="{Binding ToggleSidebarCommand}"
+                                    Width="30" Height="30" 
+                                    Padding="0"
+                                    Background="Transparent" 
+                                    BorderThickness="0" 
+                                    Cursor="Hand"
+                                    ToolTip="Collapse Sidebar (Ctrl+B)">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="BtnBdr" Background="{TemplateBinding Background}" CornerRadius="6">
+                                            <Path Data="M15.41,16.58L10.83,12L15.41,7.41L14,6L8,12L14,18L15.41,16.58Z" 
+                                                  Fill="#64748B" Width="14" Height="14" Stretch="Uniform"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="BtnBdr" Property="Background" Value="#F1F5F9"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+
+                        <!-- Collapsed Header: Centered Toggle & Logo -->
+                        <Grid Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Button Command="{Binding ToggleSidebarCommand}"
+                                    Width="38" Height="38" 
+                                    Padding="0"
+                                    Background="Transparent" 
+                                    BorderThickness="0" 
+                                    Cursor="Hand"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center"
+                                    ToolTip="Expand Sidebar (Ctrl+B)">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Border x:Name="BtnBdr" Background="{TemplateBinding Background}" CornerRadius="8">
+                                            <Border Width="34" Height="34" CornerRadius="7" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                                <Image Source="../Resources/EasyInsur Logo.png" Width="28" Height="28" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="BtnBdr" Property="Background" Value="#EFF6FF"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- BOTTOM FOOTER: User Profile & Database Status -->
+                <Border DockPanel.Dock="Bottom" 
+                        Padding="10,12" 
+                        BorderBrush="#F1F5F9" 
+                        BorderThickness="0,1,0,0">
+                    <Grid>
+                        <!-- Expanded Footer -->
+                        <Grid Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Avatar with status dot -->
+                            <Grid Grid.Column="0" Margin="0,0,10,0">
+                                <Border Width="34" Height="34" CornerRadius="17" Background="#EFF6FF" BorderBrush="#DBEAFE" BorderThickness="1">
+                                    <TextBlock Text="EI" FontWeight="Bold" FontSize="12" Foreground="#2563EB" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <Ellipse Width="8" Height="8" Fill="#10B981" Stroke="#FFFFFF" StrokeThickness="1.5"
+                                         HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                            </Grid>
+
+                            <!-- Profile and connection details -->
+                            <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding OwnerName}" FontSize="12" FontWeight="SemiBold" 
+                                           Foreground="#1E293B" TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="EasyInsur.db • Connected" FontSize="10" Foreground="#059669" FontWeight="Medium"/>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Collapsed Footer (Avatar Only with status) -->
+                        <Grid Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                            <Grid HorizontalAlignment="Center" VerticalAlignment="Center" 
+                                  ToolTip="{Binding OwnerName, StringFormat='{}{0} • Online (EasyInsur.db)'}">
+                                <Border Width="34" Height="34" CornerRadius="17" Background="#EFF6FF" BorderBrush="#DBEAFE" BorderThickness="1">
+                                    <TextBlock Text="EI" FontWeight="Bold" FontSize="12" Foreground="#2563EB" 
+                                               HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <Ellipse Width="8" Height="8" Fill="#10B981" Stroke="#FFFFFF" StrokeThickness="1.5"
+                                         HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </Border>
+
+                <!-- SCROLLABLE NAVIGATION ITEMS -->
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="0,8,0,8">
+                        
+                        <!-- SECTION: OVERVIEW -->
+                        <TextBlock Text="OVERVIEW" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="16,8,16,4"
+                                   Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <Separator Background="#F1F5F9" Margin="12,6" 
+                                   Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <controls:ModernNavItem Title="Dashboard" 
+                                                Icon="../Resources/dashboard.png" 
+                                                Shortcut="Ctrl+1" 
+                                                TargetView="Dashboard" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                        <!-- SECTION: TRANSACTIONS & CASH -->
+                        <TextBlock Text="OPERATIONS" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="16,16,16,4"
+                                   Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <Separator Background="#F1F5F9" Margin="12,6" 
+                                   Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <controls:ModernNavItem Title="New Payment" 
+                                                Icon="../Resources/rupee.png" 
+                                                Shortcut="Ctrl+2" 
+                                                TargetView="PaymentWindow" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                        <controls:ModernNavItem Title="View Payments" 
+                                                Icon="../Resources/payment_history.png" 
+                                                Shortcut="Ctrl+3" 
+                                                TargetView="ViewPaymentWindow" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                        <!-- SECTION: DIRECTORY & POLICIES -->
+                        <TextBlock Text="REGISTRY" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" Margin="16,16,16,4"
+                                   Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        <Separator Background="#F1F5F9" Margin="12,6" 
+                                   Visibility="{Binding IsSidebarCollapsed, Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+                        <controls:ModernNavItem Title="Add Person" 
+                                                Icon="../Resources/add_people.png" 
+                                                Shortcut="Ctrl+4" 
+                                                TargetView="PersonDetails" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                        <controls:ModernNavItem Title="Clients &amp; Agents" 
+                                                Icon="../Resources/view_people.png" 
+                                                Shortcut="Ctrl+5" 
+                                                TargetView="ViewPeopleWindow" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                        <controls:ModernNavItem Title="Vehicles &amp; Policies" 
+                                                Icon="../Resources/broker_32.png" 
+                                                Shortcut="Ctrl+6" 
+                                                TargetView="InsuranceWindow" 
+                                                CurrentView="{Binding CurrentView}" 
+                                                IsCollapsed="{Binding IsSidebarCollapsed}" 
+                                                Command="{Binding SelectCmd}"/>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+            </DockPanel>
+        </Border>
+
+        <!-- Main Content Host Region -->
+        <ContentControl regions:RegionManager.RegionName="ContentRegion" Margin="0"/>
+
     </DockPanel>
 </hc:Window>

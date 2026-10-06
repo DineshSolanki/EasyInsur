@@ -1,4 +1,4 @@
-﻿using RepoDb.Attributes;
+using RepoDb.Attributes;
 
 namespace EasyInsur.Models
 {
@@ -11,5 +11,15 @@ namespace EasyInsur.Models
         public string RegDate { get; set; }
         public string VehicleNo { get; set; }
         public double Amount { get; set; }
+
+        public System.DateTime? RegDateTime
+        {
+            get
+            {
+                if (System.DateTime.TryParse(RegDate, out var dt))
+                    return dt;
+                return null;
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using EasyInsur.Modules;
 using RepoDb.Attributes;
 
@@ -40,12 +40,7 @@ namespace EasyInsur.Models
         public long? InsuranceID
         {
             get => _insuranceId;
-            set
-            {
-                _insuranceId = value;
-                if (value is null) return;
-                DbMethods.GetInsuranceAsync((long)value).ContinueWith(i=> Insurance = i.Result.FirstOrDefault());
-            }
+            set => _insuranceId = value;
         }
 
         public Insurance Insurance { get; set; }
@@ -65,5 +60,17 @@ namespace EasyInsur.Models
         public double Balance { get; set; }
         public double PreviousBalance { get; set; }
         public double FinalBalance { get; set; }
+
+        public bool IsPaid => FinalBalance <= 0;
+
+        public System.DateTime? PaymentDateTime
+        {
+            get
+            {
+                if (System.DateTime.TryParse(PaymentDate, out var dt))
+                    return dt;
+                return null;
+            }
+        }
     }
 }

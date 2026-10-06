@@ -24,6 +24,7 @@
 		<None Remove="Resources\clear.png" />
 		<None Remove="Resources\customer.png" />
 		<None Remove="Resources\dashboard.png" />
+		<None Remove="Resources\EasyInsur Logo.png" />
 		<None Remove="Resources\email.png" />
 		<None Remove="Resources\isd_country_code.json" />
 		<None Remove="Resources\link.png" />
@@ -68,10 +69,12 @@
 		<PackageReference Include="Syncfusion.Shared.WPF" Version="35.1.37" />
 		<PackageReference Include="Syncfusion.SfImageEditor.WPF" Version="35.1.37" />
 		<PackageReference Include="Syncfusion.SfGrid.WPF" Version="35.1.37" />
+		<PackageReference Include="Syncfusion.SfSmartComponents.WPF" Version="35.1.37" />
 		<PackageReference Include="Syncfusion.Themes.Metro.Wpf" Version="35.1.37" />
 		<PackageReference Include="Syncfusion.SfSkinManager.Wpf" Version="35.1.37" />
     <PackageReference Include="Syncfusion.SfInput.WPF" Version="35.1.37" />
     <PackageReference Include="Syncfusion.SfBarcode.WPF" Version="35.1.37" />
+		<PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="35.1.37" />
 </ItemGroup>
 	<ItemGroup>
 		<Content Include="images\no_image.jpg">
@@ -89,6 +92,7 @@
 		<Resource Include="Resources\clear.png" />
 		<Resource Include="Resources\customer.png" />
 		<Resource Include="Resources\dashboard.png" />
+		<Resource Include="Resources\EasyInsur Logo.png" />
 		<Resource Include="Resources\email.png" />
 		<Resource Include="Resources\link.png" />
 		<Resource Include="Resources\man.png" />

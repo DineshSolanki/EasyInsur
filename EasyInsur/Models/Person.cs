@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using RepoDb.Attributes;
 
 namespace EasyInsur.Models
@@ -7,8 +7,8 @@ namespace EasyInsur.Models
     {
         public Person() { }
 
-        public Person(string firstName, string lastName, string type, string personId, string imagePath,
-            string regDate, string mobile, string address = null!, string email = "")
+        public Person(string firstName, string lastName, string type, string personId, string? imagePath,
+            string regDate, string mobile, string? address = null, string? email = null)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -17,11 +17,11 @@ namespace EasyInsur.Models
             ImagePath = imagePath;
             RegDate = regDate;
             Mobile = mobile;
-            Address = address;
-            Email = email;
+            Address = address ?? "";
+            Email = email ?? "";
         }
-        public Person(string firstName, string lastName, string type, string personId, double balance, string imagePath,
-            string regDate, string mobile, string address = null!, string email = null!)
+        public Person(string firstName, string lastName, string type, string personId, double balance, string? imagePath,
+            string regDate, string mobile, string? address = null, string? email = null)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -31,8 +31,8 @@ namespace EasyInsur.Models
             ImagePath = imagePath;
             RegDate = regDate;
             Mobile = mobile;
-            Address = address;
-            Email = email;
+            Address = address ?? "";
+            Email = email ?? "";
         }
 
         [Identity] // Identity decoration
@@ -50,12 +50,23 @@ namespace EasyInsur.Models
         [Required]
         public double Balance { get; set; }
 
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         [Phone]
         public string Mobile { get; set; }
         [Required]
         public string RegDate { get; set; }
+
+        public System.DateTime? RegDateTime
+        {
+            get
+            {
+                if (System.DateTime.TryParse(RegDate, out var dt))
+                    return dt;
+                return null;
+            }
+        }
+
         public override string ToString() => $"{FirstName} {LastName}";
     }
 }
