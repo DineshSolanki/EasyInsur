@@ -1,9 +1,10 @@
-# EasyInsur 🛡️
-
+# EasyInsur 
+ <img src="https://raw.githubusercontent.com/DineshSolanki/EasyInsur/refs/heads/master/EasyInsur/Resources/EasyInsur%20Logo.png" />
+ 
 A modern, high-performance **WPF desktop application** for managing motor insurance policies, agents, customers, commissions, and multi-party payment ledgers. Built with **.NET 10** using the **MVVM pattern with Prism**, styled with the **Syncfusion Fluent Light** design system and **HandyControls**, with local **SQLite** persistence via **RepoDb**.
 
 ---
-<img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/4da21457-9baa-4870-a9d5-034e79268028" />
+ <img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/2b3c75ee-92a9-41ad-9a23-2667157aa8a1" />
 
 ## Key Features
 
@@ -25,7 +26,17 @@ A modern, high-performance **WPF desktop application** for managing motor insura
 ---
 <details>
   <summary>Click to expand screenshots</summary>
-  
+  <img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/2b3c75ee-92a9-41ad-9a23-2667157aa8a1" />
+<img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/474167f8-20b1-4280-a752-8efca6f24757" />
+  <img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/c3570140-c474-4b36-9c66-d225c80d899a" />
+
+<img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/974490ba-c219-410b-9f25-d23840f98461" />
+
+
+<img width="2560" height="1388" alt="image" src="https://github.com/user-attachments/assets/efe781f9-05f5-4c47-9bf4-4e63b33d701c" />
+
+
+
 </details>
 
 ---
