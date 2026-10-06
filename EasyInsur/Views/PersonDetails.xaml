@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EasyInsur.Views.PersonDetails"
+<UserControl x:Class="EasyInsur.Views.PersonDetails"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:prism="http://prismlibrary.com/"    
@@ -12,60 +12,82 @@
 			 xmlns:local="clr-namespace:EasyInsur.Modules" xmlns:viewmodels="clr-namespace:EasyInsur.ViewModels"
 			 syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
 			 prism:ViewModelLocator.AutoWireViewModel="True">
-	<Grid>
+	<Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="100"/>
 			<RowDefinition Height="*"/>
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-			<ColumnDefinition/>
-		</Grid.ColumnDefinitions>
-		<hc:ComboBox SelectedIndex="0" Grid.Row="0" Grid.Column="0" AutoComplete="True" Text="{Binding PersonType}" hc:TitleElement.Title="Person type" hc:TitleElement.TitlePlacement="Top" Margin="5">
-			<ComboBoxItem Content="Customer"/>
-			<ComboBoxItem Content="Agent"/>
-		</hc:ComboBox>
-		<hc:TextBox Grid.Row="0" Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId, Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<hc:TextBox Grid.Row="0" Grid.Column="2" hc:TitleElement.Title="First Name" hc:InfoElement.Necessary="True" Text="{Binding FirstName}" hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<hc:TextBox Grid.Row="0" Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Row="0" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="5" SelectedDate="{Binding RegistrationDate}"/>
-		<syncfusion:CurrencyTextBox Grid.Row="0" Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}"  hc:TitleElement.Title="Balance" Value="{Binding Balance}"  hc:TitleElement.TitlePlacement="Top" Margin="5"/>
-		<hc:ImageSelector Grid.Row="0" Grid.RowSpan="2" Grid.Column="6" Height="150" Width="150" Margin="10" Stretch="Fill" ToolTip="{Binding ImagePathTag, Mode=TwoWay}"/>
-		<hc:SimpleStackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-			<hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True"  MinWidth="120" MaxWidth="120"  AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}"   hc:TitleElement.Title="Country Code" hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0"/>
-			<hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code"
-						Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}"
-						hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" IsReadOnly="True"
-						MaxWidth="60" />
-		</hc:SimpleStackPanel>
-		<hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}"
-						  Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True"
-						  Grid.Row="1" Grid.Column="1" hc:TitleElement.Title="Mobile No."
-						  hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}"
-						  hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" />
-		<hc:TextBox		hc:InfoElement.Placeholder="Enter email here."
-						  Grid.Row="1" Grid.Column="2" hc:TitleElement.Title="Email"
-						  hc:InfoElement.Necessary="False" Text="{Binding Email,Mode=TwoWay}"
-						  hc:TitleElement.TitlePlacement="Top" Margin="5,0,0,0" VerticalAlignment="Top" />
-		<hc:SplitButton Grid.Row="1" Grid.Column="3" Style="{StaticResource SplitButtonPrimary}" Content="Save person"
-						Command="{Binding SaveCommand}" Margin="10,26,0,0" HorizontalAlignment="Stretch"
-						VerticalAlignment="Top">
-			<hc:SplitButton.DropDownContent>
-				<StackPanel>
-					<MenuItem Header="Reset form" Command="{Binding ResetCommand}" />
-				</StackPanel>
-			</hc:SplitButton.DropDownContent>
-		</hc:SplitButton>
-		<syncfusion:SfDataGrid x:Name="DataGrid" BorderThickness="1,1,1,1"  Grid.Row="2" Grid.Column="0" Margin="10" Grid.ColumnSpan="7" AutoGenerateColumns="False"
+
+		<!-- TOP SECTION: Form Fields (Left) & Photo Selector (Right) -->
+		<Grid Grid.Row="0" Margin="0,0,0,6">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+
+			<!-- Left: Form Fields (Two responsive rows) -->
+			<Grid Grid.Column="0">
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+
+				<!-- Row 0: Basic Details -->
+				<Grid Grid.Row="0" Margin="0,0,0,6">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="130"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="140"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<hc:ComboBox SelectedIndex="0" Grid.Column="0" AutoComplete="True" Text="{Binding PersonType}" hc:TitleElement.Title="Person Type" hc:TitleElement.TitlePlacement="Top" Margin="4,0">
+						<ComboBoxItem Content="Customer"/>
+						<ComboBoxItem Content="Agent"/>
+					</hc:ComboBox>
+					<hc:TextBox Grid.Column="1" hc:TitleElement.Title="Person ID" hc:InfoElement.Necessary="True" Text="{Binding PersonId, Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
+					<hc:TextBox Grid.Column="2" hc:TitleElement.Title="First Name" hc:InfoElement.Necessary="True" Text="{Binding FirstName}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
+					<hc:TextBox Grid.Column="3" hc:TitleElement.Title="Last Name" hc:InfoElement.Necessary="True" Text="{Binding LastName}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
+					<hc:DatePicker SelectedDateFormat="Short" hc:InfoElement.Necessary="True" Grid.Column="4" hc:TitleElement.Title="Registration Date" hc:TitleElement.TitlePlacement="Top" Margin="4,0" SelectedDate="{Binding RegistrationDate}"/>
+					<syncfusion:CurrencyTextBox Grid.Column="5" hc:InfoElement.Necessary="True" Style="{StaticResource TextBoxExtend}" hc:TitleElement.Title="Balance" Value="{Binding Balance}" hc:TitleElement.TitlePlacement="Top" Margin="4,0"/>
+				</Grid>
+
+				<!-- Row 1: Contact Details & Action -->
+				<Grid Grid.Row="1" Margin="0,0,0,4">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="185"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="1.4*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<hc:SimpleStackPanel Grid.Column="0" Orientation="Horizontal" Margin="4,0">
+						<hc:ComboBox x:Name="CountryBox" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True" Width="115" AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}" hc:TitleElement.Title="Country Code" hc:TitleElement.TitlePlacement="Top"/>
+						<hc:TextBox IsTabStop="False" hc:TitleElement.Title="Code" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" hc:TitleElement.TitlePlacement="Top" Margin="4,0,0,0" VerticalAlignment="Top" IsReadOnly="True" Width="60"/>
+					</hc:SimpleStackPanel>
+					<hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True" Grid.Column="1" hc:TitleElement.Title="Mobile No." hc:InfoElement.Necessary="True" Text="{Binding Mobile,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0" VerticalAlignment="Top"/>
+					<hc:TextBox hc:InfoElement.Placeholder="Enter email here." Grid.Column="2" hc:TitleElement.Title="Email" hc:InfoElement.Necessary="False" Text="{Binding Email,Mode=TwoWay}" hc:TitleElement.TitlePlacement="Top" Margin="4,0" VerticalAlignment="Top"/>
+					<hc:SplitButton Grid.Column="3" Style="{StaticResource SplitButtonPrimary}" Content="Save person" Command="{Binding SaveCommand}" Margin="6,21,4,0" VerticalAlignment="Top" Height="32">
+						<hc:SplitButton.DropDownContent>
+							<StackPanel>
+								<MenuItem Header="Reset form" Command="{Binding ResetCommand}" />
+							</StackPanel>
+						</hc:SplitButton.DropDownContent>
+					</hc:SplitButton>
+				</Grid>
+			</Grid>
+
+			<!-- Right: Image Selector in card border -->
+			<Border Grid.Column="1" Margin="10,0,0,0" Padding="4" Background="#F9FAFB" BorderBrush="#E5E7EB" BorderThickness="1" CornerRadius="6" VerticalAlignment="Center">
+				<hc:ImageSelector Height="115" Width="115" Stretch="UniformToFill" ToolTip="{Binding ImagePathTag, Mode=TwoWay}"/>
+			</Border>
+		</Grid>
+
+		<!-- ROW 1: People DataGrid -->
+		<syncfusion:SfDataGrid x:Name="DataGrid" BorderThickness="1" Grid.Row="1" Margin="0,4" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" AllowSorting="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" AllowSorting="True" ColumnSizer="Star" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
 							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True"
 							   EnableDataVirtualization="True">
@@ -290,17 +312,18 @@
 			</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn  MappingName="Id" HeaderText="ID" IsHidden="True"/>
-				<syncfusion:GridTextColumn  MappingName="PersonID" HeaderText="PID"/>
-				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
-				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
-				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
-				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
-				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
-				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
+				<syncfusion:GridTextColumn  MappingName="PersonID" HeaderText="PID" MinimumWidth="75"/>
+				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name" MinimumWidth="100"/>
+				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name" MinimumWidth="100"/>
+				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance" MinimumWidth="90"/>
+				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center" MinimumWidth="110"/>
+				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No." MinimumWidth="100"/>
+				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email" MinimumWidth="130"/>
 				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="False" AllowGrouping="False" HeaderText=""
 											AllowFocus="False" AllowFiltering="False" Stretch="Fill"
 											StretchDirection="Both" ImageWidth="32" TextAlignment="Center"
 											ImageHeight="32" VerticalAlignment="Center" UseBindingValue="True"
+											MinimumWidth="48" MaximumWidth="48" Width="48"
 											ValueBinding="{Binding Path=ImagePath, 
 				Converter={StaticResource StringToImageConverter}}"/>
 			</syncfusion:SfDataGrid.Columns>
@@ -318,8 +341,8 @@
 				</syncfusion:GridTableSummaryRow>
 			</syncfusion:SfDataGrid.TableSummaryRows>
 		</syncfusion:SfDataGrid>
-		<syncfusion:SfDataPager Grid.Column="0" Grid.ColumnSpan="7" x:Name="SfDataPager" 
-							   Grid.Row="3"
+		<syncfusion:SfDataPager x:Name="SfDataPager" 
+							   Grid.Row="2"
 							   NumericButtonCount="10"
 							   PageSize="10" 
 							   HorizontalAlignment="Right"

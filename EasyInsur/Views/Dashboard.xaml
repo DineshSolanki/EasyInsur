@@ -124,11 +124,11 @@
         <!-- STAT METRIC CARDS ROW -->
         <Grid Grid.Row="1" Margin="-4,0,-4,10">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" MinWidth="130" />
+                <ColumnDefinition Width="*" MinWidth="130" />
+                <ColumnDefinition Width="*" MinWidth="130" />
+                <ColumnDefinition Width="*" MinWidth="130" />
+                <ColumnDefinition Width="*" MinWidth="130" />
             </Grid.ColumnDefinitions>
 
             <!-- Card 1: Total Premium -->
@@ -195,9 +195,9 @@
         <!-- MAIN CONTENT AREA -->
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <!-- Left 70%: Responsive Recent Activity Feed Table -->
-                <ColumnDefinition Width="7*" />
-                <!-- Right 30%: Operations, Calculator & Portals -->
+                <!-- Left: Responsive Recent Activity Feed Table -->
+                <ColumnDefinition Width="7*" MinWidth="480" />
+                <!-- Right: Operations, Calculator & Portals -->
                 <ColumnDefinition Width="3*" MinWidth="300" MaxWidth="380" />
             </Grid.ColumnDefinitions>
 

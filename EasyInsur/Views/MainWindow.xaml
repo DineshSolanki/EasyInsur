@@ -11,10 +11,12 @@
         WindowState="Maximized"
         Style="{StaticResource WindowWin10}"
         ShowTitle="True"
-        Height="450" 
-        Width="800">
+        Height="720" 
+        Width="1200"
+        MinHeight="600"
+        MinWidth="1000">
     <DockPanel>
-        <hc:SideMenu AutoSelect="False" ExpandMode="ShowOne" Width="170">
+        <hc:SideMenu AutoSelect="False" ExpandMode="ShowOne" Width="180" MinWidth="160">
             <!--<hc:Interaction.Triggers>
                 <hc:EventTrigger EventName="SelectionChanged">
                     <hc:EventToCommand Command="{Binding NavigateCommand}" PassEventArgsToCommand="True" />

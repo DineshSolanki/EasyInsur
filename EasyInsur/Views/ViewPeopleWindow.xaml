@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EasyInsur.Views.ViewPeopleWindow"
+<UserControl x:Class="EasyInsur.Views.ViewPeopleWindow"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:prism="http://prismlibrary.com/"
@@ -129,11 +129,11 @@
 								PageSize="10" 
 								HorizontalAlignment="Right"
 								Source="{Binding People}" />
-		<syncfusion:SfSmartDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
+		<syncfusion:SfSmartDataGrid x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
-							   AllowFiltering="True" AllowSorting="True" ColumnSizer="AutoWithLastColumnFill" AllowResizingColumns="True"
+							   AllowFiltering="True" AllowSorting="True" ColumnSizer="Star" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
-							   HeaderLinesVisibility="Horizontal" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
+							   HeaderLinesVisibility="Horizontal" ScrollMode="Async" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
 							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
 							   EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit"
@@ -362,17 +362,18 @@
 			</syncfusion:SfDataGrid.RecordContextMenu>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" AllowEditing="False" IsHidden="True"/>
-				<syncfusion:GridTextColumn MappingName="PersonID" AllowEditing="False" HeaderText="PID"/>
-				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name"/>
-				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name"/>
-				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
-				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center"/>
-				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No."/>
-				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email"/>
+				<syncfusion:GridTextColumn MappingName="PersonID" AllowEditing="False" HeaderText="PID" MinimumWidth="75"/>
+				<syncfusion:GridTextColumn MappingName="FirstName" HeaderText="First Name" MinimumWidth="100"/>
+				<syncfusion:GridTextColumn MappingName="LastName" HeaderText="Last Name" MinimumWidth="100"/>
+				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance" MinimumWidth="90"/>
+				<syncfusion:GridDateTimeColumn MappingName="RegDate" HeaderText="Registration Date" TextAlignment="Center" MinimumWidth="110"/>
+				<syncfusion:GridTextColumn MappingName="Mobile" HeaderText="Mobile No." MinimumWidth="100"/>
+				<syncfusion:GridTextColumn MappingName="Email" HeaderText="Email" MinimumWidth="130"/>
 				<syncfusion:GridImageColumn MappingName="ImagePath" AllowEditing="True" AllowGrouping="False" HeaderText=""
 											AllowFocus="False" AllowFiltering="False" Stretch="Fill"
 											StretchDirection="Both" ImageWidth="32" TextAlignment="Center"
 											ImageHeight="32" VerticalAlignment="Center" UseBindingValue="True"
+											MinimumWidth="48" MaximumWidth="48" Width="48"
 											ValueBinding="{Binding Path=ImagePath, 
 				Converter={StaticResource StringToImageConverter}}"/>
 			</syncfusion:SfDataGrid.Columns>

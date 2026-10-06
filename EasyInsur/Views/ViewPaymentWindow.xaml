@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="EasyInsur.Views.ViewPaymentWindow"
+<UserControl x:Class="EasyInsur.Views.ViewPaymentWindow"
 			 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:mc ="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -111,11 +111,11 @@
 								 PageSize="10" 
 								 HorizontalAlignment="Right"
 								 Source="{Binding Transactions}" />
-		<syncfusion:SfSmartDataGrid DockPanel.Dock="Bottom" x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
+		<syncfusion:SfSmartDataGrid x:Name="DataGrid" BorderThickness="1,1,1,1" Margin="10" AutoGenerateColumns="False"
 							   ItemsSource="{Binding ElementName=SfDataPager,Path=PagedSource}" AllowDraggingColumns="True"
 								AllowFiltering="True" AllowSorting="True" ColumnSizer="Star" AllowResizingColumns="True"
 							   ShowRowHeader="True" GridLinesVisibility="Horizontal" GridCopyOption="CopyData" SelectionUnit="Any"
-							   HeaderLinesVisibility="Both" ScrollMode="None" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
+							   HeaderLinesVisibility="Both" ScrollMode="Async" ShowGroupDropArea="True" LiveDataUpdateMode="AllowDataShaping"
 							   EnableDataVirtualization="True" CurrentCellValueChanged="DataGrid_OnCurrentCellValueChanged"
 							   CellStyleSelector="{StaticResource CellStyleSelector}" AllowEditing="True"
 								EditorSelectionBehavior="MoveLast" GridValidationMode="InEdit"
@@ -342,24 +342,23 @@
 			</syncfusion:SfDataGrid.StackedHeaderRows>
 			<syncfusion:SfDataGrid.Columns>
 				<syncfusion:GridTextColumn MappingName="Id" HeaderText="ID" IsHidden="True"/>
-                <syncfusion:GridTextColumn MappingName="Insurance.VehicleNo" HeaderText="Vehicle No."/>
-                <syncfusion:GridDateTimeColumn MappingName="Insurance.RegDate" HeaderText="Reg Date"/>
-                <syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date"/>
-				<syncfusion:GridCurrencyColumn MappingName="FixedAmount" HeaderText="Fixed"/>
-				<syncfusion:GridCurrencyColumn MappingName="OD" HeaderText="OD"/>
-				<syncfusion:GridCurrencyColumn MappingName="TP" HeaderText="TP"/>
-				<syncfusion:GridCurrencyColumn MappingName="Tax" HeaderText="Tax"/>
-				<syncfusion:GridCurrencyColumn MappingName="CommissionAmount" HeaderText="Commission"/>
-				<syncfusion:GridCurrencyColumn MappingName="AfterCommissionAmount" HeaderText="Total Amount - Commission"/>
-				<syncfusion:GridCurrencyColumn MappingName="Payment" HeaderText="Payment"/>
-				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance"/>
-				<syncfusion:GridCurrencyColumn MappingName="PreviousBalance" HeaderText="Previous"/>
-				<syncfusion:GridCurrencyColumn MappingName="FinalBalance" HeaderText="Final" >
+				<syncfusion:GridTextColumn MappingName="Insurance.VehicleNo" HeaderText="Vehicle No." MinimumWidth="110"/>
+				<syncfusion:GridDateTimeColumn MappingName="Insurance.RegDate" HeaderText="Reg Date" MinimumWidth="90"/>
+				<syncfusion:GridDateTimeColumn MappingName="PaymentDate" HeaderText="Payment Date" MinimumWidth="90"/>
+				<syncfusion:GridCurrencyColumn MappingName="FixedAmount" HeaderText="Fixed" MinimumWidth="80"/>
+				<syncfusion:GridCurrencyColumn MappingName="OD" HeaderText="OD" MinimumWidth="65"/>
+				<syncfusion:GridCurrencyColumn MappingName="TP" HeaderText="TP" MinimumWidth="65"/>
+				<syncfusion:GridCurrencyColumn MappingName="Tax" HeaderText="Tax" MinimumWidth="65"/>
+				<syncfusion:GridCurrencyColumn MappingName="CommissionAmount" HeaderText="Commission" MinimumWidth="85"/>
+				<syncfusion:GridCurrencyColumn MappingName="AfterCommissionAmount" HeaderText="Total Amount - Commission" MinimumWidth="110"/>
+				<syncfusion:GridCurrencyColumn MappingName="Payment" HeaderText="Payment" MinimumWidth="80"/>
+				<syncfusion:GridCurrencyColumn MappingName="Balance" HeaderText="Balance" MinimumWidth="80"/>
+				<syncfusion:GridCurrencyColumn MappingName="PreviousBalance" HeaderText="Previous" MinimumWidth="80"/>
+				<syncfusion:GridCurrencyColumn MappingName="FinalBalance" HeaderText="Final" MinimumWidth="85">
 					<syncfusion:GridCurrencyColumn.CellStyle>
 						<Style TargetType="syncfusion:GridCell">
 							<Setter Property="Background" Value="{Binding FinalBalance, Converter={StaticResource ColorConvertor}}" />
 						</Style>
-						
 					</syncfusion:GridCurrencyColumn.CellStyle>
 				</syncfusion:GridCurrencyColumn>
 			</syncfusion:SfDataGrid.Columns>
