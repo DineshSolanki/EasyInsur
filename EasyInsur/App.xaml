@@ -180,9 +180,6 @@
 											<Binding Path="Data.Balance" />
 										</MultiBinding>
 									</barcode:SfBarcode.Text>
-									<barcode:SfBarcode.ToolTip>
-										<ToolTip Content="{Binding Path=Text, RelativeSource={RelativeSource Mode=Self}}"/>
-									</barcode:SfBarcode.ToolTip>
 								</barcode:SfBarcode>
 								<TextBlock Text="Scan to Verify" FontSize="10" FontWeight="SemiBold" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,4,0,0"/>
 							</StackPanel>
