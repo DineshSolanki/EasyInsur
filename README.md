@@ -22,6 +22,12 @@ A modern, high-performance **WPF desktop application** for managing motor insura
 - **Legally-Safe Synthetic Dataset Seeder** — Bundled `TestDataSeeder` CLI tool to generate realistic, RFC 2606-compliant mock datasets without exposing private personal data.
 
 ---
+<details>
+  <summary>Click to expand screenshots</summary>
+  
+</details>
+
+---
 
 ## Tech Stack
 
