@@ -114,8 +114,8 @@
 
                     <StackPanel Grid.Column="0" Margin="0,0,8,0">
                         <TextBlock Text="Person Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                        <hc:ComboBox ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
-                                     SelectedItem="{Binding PersonType}" Height="34"/>
+                        <syncfusion:ComboBoxAdv SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type local:PersonType}}}"
+                                                SelectedItem="{Binding PersonType}" AutoCompleteMode="Suggest" Height="34"/>
                     </StackPanel>
 
                     <!-- Search Bar -->
@@ -200,19 +200,19 @@
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Rows per page:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,8,0"/>
-                            <hc:ComboBox x:Name="PageSizeCombo" SelectedIndex="1" Width="95" Height="26">
-                                <ComboBoxItem Content="15 rows" Tag="15"/>
-                                <ComboBoxItem Content="25 rows" Tag="25"/>
-                                <ComboBoxItem Content="50 rows" Tag="50"/>
-                                <ComboBoxItem Content="100 rows" Tag="100"/>
-                            </hc:ComboBox>
+                            <syncfusion:ComboBoxAdv x:Name="PageSizeCombo" SelectedIndex="1" Width="100" Height="26">
+                                <syncfusion:ComboBoxItemAdv Content="15 rows" Tag="15"/>
+                                <syncfusion:ComboBoxItemAdv Content="25 rows" Tag="25"/>
+                                <syncfusion:ComboBoxItemAdv Content="50 rows" Tag="50"/>
+                                <syncfusion:ComboBoxItemAdv Content="100 rows" Tag="100"/>
+                            </syncfusion:ComboBoxAdv>
                         </StackPanel>
                         <syncfusion:SfDataPager x:Name="SfDataPager"
                                                 DockPanel.Dock="Right"
                                                 NumericButtonCount="7"
                                                 Height="30"
                                                 HorizontalAlignment="Right"
-                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedValue.Tag, FallbackValue=25, TargetNullValue=25}" 
+                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedItem.Tag, FallbackValue=25}" 
                                                 Source="{Binding People}" />
                     </DockPanel>
                 </Border>

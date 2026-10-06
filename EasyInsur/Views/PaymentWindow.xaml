@@ -133,7 +133,7 @@
 
                         <StackPanel Grid.Column="0" Margin="0,0,6,0">
                             <TextBlock Text="SR. No" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                            <hc:TextBox Text="{Binding SrNo}" Height="34"/>
+                            <syncfusion:IntegerTextBox Value="{Binding SrNo}" MinValue="1" Height="34" Style="{StaticResource TextBoxExtend}"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" Margin="0,0,6,0">
@@ -141,12 +141,12 @@
                                 <Run Text="First Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                 <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                             </TextBlock>
-                            <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding FirstDate}" Height="34"/>
+                            <syncfusion:DateTimeEdit DateTime="{Binding FirstDate}" Pattern="ShortDate" Height="34"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="2" Margin="0,0,6,0">
                             <TextBlock Text="Payee Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                            <hc:ComboBox SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type models:PersonType}}}" AutoComplete="True" SelectedItem="{Binding PayeeType}" Height="34"/>
+                            <syncfusion:ComboBoxAdv SelectedIndex="0" ItemsSource="{Binding Source={hc:EnumBindingSource {x:Type models:PersonType}}}" AutoCompleteMode="Suggest" SelectedItem="{Binding PayeeType}" Height="34"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="3" Margin="0,0,6,0">
@@ -154,7 +154,7 @@
                                 <Run Text="Payee Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                 <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                             </TextBlock>
-                            <hc:ComboBox SelectedIndex="0" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoComplete="True" Height="34"/>
+                            <syncfusion:ComboBoxAdv SelectedIndex="0" ItemsSource="{Binding PayeeCollection}" SelectedItem="{Binding SelectedPayee}" ToolTip="{Binding SelectedPayee.PersonID}" AutoCompleteMode="Suggest" Height="34"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="4" Margin="0,0,6,0">
@@ -170,7 +170,7 @@
                                 <Run Text="Payment Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                 <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                             </TextBlock>
-                            <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding PaymentDate}" Height="34"/>
+                            <syncfusion:DateTimeEdit DateTime="{Binding PaymentDate}" Pattern="ShortDate" Height="34"/>
                         </StackPanel>
                     </Grid>
                 </Grid>
@@ -264,10 +264,10 @@
 
                             <StackPanel Grid.Column="0" Margin="0,0,6,0">
                                 <TextBlock Text="Commission" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                                <hc:ComboBox x:Name="Box" SelectedIndex="0" Text="{Binding CommissionType}" AutoComplete="True" Height="34">
-                                    <ComboBoxItem Content="Amount"/>
-                                    <ComboBoxItem Content="Percentage"/>
-                                </hc:ComboBox>
+                                <syncfusion:ComboBoxAdv x:Name="Box" SelectedIndex="0" Text="{Binding CommissionType}" AutoCompleteMode="Suggest" Height="34">
+                                    <syncfusion:ComboBoxItemAdv Content="Amount"/>
+                                    <syncfusion:ComboBoxItemAdv Content="Percentage"/>
+                                </syncfusion:ComboBoxAdv>
                             </StackPanel>
 
                             <!-- Amount or Percentage mode -->
@@ -358,19 +358,19 @@
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Rows per page:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,8,0"/>
-                            <hc:ComboBox x:Name="PageSizeCombo" SelectedIndex="1" Width="95" Height="26">
-                                <ComboBoxItem Content="15 rows" Tag="15"/>
-                                <ComboBoxItem Content="25 rows" Tag="25"/>
-                                <ComboBoxItem Content="50 rows" Tag="50"/>
-                                <ComboBoxItem Content="100 rows" Tag="100"/>
-                            </hc:ComboBox>
+                            <syncfusion:ComboBoxAdv x:Name="PageSizeCombo" SelectedIndex="1" Width="100" Height="26">
+                                <syncfusion:ComboBoxItemAdv Content="15 rows" Tag="15"/>
+                                <syncfusion:ComboBoxItemAdv Content="25 rows" Tag="25"/>
+                                <syncfusion:ComboBoxItemAdv Content="50 rows" Tag="50"/>
+                                <syncfusion:ComboBoxItemAdv Content="100 rows" Tag="100"/>
+                            </syncfusion:ComboBoxAdv>
                         </StackPanel>
                         <syncfusion:SfDataPager x:Name="SfDataPager"
                                                 DockPanel.Dock="Right"
                                                 NumericButtonCount="7"
                                                 Height="30"
                                                 HorizontalAlignment="Right"
-                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedValue.Tag, FallbackValue=25, TargetNullValue=25}" 
+                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedItem.Tag, FallbackValue=25}" 
                                                 Source="{Binding Transactions}" />
                     </DockPanel>
                 </Border>

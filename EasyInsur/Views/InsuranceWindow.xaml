@@ -115,13 +115,13 @@
                             <Run Text="Vehicle Number" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                             <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                         </TextBlock>
-                        <hc:TextBox Text="{Binding VehicleNo, UpdateSourceTrigger=PropertyChanged}" 
-                                    hc:InfoElement.Placeholder="e.g. MH02AB1234" Height="34"/>
+                        <TextBox Text="{Binding VehicleNo, UpdateSourceTrigger=PropertyChanged}" 
+                                 Height="34" VerticalContentAlignment="Center" Padding="8,0"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="1" Margin="0,0,10,0">
                         <TextBlock Text="Registration Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                        <hc:DatePicker SelectedDate="{Binding RegDate, UpdateSourceTrigger=PropertyChanged}" Height="34"/>
+                        <syncfusion:DateTimeEdit DateTime="{Binding RegDate, UpdateSourceTrigger=PropertyChanged}" Pattern="ShortDate" Height="34"/>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2" Margin="0,0,10,0">
@@ -159,12 +159,12 @@
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Rows per page:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,8,0"/>
-                            <hc:ComboBox x:Name="PageSizeCombo" SelectedIndex="1" Width="95" Height="26">
-                                <ComboBoxItem Content="15 rows" Tag="15"/>
-                                <ComboBoxItem Content="25 rows" Tag="25"/>
-                                <ComboBoxItem Content="50 rows" Tag="50"/>
-                                <ComboBoxItem Content="100 rows" Tag="100"/>
-                            </hc:ComboBox>
+                            <syncfusion:ComboBoxAdv x:Name="PageSizeCombo" SelectedIndex="1" Width="100" Height="26">
+                                <syncfusion:ComboBoxItemAdv Content="15 rows" Tag="15"/>
+                                <syncfusion:ComboBoxItemAdv Content="25 rows" Tag="25"/>
+                                <syncfusion:ComboBoxItemAdv Content="50 rows" Tag="50"/>
+                                <syncfusion:ComboBoxItemAdv Content="100 rows" Tag="100"/>
+                            </syncfusion:ComboBoxAdv>
                         </StackPanel>
                         <syncfusion:SfDataPager x:Name="DataPager" DockPanel.Dock="Right"
                                                 PageSize="{Binding SelectedItem.Tag, ElementName=PageSizeCombo, FallbackValue=25}"

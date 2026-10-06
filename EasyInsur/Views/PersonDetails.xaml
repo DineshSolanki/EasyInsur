@@ -138,10 +138,10 @@
 
                             <StackPanel Grid.Column="0" Margin="0,0,8,0">
                                 <TextBlock Text="Person Type" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                                <hc:ComboBox SelectedIndex="0" AutoComplete="True" Text="{Binding PersonType}" Height="34">
-                                    <ComboBoxItem Content="Customer"/>
-                                    <ComboBoxItem Content="Agent"/>
-                                </hc:ComboBox>
+                                <syncfusion:ComboBoxAdv SelectedIndex="0" AutoCompleteMode="Suggest" Text="{Binding PersonType}" Height="34">
+                                    <syncfusion:ComboBoxItemAdv Content="Customer"/>
+                                    <syncfusion:ComboBoxItemAdv Content="Agent"/>
+                                </syncfusion:ComboBoxAdv>
                             </StackPanel>
 
                             <StackPanel Grid.Column="1" Margin="0,0,8,0">
@@ -149,7 +149,7 @@
                                     <Run Text="Person ID" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                     <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                                 </TextBlock>
-                                <hc:TextBox Text="{Binding PersonId, Mode=TwoWay}" Height="34"/>
+                                <TextBox Text="{Binding PersonId, Mode=TwoWay}" Height="34" VerticalContentAlignment="Center" Padding="8,0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" Margin="0,0,8,0">
@@ -157,7 +157,7 @@
                                     <Run Text="First Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                     <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                                 </TextBlock>
-                                <hc:TextBox Text="{Binding FirstName}" Height="34"/>
+                                <TextBox Text="{Binding FirstName}" Height="34" VerticalContentAlignment="Center" Padding="8,0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="3" Margin="0,0,8,0">
@@ -165,7 +165,7 @@
                                     <Run Text="Last Name" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                     <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                                 </TextBlock>
-                                <hc:TextBox Text="{Binding LastName}" Height="34"/>
+                                <TextBox Text="{Binding LastName}" Height="34" VerticalContentAlignment="Center" Padding="8,0"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="4" Margin="0,0,8,0">
@@ -173,7 +173,7 @@
                                     <Run Text="Registration Date" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                     <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                                 </TextBlock>
-                                <hc:DatePicker SelectedDateFormat="Short" SelectedDate="{Binding RegistrationDate}" Height="34"/>
+                                <syncfusion:DateTimeEdit DateTime="{Binding RegistrationDate}" Pattern="ShortDate" Height="34"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="5" Margin="0,0,4,0">
@@ -211,8 +211,8 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="65"/>
                                     </Grid.ColumnDefinitions>
-                                    <hc:ComboBox x:Name="CountryBox" Grid.Column="0" DisplayMemberPath="name" hc:DropDownElement.AutoWidth="True" AutoComplete="True" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}" Height="34" Margin="0,0,4,0"/>
-                                    <hc:TextBox Grid.Column="1" IsTabStop="False" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" IsReadOnly="True" Height="34"/>
+                                    <syncfusion:ComboBoxAdv x:Name="CountryBox" Grid.Column="0" DisplayMemberPath="name" AutoCompleteMode="Suggest" SelectedValue="{Binding SelectedCountry,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" ItemsSource="{Binding CountryDetails}" Height="34" Margin="0,0,4,0"/>
+                                    <TextBox Grid.Column="1" IsTabStop="False" Text="{Binding ElementName=CountryBox, Path=SelectedValue.dial_code}" IsReadOnly="True" Height="34" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
                                 </Grid>
                             </StackPanel>
 
@@ -221,22 +221,45 @@
                                     <Run Text="Mobile Number" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
                                     <Run Text=" *" Foreground="#EF4444" FontWeight="Bold"/>
                                 </TextBlock>
-                                <hc:MaskedTextBox hc:InfoElement.Placeholder="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" AutoMoveFocus="True" Text="{Binding Mobile,Mode=TwoWay}" Height="34"/>
+                                <syncfusion:SfMaskedEdit Mask="{Binding ElementName=CountryBox, Path=SelectedValue.MobileMask}" Value="{Binding Mobile, Mode=TwoWay}" Watermark="{Binding ElementName=CountryBox, Path=SelectedValue.ExampleNumber}" Height="34"/>
                             </StackPanel>
 
                             <StackPanel Grid.Column="2" Margin="0,0,4,0">
                                 <TextBlock Text="Email Address" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}" Margin="0,0,0,4"/>
-                                <hc:TextBox hc:InfoElement.Placeholder="Enter email address" Text="{Binding Email,Mode=TwoWay}" Height="34"/>
+                                <TextBox Text="{Binding Email, Mode=TwoWay}" Height="34" VerticalContentAlignment="Center" Padding="8,0"/>
                             </StackPanel>
                         </Grid>
                     </Grid>
                 </Grid>
 
-                <!-- Right: Photo Selector Card -->
-                <Border Grid.Column="1" Margin="14,0,0,0" Padding="8" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" VerticalAlignment="Center">
+                <!-- Right: Syncfusion Photo Management Card -->
+                <Border Grid.Column="1" Margin="14,0,0,0" Padding="12,10" Background="#F8FAFC" BorderBrush="#E2E8F0" BorderThickness="1" CornerRadius="8" VerticalAlignment="Center" Width="140">
                     <StackPanel HorizontalAlignment="Center">
-                        <hc:ImageSelector Height="110" Width="110" Stretch="UniformToFill" ToolTip="{Binding ImagePathTag, Mode=TwoWay}"/>
-                        <TextBlock Text="Profile Photo" FontSize="11" FontWeight="SemiBold" Foreground="{StaticResource TextSecondaryBrush}" HorizontalAlignment="Center" Margin="0,4,0,0"/>
+                        <!-- Photo Frame Preview -->
+                        <Border Width="92" Height="92" CornerRadius="8" Background="#FFFFFF" BorderBrush="#CBD5E1" BorderThickness="1.5" ClipToBounds="True" Margin="0,0,0,6">
+                            <Grid>
+                                <!-- Fallback Icon -->
+                                <Path Data="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                      Stroke="#94A3B8" StrokeThickness="1.5" Width="36" Height="36" Stretch="Uniform"
+                                      HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <!-- Selected Image Preview -->
+                                <Image Source="{Binding ImagePathTag, Converter={StaticResource StringToImageConverter}}"
+                                       Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+
+                        <!-- Action Buttons -->
+                        <Button Style="{StaticResource ButtonDefault}" Command="{Binding SelectImageCommand}" Height="26" Width="116" Margin="0,0,0,4" Padding="0" Cursor="Hand" ToolTip="Select photo from computer">
+                            <TextBlock Text="📷 Select Photo" FontSize="10" FontWeight="SemiBold"/>
+                        </Button>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Style="{StaticResource ButtonDefault}" Command="{Binding EditImageCommand}" Height="24" Width="56" Margin="0,0,4,0" Padding="0" Cursor="Hand" ToolTip="Crop and edit photo in Syncfusion Image Editor">
+                                <TextBlock Text="✂ Edit" FontSize="10"/>
+                            </Button>
+                            <Button Style="{StaticResource ButtonDefault}" Command="{Binding ClearImageCommand}" Height="24" Width="56" Padding="0" Cursor="Hand" ToolTip="Remove selected photo">
+                                <TextBlock Text="✕ Clear" FontSize="10"/>
+                            </Button>
+                        </StackPanel>
                     </StackPanel>
                 </Border>
             </Grid>
@@ -260,18 +283,18 @@
                     <DockPanel LastChildFill="False">
                         <StackPanel DockPanel.Dock="Left" Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Rows per page:" VerticalAlignment="Center" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12" Margin="0,0,8,0"/>
-                            <hc:ComboBox x:Name="PageSizeCombo" SelectedIndex="1" Width="95" Height="26">
-                                <ComboBoxItem Content="15 rows" Tag="15"/>
-                                <ComboBoxItem Content="25 rows" Tag="25"/>
-                                <ComboBoxItem Content="50 rows" Tag="50"/>
-                                <ComboBoxItem Content="100 rows" Tag="100"/>
-                            </hc:ComboBox>
+                            <syncfusion:ComboBoxAdv x:Name="PageSizeCombo" SelectedIndex="1" Width="100" Height="26">
+                                <syncfusion:ComboBoxItemAdv Content="15 rows" Tag="15"/>
+                                <syncfusion:ComboBoxItemAdv Content="25 rows" Tag="25"/>
+                                <syncfusion:ComboBoxItemAdv Content="50 rows" Tag="50"/>
+                                <syncfusion:ComboBoxItemAdv Content="100 rows" Tag="100"/>
+                            </syncfusion:ComboBoxAdv>
                         </StackPanel>
                         <syncfusion:SfDataPager x:Name="SfDataPager" 
                                                 DockPanel.Dock="Right"
                                                 NumericButtonCount="7"
                                                 Height="30"
-                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedValue.Tag, FallbackValue=25, TargetNullValue=25}" 
+                                                PageSize="{Binding ElementName=PageSizeCombo, Path=SelectedItem.Tag, FallbackValue=25}" 
                                                 HorizontalAlignment="Right"
                                                 Source="{Binding PersonData}" />
                     </DockPanel>

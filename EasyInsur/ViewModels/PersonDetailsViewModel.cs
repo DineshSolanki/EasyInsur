@@ -36,6 +36,9 @@ namespace EasyInsur.ViewModels
             CountryDetails = new ObservableCollection<Country>(Util.Read()!.OrderBy(c => c.name));
             ResetCommand = new DelegateCommand(ResetFields);
             SaveCommand = new DelegateCommand(Save);
+            SelectImageCommand = new DelegateCommand(SelectImage);
+            EditImageCommand = new DelegateCommand(EditImage, () => !string.IsNullOrEmpty(ImagePathTag)).ObservesProperty(() => ImagePathTag);
+            ClearImageCommand = new DelegateCommand(ClearImage, () => !string.IsNullOrEmpty(ImagePathTag)).ObservesProperty(() => ImagePathTag);
             ResetFields();
             PersonId = DbMethods.GetPeopleLastIdSync().ToString();
             LoadPeople();
@@ -155,6 +158,40 @@ namespace EasyInsur.ViewModels
 
         public DelegateCommand ResetCommand { get; }
         public DelegateCommand SaveCommand { get; }
+        public DelegateCommand SelectImageCommand { get; }
+        public DelegateCommand EditImageCommand { get; }
+        public DelegateCommand ClearImageCommand { get; }
+
+        private void SelectImage()
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Title = "Select Profile Photo",
+                Filter = "Image Files (*.jpg;*.jpeg;*.png;*.bmp;*.webp)|*.jpg;*.jpeg;*.png;*.bmp;*.webp|All Files (*.*)|*.*"
+            };
+            if (dialog.ShowDialog() == true)
+            {
+                ImagePathTag = dialog.FileName;
+                IsDirty = true;
+            }
+        }
+
+        private void EditImage()
+        {
+            if (string.IsNullOrEmpty(ImagePathTag) || !File.Exists(ImagePathTag)) return;
+            var editor = new EasyInsur.Views.ImageEditorDialog(ImagePathTag);
+            if (editor.ShowDialog() == true && !string.IsNullOrEmpty(editor.ResultPath))
+            {
+                ImagePathTag = editor.ResultPath;
+                IsDirty = true;
+            }
+        }
+
+        private void ClearImage()
+        {
+            ImagePathTag = "";
+            IsDirty = true;
+        }
 
 
         private void ResetFields()
