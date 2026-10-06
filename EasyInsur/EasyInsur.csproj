@@ -24,6 +24,7 @@
 		<None Remove="Resources\clear.png" />
 		<None Remove="Resources\customer.png" />
 		<None Remove="Resources\dashboard.png" />
+		<None Remove="Resources\EasyInsur Logo.png" />
 		<None Remove="Resources\email.png" />
 		<None Remove="Resources\isd_country_code.json" />
 		<None Remove="Resources\link.png" />
@@ -91,6 +92,7 @@
 		<Resource Include="Resources\clear.png" />
 		<Resource Include="Resources\customer.png" />
 		<Resource Include="Resources\dashboard.png" />
+		<Resource Include="Resources\EasyInsur Logo.png" />
 		<Resource Include="Resources\email.png" />
 		<Resource Include="Resources\link.png" />
 		<Resource Include="Resources\man.png" />

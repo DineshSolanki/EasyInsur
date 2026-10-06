@@ -10,6 +10,7 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}"
         mc:Ignorable="d"
         Title="EasyInsur - Insurance Management" 
+        Icon="../Resources/EasyInsur Logo.png"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         Style="{StaticResource WindowWin10}"
@@ -57,19 +58,13 @@
                         <Grid Visibility="{Binding IsSidebarExpanded, Converter={StaticResource BoolToVisibilityConverter}}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
-                            <!-- Gradient Brand Icon -->
-                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" Margin="0,0,10,0">
-                                <Border.Background>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                        <GradientStop Color="#2563EB" Offset="0.0"/>
-                                        <GradientStop Color="#1D4ED8" Offset="1.0"/>
-                                    </LinearGradientBrush>
-                                </Border.Background>
-                                <Image Source="../Resources/broker_32.png" Width="20" Height="20" 
+                            <!-- Brand Logo -->
+                            <Border Grid.Column="0" Width="36" Height="36" CornerRadius="8" Margin="0,0,10,0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                <Image Source="../Resources/EasyInsur Logo.png" Width="30" Height="30" Stretch="Uniform"
                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </Border>
 
@@ -119,14 +114,8 @@
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">
                                         <Border x:Name="BtnBdr" Background="{TemplateBinding Background}" CornerRadius="8">
-                                            <Border Width="34" Height="34" CornerRadius="7" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <Border.Background>
-                                                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                                        <GradientStop Color="#2563EB" Offset="0.0"/>
-                                                        <GradientStop Color="#1D4ED8" Offset="1.0"/>
-                                                    </LinearGradientBrush>
-                                                </Border.Background>
-                                                <Image Source="../Resources/broker_32.png" Width="18" Height="18" 
+                                            <Border Width="34" Height="34" CornerRadius="7" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
+                                                <Image Source="../Resources/EasyInsur Logo.png" Width="28" Height="28" 
                                                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                             </Border>
                                         </Border>

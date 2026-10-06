@@ -4,6 +4,7 @@
         xmlns:imageeditor="clr-namespace:Syncfusion.UI.Xaml.ImageEditor;assembly=Syncfusion.SfImageEditor.WPF"
         xmlns:syncfusionskin="clr-namespace:Syncfusion.SfSkinManager;assembly=Syncfusion.SfSkinManager.WPF"
         Title="Edit &amp; Crop Profile Photo" 
+        Icon="../Resources/EasyInsur Logo.png"
         Height="540" Width="680"
         WindowStartupLocation="CenterScreen"
         syncfusionskin:SfSkinManager.VisualStyle="FluentLight"
